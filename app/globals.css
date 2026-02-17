@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --page-bg: #fafaf8;
+  --page-text: #1a1a1a;
+  --whisper-white: #faf9f6;
+  --pale-blush: #f5e6e8;
+  --warm-sand: #d9c5a8;
+  --slate-charcoal: #2a2a2a;
+  --lavender-blush: #e8d5d8;
+  --mist-sage: #b8c5b4;
+  --silver-blue: #6b7a8a;
+  --mushroom-taupe: #6b5e5a;
+  --dark-bg: #181818;
+  --dark-cards: #2a2624;
+  --dark-text: #f5f5f0;
+}
+
+.dark {
+  --bg: var(--dark-bg);
+  --cards: var(--dark-cards);
+  --text: var(--dark-text);
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus visible for accessibility - high contrast */
+:focus-visible {
+  outline: 2px solid var(--mushroom-taupe);
+  outline-offset: 2px;
+}
+
+.dark :focus-visible {
+  outline-color: var(--mist-sage);
+}
+
+/* Smooth theme transition */
+html {
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* Skip to main content link - visible on focus */
+.skip-link {
+  position: absolute;
+  left: 1.5rem;
+  top: -4rem;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  background: var(--page-text);
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.025em;
+  color: var(--page-bg);
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 1rem;
+  outline: 2px solid var(--mushroom-taupe);
+  outline-offset: 2px;
+}
+
+.dark .skip-link {
+  background: var(--dark-text);
+  color: var(--dark-bg);
+}
+
+.dark .skip-link:focus {
+  outline-color: var(--mist-sage);
+}
