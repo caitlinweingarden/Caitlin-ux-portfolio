@@ -76,7 +76,7 @@ export default function ArtPage() {
     lightboxIndex !== null ? filteredItems[lightboxIndex] : null;
 
   return (
-    <div className="mx-auto max-w-7xl px-6 py-12 md:px-12 md:py-16 lg:px-16 lg:py-24">
+    <div className="mx-auto max-w-7xl px-6 pt-24 pb-16 md:px-12 md:pt-32 md:pb-20 lg:px-16 lg:pb-24">
       <motion.header
         className="mb-12 md:mb-16"
         initial={{ opacity: 0, y: 12 }}

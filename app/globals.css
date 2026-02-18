@@ -45,8 +45,9 @@
   outline-color: var(--mist-sage);
 }
 
-/* Smooth theme transition */
+/* Smooth theme transition + scroll */
 html {
+  scroll-behavior: smooth;
   transition: background-color 0.4s ease, color 0.4s ease;
 }
 

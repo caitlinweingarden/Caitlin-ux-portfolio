@@ -15,7 +15,7 @@ export default async function CaseStudyPage({ params }: Props) {
   if (!project) notFound();
 
   return (
-    <article className="mx-auto max-w-7xl px-6 py-12 md:px-12 md:py-16 lg:px-16 lg:py-24">
+    <article className="mx-auto max-w-7xl px-6 pt-24 pb-16 md:px-12 md:pt-32 md:pb-20 lg:px-16 lg:pb-24">
       {/* Hero image */}
       <div className="relative mb-12 aspect-video w-full overflow-hidden rounded-2xl bg-pale-blush dark:bg-dark-cards md:mb-16">
         {project.imageSrc ? (
@@ -102,7 +102,7 @@ export default async function CaseStudyPage({ params }: Props) {
       <div className="space-y-16">
         {project.content.map((section, i) => (
           <section key={i}>
-            <h2 className="mb-4 font-heading text-4xl font-semibold italic text-page-text dark:text-dark-text md:text-5xl">
+            <h2 className="mb-4 font-heading text-3xl font-semibold italic text-page-text dark:text-dark-text md:text-4xl">
               {section.heading}
             </h2>
             <div className="max-w-3xl font-sans text-base leading-relaxed text-page-text/90 dark:text-dark-text/90">

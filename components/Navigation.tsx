@@ -154,7 +154,7 @@ export default function Navigation() {
         className="fixed left-0 right-0 top-0 z-[60] border-b border-mushroom-taupe/20 bg-page-bg/95 backdrop-blur-md dark:border-mist-sage/20 dark:bg-dark-bg/95"
         aria-label="Main navigation"
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3 md:px-12 lg:max-w-[1400px] lg:px-16">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3 md:px-12 lg:px-16">
           {/* Logo */}
           <Link
             href="/"

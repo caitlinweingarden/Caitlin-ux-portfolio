@@ -22,7 +22,6 @@ const FEATURED_PROJECTS = [
   },
 ];
 
-// Sparkle positions for hover effect
 const HOVER_SPARKLE_POSITIONS = [
   { x: -30, y: -30 },
   { x: 30, y: -35 },
@@ -37,7 +36,7 @@ const SPARKLE_COLORS = [
   "#9B8EA0", // accent-lavender
 ];
 
-// Deterministic sparkle sizes to avoid hydration mismatch from Math.random()
+// Deterministic sizes — avoids Math.random() hydration mismatch
 const SPARKLE_SIZES = [12, 14, 10, 16, 11];
 
 function StaticName() {
@@ -52,16 +51,11 @@ function StaticName() {
       <motion.h1
         className="font-sans text-6xl font-bold leading-none tracking-tight text-name-light dark:text-name-dark md:text-8xl lg:text-9xl"
         animate={{ y: [0, -3, 0] }}
-        transition={{
-          duration: 4,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
       >
         Caitlin Weingarden
       </motion.h1>
 
-      {/* SVG Sparkles on hover */}
       {isHovered && (
         <>
           {HOVER_SPARKLE_POSITIONS.map((pos, i) => (
@@ -104,56 +98,6 @@ function HeroTagline({ animate = false }: { animate?: boolean }) {
     >
       {content}
     </motion.p>
-  );
-}
-
-function ProjectCards({ animate = false }: { animate?: boolean }) {
-  return (
-    <section
-      className="relative px-6 py-4 md:px-12 md:py-6 lg:max-w-[1400px] lg:px-16 lg:py-8"
-      aria-labelledby="featured-heading"
-    >
-      <h2 id="featured-heading" className="sr-only">
-        Featured projects
-      </h2>
-      <div className="mx-auto max-w-7xl">
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
-          {FEATURED_PROJECTS.map((project, index) =>
-            animate ? (
-              <motion.article
-                key={project.href}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{
-                  duration: 0.3,
-                  ease: "easeOut",
-                  delay: index * 0.1,
-                }}
-                className="group min-h-[350px] md:min-h-[400px]"
-              >
-                <ProjectCardLink project={project} />
-              </motion.article>
-            ) : (
-              <article
-                key={project.href}
-                className="group min-h-[350px] md:min-h-[400px]"
-              >
-                <ProjectCardLink project={project} />
-              </article>
-            )
-          )}
-        </div>
-        <div className="mt-6 text-center md:mt-8">
-          <Link
-            href="/work"
-            className="inline-block rounded-lg bg-mushroom-taupe px-6 py-3 font-sans text-base font-medium text-page-bg transition-colors hover:bg-mushroom-taupe/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-mushroom-taupe focus-visible:ring-offset-2 dark:bg-mist-sage dark:text-dark-bg dark:hover:bg-mist-sage/90"
-          >
-            View all work
-          </Link>
-        </div>
-      </div>
-    </section>
   );
 }
 
@@ -201,6 +145,52 @@ function ProjectCardLink({
   );
 }
 
+function ProjectCards({ animate = false }: { animate?: boolean }) {
+  return (
+    <section
+      className="px-6 py-4 md:px-12 md:py-6 lg:px-16 lg:py-8"
+      aria-labelledby="featured-heading"
+    >
+      <h2 id="featured-heading" className="sr-only">
+        Featured projects
+      </h2>
+      <div className="mx-auto max-w-7xl">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
+          {FEATURED_PROJECTS.map((project, index) =>
+            animate ? (
+              <motion.article
+                key={project.href}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.3, ease: "easeOut", delay: index * 0.1 }}
+                className="group min-h-[350px] md:min-h-[400px]"
+              >
+                <ProjectCardLink project={project} />
+              </motion.article>
+            ) : (
+              <article
+                key={project.href}
+                className="group min-h-[350px] md:min-h-[400px]"
+              >
+                <ProjectCardLink project={project} />
+              </article>
+            )
+          )}
+        </div>
+        <div className="mt-6 text-center md:mt-8">
+          <Link
+            href="/work"
+            className="inline-block rounded-lg bg-mushroom-taupe px-6 py-3 font-sans text-base font-medium text-page-bg transition-colors duration-300 hover:bg-mushroom-taupe/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-mushroom-taupe focus-visible:ring-offset-2 dark:bg-mist-sage dark:text-dark-bg dark:hover:bg-mist-sage/90"
+          >
+            View all work
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function HomePage() {
   const [isMounted, setIsMounted] = useState(false);
   const [showIntro, setShowIntro] = useState(false);
@@ -231,19 +221,18 @@ export default function HomePage() {
     setContentVisible(true);
   };
 
-  // Stable server/client render before mount — no animations, no browser APIs
+  // Stable pre-mount render — no browser APIs, no animations
+  // Must match structure of mounted render to avoid hydration mismatch
   if (!isMounted) {
     return (
       <>
         <DecorativeShapes />
         <section
-          className="relative px-6 pt-[12vh] pb-4 md:px-12 lg:max-w-[1400px] lg:px-16"
+          className="px-6 pt-[12vh] pb-4 md:px-12 lg:px-16"
           aria-label="Introduction"
         >
-          <div className="mx-auto w-full max-w-4xl">
-            <div>
-              <StaticName />
-            </div>
+          <div className="mx-auto max-w-7xl">
+            <StaticName />
             <HeroTagline animate={false} />
           </div>
         </section>
@@ -254,22 +243,21 @@ export default function HomePage() {
 
   return (
     <>
-      {/* Full-screen intro animation */}
       {showIntro && <IntroAnimation onComplete={handleIntroComplete} />}
 
-      {/* Main portfolio content */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: contentVisible ? 1 : 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
         <DecorativeShapes />
-        {/* Hero — name + punchy tagline */}
+
+        {/* Hero — large name + punchy tagline, left-aligned in shared container */}
         <section
-          className="relative px-6 pt-[12vh] pb-4 md:px-12 lg:max-w-[1400px] lg:px-16"
+          className="px-6 pt-[12vh] pb-4 md:px-12 lg:px-16"
           aria-label="Introduction"
         >
-          <div className="mx-auto w-full max-w-4xl">
+          <div className="mx-auto max-w-7xl">
             <motion.div
               initial={{ opacity: 0, y: 12, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -281,7 +269,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Featured project cards */}
+        {/* Featured project cards — same container as hero */}
         <ProjectCards animate={true} />
       </motion.div>
     </>

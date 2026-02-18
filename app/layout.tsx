@@ -47,7 +47,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${cormorant.variable} ${dmSans.variable} ${instrumentSerif.variable} min-h-screen bg-page-bg font-sans text-page-text antialiased dark:bg-dark-bg dark:text-dark-text`}
+        className={`${cormorant.variable} ${dmSans.variable} ${instrumentSerif.variable} flex min-h-screen flex-col bg-page-bg font-sans text-page-text antialiased dark:bg-dark-bg dark:text-dark-text`}
       >
         <script
           dangerouslySetInnerHTML={{
@@ -57,7 +57,7 @@ export default function RootLayout({
         <ThemeProvider>
           <CustomCursor />
           <Navigation />
-          <main id="main-content" tabIndex={-1}>
+          <main id="main-content" tabIndex={-1} className="flex-1">
             {children}
           </main>
           <Footer />
