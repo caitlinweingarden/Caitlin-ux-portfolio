@@ -136,17 +136,17 @@ function Hero({ animate }: { animate: boolean }) {
   return (
     /* Full-viewport hero — content below the fold on load */
     <section
-      className="relative flex min-h-screen flex-col px-6 pt-20 pb-16 md:px-12 lg:px-16"
+      className="relative flex min-h-screen flex-col px-6 pt-20 pb-24 md:px-12 lg:px-16"
       aria-label="Introduction"
     >
       {/* Subtle film-grain overlay */}
       <div className="hero-grain" aria-hidden />
 
-      {/* ── Two-column layout ─────────────────────────────────── */}
-      <div className="mx-auto flex w-full max-w-[1200px] flex-1 flex-col items-center gap-10 md:flex-row md:gap-16 lg:gap-24">
+      {/* ── Two-column layout: text left ~36%, image right fills rest ── */}
+      <div className="mx-auto flex w-full max-w-[1200px] flex-1 flex-col items-center gap-10 md:flex-row md:items-center md:gap-16 lg:gap-20">
 
-        {/* Left column: text */}
-        <div className="relative z-10 flex flex-1 flex-col justify-center">
+        {/* Left column: text — pinned to left third, never grows wider */}
+        <div className="relative z-10 flex w-full flex-shrink-0 flex-col justify-center md:w-[36%]">
 
           {/* Heading */}
           {animate ? (
@@ -213,17 +213,23 @@ function Hero({ animate }: { animate: boolean }) {
           )}
         </div>
 
-        {/* Right column: hero image — slides in from left */}
-        <div className="relative z-10 w-full flex-shrink-0 md:w-[42%] lg:w-[38%]">
+        {/* Right column: image — fills remaining 2/3, height-capped so it
+            never pushes the scroll CTA off screen.
+            height = min(72vh, 44vw) keeps 4:5-ish portrait proportions
+            without ever overflowing a normal viewport. */}
+        <div className="relative z-10 flex flex-1 items-center justify-center">
           {animate ? (
             <motion.div
-              className="relative overflow-hidden"
+              className="relative w-full overflow-hidden"
               style={{
-                aspectRatio: "3 / 4",
-                // Vintage editorial drop shadow
-                boxShadow: "6px 6px 0px 0px var(--warm-sand), 7px 7px 0px 1px rgba(26,15,10,0.12)",
+                /* Cap height: smaller of 72% viewport or ~44vw (matches 4:5 at typical widths) */
+                height: "min(72vh, 44vw)",
+                maxHeight: "72vh",
+                /* Vintage editorial offset shadow */
+                boxShadow:
+                  "6px 6px 0px 0px var(--warm-sand), 7px 7px 0px 1px rgba(26,15,10,0.12)",
               }}
-              initial={{ x: -70, opacity: 0 }}
+              initial={{ x: -60, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.85, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
             >
@@ -233,7 +239,7 @@ function Hero({ animate }: { animate: boolean }) {
                 fill
                 className="object-cover object-top"
                 priority
-                sizes="(max-width: 768px) 90vw, 38vw"
+                sizes="(max-width: 768px) 90vw, 55vw"
               />
               {/* Thin vintage border overlay */}
               <div
@@ -243,8 +249,8 @@ function Hero({ animate }: { animate: boolean }) {
             </motion.div>
           ) : (
             <div
-              className="relative overflow-hidden"
-              style={{ aspectRatio: "3 / 4" }}
+              className="relative w-full overflow-hidden"
+              style={{ height: "min(72vh, 44vw)", maxHeight: "72vh" }}
             >
               <Image
                 src="/images/self_image.jpg"
@@ -252,7 +258,7 @@ function Hero({ animate }: { animate: boolean }) {
                 fill
                 className="object-cover object-top"
                 priority
-                sizes="(max-width: 768px) 90vw, 38vw"
+                sizes="(max-width: 768px) 90vw, 55vw"
               />
             </div>
           )}
