@@ -1,106 +1,86 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
-import DecorativeShapes from "@/components/DecorativeShapes";
 import IntroAnimation from "@/components/IntroAnimation";
 import { StaticSparkle } from "@/components/Sparkle";
 import { useState, useEffect } from "react";
+
+// ── Data ─────────────────────────────────────────────────────────────────────
 
 const FEATURED_PROJECTS = [
   {
     title: "Accessibility Translation Platform",
     href: "/work/accessibility-translation-platform",
     tags: ["UX Research", "Accessibility", "i18n"],
-    imageAlt: "Accessibility Translation Platform interface preview",
   },
   {
     title: "Multilingual Design System",
     href: "/work/multilingual-design-system",
     tags: ["Product Design", "Design Systems"],
-    imageAlt: "Multilingual Design System components and documentation",
   },
 ];
 
 const HOVER_SPARKLE_POSITIONS = [
   { x: -30, y: -30 },
-  { x: 30, y: -35 },
-  { x: -40, y: 20 },
-  { x: 35, y: 25 },
-  { x: 0, y: -40 },
+  { x: 30,  y: -35 },
+  { x: -40, y: 20  },
+  { x: 35,  y: 25  },
+  { x: 0,   y: -40 },
 ];
 
-const SPARKLE_COLORS = [
-  "#6B5E5A", // mushroom-taupe
-  "#B8C5B4", // mist-sage
-  "#9B8EA0", // accent-lavender
-];
-
+const SPARKLE_COLORS = ["#C9748F", "#C4B5AF", "#3D1F0F"];
 // Deterministic sizes — avoids Math.random() hydration mismatch
 const SPARKLE_SIZES = [12, 14, 10, 16, 11];
 
-function StaticName() {
-  const [isHovered, setIsHovered] = useState(false);
+// ── Sub-components ────────────────────────────────────────────────────────────
 
+/* Heading: "Hi, I'm Caitlin." with sparkle hover */
+function HeroName() {
+  const [isHovered, setIsHovered] = useState(false);
   return (
     <div
       className="relative inline-block"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <motion.h1
-        className="font-sans text-6xl font-bold leading-none tracking-tight text-name-light dark:text-name-dark md:text-8xl lg:text-9xl"
-        animate={{ y: [0, -3, 0] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-      >
-        Caitlin Weingarden
-      </motion.h1>
-
-      {isHovered && (
-        <>
-          {HOVER_SPARKLE_POSITIONS.map((pos, i) => (
-            <StaticSparkle
-              key={i}
-              size={SPARKLE_SIZES[i]}
-              color={SPARKLE_COLORS[i % SPARKLE_COLORS.length]}
-              delay={i * 0.1}
-              x={pos.x}
-              y={pos.y}
-            />
-          ))}
-        </>
-      )}
+      <h1 className="font-heading text-5xl font-bold leading-[1.1] text-page-text dark:text-dark-text md:text-6xl lg:text-7xl">
+        Hi, I&apos;m Caitlin.
+      </h1>
+      {isHovered &&
+        HOVER_SPARKLE_POSITIONS.map((pos, i) => (
+          <StaticSparkle
+            key={i}
+            size={SPARKLE_SIZES[i]}
+            color={SPARKLE_COLORS[i % SPARKLE_COLORS.length]}
+            delay={i * 0.1}
+            x={pos.x}
+            y={pos.y}
+          />
+        ))}
     </div>
   );
 }
 
-function HeroTagline({ animate = false }: { animate?: boolean }) {
-  const content = (
-    <span className="bg-gradient-to-r from-mushroom-taupe via-accent-lavender to-mist-sage bg-clip-text text-transparent dark:from-mist-sage dark:via-accent-lavender dark:to-accent-sage">
-      Artist turned product designer translating accessible experiences.
-    </span>
-  );
-
-  if (!animate) {
-    return (
-      <p className="mt-6 max-w-2xl font-sans text-xl font-medium leading-relaxed md:text-2xl">
-        {content}
-      </p>
-    );
-  }
-
+/* Tagline: ARTIST and ACCESSIBLE are bold + underlined */
+function HeroTagline() {
   return (
-    <motion.p
-      className="mt-6 max-w-2xl font-sans text-xl font-medium leading-relaxed md:text-2xl"
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: 0.3, ease: "easeOut" }}
-    >
-      {content}
-    </motion.p>
+    <p className="mt-5 max-w-md font-sans text-lg leading-relaxed text-page-text/65 dark:text-dark-text/65 md:text-xl">
+      an{" "}
+      <strong className="font-bold text-page-text underline decoration-page-text/50 decoration-2 underline-offset-4 dark:text-dark-text dark:decoration-dark-text/50">
+        ARTIST
+      </strong>{" "}
+      turned product designer, translating{" "}
+      <strong className="font-bold text-page-text underline decoration-page-text/50 decoration-2 underline-offset-4 dark:text-dark-text dark:decoration-dark-text/50">
+        ACCESSIBLE
+      </strong>{" "}
+      experiences.
+    </p>
   );
 }
 
+/* Project card */
 function ProjectCardLink({
   project,
 }: {
@@ -109,11 +89,11 @@ function ProjectCardLink({
   return (
     <Link
       href={project.href}
-      className="flex h-full flex-col overflow-hidden rounded-2xl bg-pale-blush shadow-soft transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-soft-lg dark:bg-dark-cards"
+      className="flex h-full flex-col overflow-hidden rounded-2xl bg-pale-blush shadow-soft transition-all duration-300 hover:-translate-y-2 hover:shadow-soft-lg dark:bg-dark-cards"
     >
-      <div className="relative aspect-video w-full flex-shrink-0 overflow-hidden">
+      <div className="relative aspect-video w-full overflow-hidden">
         <div
-          className="absolute inset-0 bg-gradient-to-br from-mushroom-taupe/50 to-mist-sage/50"
+          className="absolute inset-0 bg-gradient-to-br from-pale-blush to-warm-sand"
           aria-hidden
         />
         <div
@@ -131,13 +111,13 @@ function ProjectCardLink({
           {project.tags.map((tag) => (
             <span
               key={tag}
-              className="rounded-full bg-mushroom-taupe/20 px-3 py-1 font-sans text-sm font-medium tracking-wide text-page-text dark:bg-dark-text/20 dark:text-dark-text"
+              className="rounded-full bg-mushroom-taupe/20 px-3 py-1 font-sans text-sm font-medium text-page-text dark:bg-dark-text/20 dark:text-dark-text"
             >
               {tag}
             </span>
           ))}
         </div>
-        <span className="mt-4 inline-block font-sans text-sm font-medium tracking-wide text-mushroom-taupe transition-colors group-hover:text-accent-sage dark:text-mist-sage dark:group-hover:text-accent-sage">
+        <span className="mt-4 inline-block font-sans text-sm font-medium text-accent-sage dark:text-mist-sage">
           View Project →
         </span>
       </div>
@@ -145,60 +125,277 @@ function ProjectCardLink({
   );
 }
 
-function ProjectCards({ animate = false }: { animate?: boolean }) {
+// ── Hero section ──────────────────────────────────────────────────────────────
+
+function Hero({ animate }: { animate: boolean }) {
+  const Wrap = animate ? motion.div : "div";
+  const wrapProps = animate
+    ? { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.5 } }
+    : {};
+
   return (
+    /* Full-viewport hero — content below the fold on load */
     <section
-      className="px-6 py-4 md:px-12 md:py-6 lg:px-16 lg:py-8"
+      className="relative flex min-h-screen flex-col px-6 pt-20 pb-16 md:px-12 lg:px-16"
+      aria-label="Introduction"
+    >
+      {/* Subtle film-grain overlay */}
+      <div className="hero-grain" aria-hidden />
+
+      {/* ── Two-column layout ─────────────────────────────────── */}
+      <div className="mx-auto flex w-full max-w-[1200px] flex-1 flex-col items-center gap-10 md:flex-row md:gap-16 lg:gap-24">
+
+        {/* Left column: text */}
+        <div className="relative z-10 flex flex-1 flex-col justify-center">
+
+          {/* Heading */}
+          {animate ? (
+            <motion.div
+              initial={{ opacity: 0, y: 22 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <HeroName />
+            </motion.div>
+          ) : (
+            <HeroName />
+          )}
+
+          {/* Tagline */}
+          {animate ? (
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <HeroTagline />
+            </motion.div>
+          ) : (
+            <HeroTagline />
+          )}
+
+          {/* CTA links */}
+          {animate ? (
+            <motion.div
+              className="mt-10 flex flex-wrap items-center gap-5"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.38, ease: "easeOut" }}
+            >
+              <Link
+                href="/work"
+                className="rounded-sm bg-page-text px-6 py-3 font-sans text-sm font-medium tracking-wide text-page-bg transition-colors hover:bg-accent-sage dark:bg-dark-text dark:text-dark-bg dark:hover:bg-mist-sage"
+              >
+                View Work
+              </Link>
+              <Link
+                href="/about"
+                className="font-sans text-sm font-medium text-page-text/60 underline-offset-4 transition-colors hover:text-page-text hover:underline dark:text-dark-text/60 dark:hover:text-dark-text"
+              >
+                About Me →
+              </Link>
+            </motion.div>
+          ) : (
+            <div className="mt-10 flex flex-wrap items-center gap-5">
+              <Link
+                href="/work"
+                className="rounded-sm bg-page-text px-6 py-3 font-sans text-sm font-medium tracking-wide text-page-bg dark:bg-dark-text dark:text-dark-bg"
+              >
+                View Work
+              </Link>
+              <Link
+                href="/about"
+                className="font-sans text-sm font-medium text-page-text/60 dark:text-dark-text/60"
+              >
+                About Me →
+              </Link>
+            </div>
+          )}
+        </div>
+
+        {/* Right column: hero image — slides in from left */}
+        <div className="relative z-10 w-full flex-shrink-0 md:w-[42%] lg:w-[38%]">
+          {animate ? (
+            <motion.div
+              className="relative overflow-hidden"
+              style={{
+                aspectRatio: "3 / 4",
+                // Vintage editorial drop shadow
+                boxShadow: "6px 6px 0px 0px var(--warm-sand), 7px 7px 0px 1px rgba(26,15,10,0.12)",
+              }}
+              initial={{ x: -70, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.85, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <Image
+                src="/images/self_image.jpg"
+                alt="Caitlin Weingarden"
+                fill
+                className="object-cover object-top"
+                priority
+                sizes="(max-width: 768px) 90vw, 38vw"
+              />
+              {/* Thin vintage border overlay */}
+              <div
+                className="pointer-events-none absolute inset-0"
+                style={{ border: "1px solid rgba(26,15,10,0.14)" }}
+              />
+            </motion.div>
+          ) : (
+            <div
+              className="relative overflow-hidden"
+              style={{ aspectRatio: "3 / 4" }}
+            >
+              <Image
+                src="/images/self_image.jpg"
+                alt="Caitlin Weingarden"
+                fill
+                className="object-cover object-top"
+                priority
+                sizes="(max-width: 768px) 90vw, 38vw"
+              />
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ── Scroll-down CTA — bottom left ─────────────────────── */}
+      {animate && (
+        <motion.div
+          className="absolute bottom-8 left-6 flex items-center gap-2 md:left-12 lg:left-16"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.9 }}
+          aria-hidden
+        >
+          <span className="font-sans text-xs uppercase tracking-[0.2em] text-page-text/35 dark:text-dark-text/35">
+            Scroll
+          </span>
+          <motion.span
+            className="text-page-text/35 dark:text-dark-text/35"
+            animate={{ y: [0, 5, 0] }}
+            transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+          >
+            ↓
+          </motion.span>
+        </motion.div>
+      )}
+    </section>
+  );
+}
+
+// ── Projects section ──────────────────────────────────────────────────────────
+
+function Projects({ animate }: { animate: boolean }) {
+  return (
+    /* Swoosh-in: each card translates up and fades as it enters the viewport */
+    <section
+      className="px-6 py-16 md:px-12 md:py-20 lg:px-16 lg:py-24"
       aria-labelledby="featured-heading"
     >
-      <h2 id="featured-heading" className="sr-only">
-        Featured projects
-      </h2>
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-[1200px]">
+
+        {/* Section label */}
+        {animate ? (
+          <motion.p
+            className="mb-2 font-sans text-xs uppercase tracking-[0.18em] text-page-text/35 dark:text-dark-text/35"
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.4 }}
+          >
+            Selected Work
+          </motion.p>
+        ) : (
+          <p className="mb-2 font-sans text-xs uppercase tracking-[0.18em] text-page-text/35 dark:text-dark-text/35">
+            Selected Work
+          </p>
+        )}
+
+        <h2
+          id="featured-heading"
+          className={
+            animate
+              ? "mb-10 font-heading text-3xl font-semibold italic text-page-text dark:text-dark-text md:text-4xl"
+              : "mb-10 font-heading text-3xl font-semibold italic text-page-text dark:text-dark-text md:text-4xl"
+          }
+        >
+          {animate ? (
+            <motion.span
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.45, delay: 0.05 }}
+              style={{ display: "block" }}
+            >
+              Featured Projects
+            </motion.span>
+          ) : (
+            "Featured Projects"
+          )}
+        </h2>
+
+        {/* Cards grid */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
-          {FEATURED_PROJECTS.map((project, index) =>
+          {FEATURED_PROJECTS.map((project, i) =>
             animate ? (
               <motion.article
                 key={project.href}
-                initial={{ opacity: 0, y: 16 }}
+                className="min-h-[350px] md:min-h-[400px]"
+                initial={{ opacity: 0, y: 36 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.3, ease: "easeOut", delay: index * 0.1 }}
-                className="group min-h-[350px] md:min-h-[400px]"
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: i * 0.12 }}
               >
                 <ProjectCardLink project={project} />
               </motion.article>
             ) : (
-              <article
-                key={project.href}
-                className="group min-h-[350px] md:min-h-[400px]"
-              >
+              <article key={project.href} className="min-h-[350px] md:min-h-[400px]">
                 <ProjectCardLink project={project} />
               </article>
             )
           )}
         </div>
-        <div className="mt-6 text-center md:mt-8">
-          <Link
-            href="/work"
-            className="inline-block rounded-lg bg-mushroom-taupe px-6 py-3 font-sans text-base font-medium text-page-bg transition-colors duration-300 hover:bg-mushroom-taupe/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-mushroom-taupe focus-visible:ring-offset-2 dark:bg-mist-sage dark:text-dark-bg dark:hover:bg-mist-sage/90"
-          >
-            View all work
-          </Link>
+
+        {/* View all CTA */}
+        <div className="mt-8 text-center">
+          {animate ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: 0.25 }}
+            >
+              <Link
+                href="/work"
+                className="inline-block rounded-sm border border-page-text/25 px-6 py-3 font-sans text-sm font-medium text-page-text transition-colors hover:border-page-text hover:bg-page-text hover:text-page-bg dark:border-dark-text/25 dark:text-dark-text dark:hover:border-dark-text dark:hover:bg-dark-text dark:hover:text-dark-bg"
+              >
+                View all work
+              </Link>
+            </motion.div>
+          ) : (
+            <Link
+              href="/work"
+              className="inline-block rounded-sm border border-page-text/25 px-6 py-3 font-sans text-sm font-medium text-page-text dark:border-dark-text/25 dark:text-dark-text"
+            >
+              View all work
+            </Link>
+          )}
         </div>
       </div>
     </section>
   );
 }
 
+// ── Page ──────────────────────────────────────────────────────────────────────
+
 export default function HomePage() {
-  const [isMounted, setIsMounted] = useState(false);
-  const [showIntro, setShowIntro] = useState(false);
+  const [isMounted, setIsMounted]       = useState(false);
+  const [showIntro, setShowIntro]       = useState(false);
   const [contentVisible, setContentVisible] = useState(true);
 
   useEffect(() => {
     setIsMounted(true);
-
     const introPlayed = sessionStorage.getItem("introPlayed");
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
@@ -214,29 +411,18 @@ export default function HomePage() {
   }, []);
 
   const handleIntroComplete = () => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined")
       sessionStorage.setItem("introPlayed", "true");
-    }
     setShowIntro(false);
     setContentVisible(true);
   };
 
-  // Stable pre-mount render — no browser APIs, no animations
-  // Must match structure of mounted render to avoid hydration mismatch
+  /* ── Pre-mount static render (avoids hydration mismatch) ── */
   if (!isMounted) {
     return (
       <>
-        <DecorativeShapes />
-        <section
-          className="px-6 pt-[12vh] pb-4 md:px-12 lg:px-16"
-          aria-label="Introduction"
-        >
-          <div className="mx-auto max-w-7xl">
-            <StaticName />
-            <HeroTagline animate={false} />
-          </div>
-        </section>
-        <ProjectCards animate={false} />
+        <Hero animate={false} />
+        <Projects animate={false} />
       </>
     );
   }
@@ -250,27 +436,11 @@ export default function HomePage() {
         animate={{ opacity: contentVisible ? 1 : 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
-        <DecorativeShapes />
+        {/* Full-viewport hero — everything else starts below the fold */}
+        <Hero animate={true} />
 
-        {/* Hero — large name + punchy tagline, left-aligned in shared container */}
-        <section
-          className="px-6 pt-[12vh] pb-4 md:px-12 lg:px-16"
-          aria-label="Introduction"
-        >
-          <div className="mx-auto max-w-7xl">
-            <motion.div
-              initial={{ opacity: 0, y: 12, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-            >
-              <StaticName />
-            </motion.div>
-            <HeroTagline animate={true} />
-          </div>
-        </section>
-
-        {/* Featured project cards — same container as hero */}
-        <ProjectCards animate={true} />
+        {/* Projects — swoosh in as user scrolls down */}
+        <Projects animate={true} />
       </motion.div>
     </>
   );

@@ -1,129 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import ThemeToggle from "./ThemeToggle";
 
 const NAV_LINKS = [
-  {
-    href: "/",
-    label: "Home",
-    icon: (
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-        <polyline points="9 22 9 12 15 12 15 22" />
-      </svg>
-    ),
-  },
-  {
-    href: "/work",
-    label: "Work",
-    isPrimary: true,
-    icon: (
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
-        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-      </svg>
-    ),
-  },
-  {
-    href: "/art",
-    label: "Art",
-    icon: (
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <circle cx="12" cy="12" r="10" />
-        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-      </svg>
-    ),
-  },
-  {
-    href: "/about",
-    label: "About",
-    icon: (
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-        <circle cx="12" cy="7" r="4" />
-      </svg>
-    ),
-  },
-  {
-    href: "/resume",
-    label: "Resume",
-    icon: (
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-        <polyline points="14 2 14 8 20 8" />
-        <line x1="16" y1="13" x2="8" y2="13" />
-        <line x1="16" y1="17" x2="8" y2="17" />
-        <polyline points="10 9 9 9 8 9" />
-      </svg>
-    ),
-  },
-  {
-    href: "/contact",
-    label: "Contact",
-    icon: (
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-        <polyline points="22,6 12,13 2,6" />
-      </svg>
-    ),
-  },
+  { href: "/work", label: "Work" },
+  { href: "/art", label: "Art" },
+  { href: "/about", label: "About" },
+  { href: "/resume", label: "Resume" },
+  { href: "/contact", label: "Contact" },
 ] as const;
 
 export default function Navigation() {
@@ -145,6 +33,11 @@ export default function Navigation() {
 
   const closeMobile = () => setMobileOpen(false);
 
+  const handleLogoClick = () => {
+    closeMobile();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <>
       <a href="#main-content" className="skip-link">
@@ -154,37 +47,43 @@ export default function Navigation() {
         className="fixed left-0 right-0 top-0 z-[60] border-b border-mushroom-taupe/20 bg-page-bg/95 backdrop-blur-md dark:border-mist-sage/20 dark:bg-dark-bg/95"
         aria-label="Main navigation"
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3 md:px-12 lg:px-16">
-          {/* Logo */}
+        <div className="px-6 md:px-12 lg:px-16">
+        <div className="mx-auto flex max-w-[1200px] items-center py-3">
+          {/* Logo - left */}
           <Link
             href="/"
-            className="font-sans text-lg font-bold text-page-text no-underline transition-colors hover:text-mushroom-taupe dark:text-dark-text dark:hover:text-mist-sage"
-            onClick={closeMobile}
+            onClick={handleLogoClick}
+            className="shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-mushroom-taupe focus-visible:ring-offset-2"
+            aria-label="Caitlin Weingarden – Home"
           >
-            Caitlin Weingarden
+            <Image
+              src="https://raw.githubusercontent.com/caitlinweingarden/Caitlin-ux-portfolio/main/portfolio_logo.png?v=2"
+              alt="Caitlin Weingarden"
+              height={44}
+              width={185}
+              style={{ height: "44px", width: "auto" }}
+              priority
+            />
           </Link>
 
-          {/* Desktop nav */}
-          <div className="hidden items-center gap-2 md:flex">
-            {NAV_LINKS.map(({ href, label, icon, isPrimary }) => {
-              const isActive = pathname === href || (href !== "/" && pathname.startsWith(href));
+          {/* Desktop nav - right */}
+          <div className="hidden flex-1 items-center justify-end gap-8 md:flex">
+            {NAV_LINKS.map(({ href, label }) => {
+              const isActive =
+                pathname === href ||
+                ((href as string) !== "/" && pathname.startsWith(href));
               return (
                 <Link
                   key={href}
                   href={href}
-                  className={`group inline-flex items-center gap-2 rounded-full px-4 py-2 font-sans text-sm font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-mushroom-taupe focus-visible:ring-offset-2 ${
-                    isPrimary
-                      ? isActive
-                        ? "bg-mushroom-taupe text-whisper-white shadow-md dark:bg-mist-sage dark:text-slate-charcoal"
-                        : "bg-mushroom-taupe/90 text-whisper-white shadow-md hover:bg-mushroom-taupe hover:shadow-lg dark:bg-mist-sage/90 dark:text-slate-charcoal dark:hover:bg-mist-sage"
-                      : isActive
-                      ? "bg-page-text/10 text-page-text dark:bg-dark-text/10 dark:text-dark-text"
-                      : "border border-page-text/20 text-page-text hover:border-mushroom-taupe/50 hover:bg-mushroom-taupe/5 dark:border-dark-text/20 dark:text-dark-text dark:hover:border-mist-sage/50 dark:hover:bg-mist-sage/5"
+                  className={`font-sans text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-mushroom-taupe focus-visible:ring-offset-2 ${
+                    isActive
+                      ? "text-page-text underline decoration-mushroom-taupe decoration-2 underline-offset-4 dark:text-dark-text dark:decoration-mist-sage"
+                      : "text-page-text/70 hover:text-page-text dark:text-dark-text/70 dark:hover:text-dark-text"
                   }`}
                   aria-current={isActive ? "page" : undefined}
                 >
-                  {icon}
-                  <span>{label}</span>
+                  {label}
                 </Link>
               );
             })}
@@ -192,7 +91,7 @@ export default function Navigation() {
           </div>
 
           {/* Mobile: hamburger + theme */}
-          <div className="flex items-center gap-2 md:hidden">
+          <div className="flex flex-1 items-center justify-end gap-2 md:hidden">
             {mounted && <ThemeToggle />}
             <button
               type="button"
@@ -208,41 +107,36 @@ export default function Navigation() {
             </button>
           </div>
         </div>
+        </div>
 
-        {/* Mobile menu overlay - full screen backdrop */}
+        {/* Mobile menu overlay */}
         <div
           id="mobile-menu"
           className={`fixed inset-0 z-50 flex flex-col bg-page-bg backdrop-blur-sm transition-all duration-300 ease-in-out dark:bg-dark-bg md:hidden ${
             mobileOpen
-              ? "opacity-100 visible"
-              : "opacity-0 invisible pointer-events-none"
+              ? "visible opacity-100"
+              : "pointer-events-none invisible opacity-0"
           }`}
           aria-hidden={!mobileOpen}
         >
-          {/* Header spacer to account for fixed nav bar */}
           <div className="h-[57px] shrink-0" />
-
-          {/* Scrollable menu content */}
           <div className="flex-1 overflow-y-auto px-6 py-8">
             <div className="flex flex-col gap-3">
-              {NAV_LINKS.map(({ href, label, icon, isPrimary }) => {
+              {NAV_LINKS.map(({ href, label }) => {
                 const isActive = pathname === href;
                 return (
                   <Link
                     key={href}
                     href={href}
                     onClick={closeMobile}
-                    className={`inline-flex min-h-[44px] items-center gap-3 rounded-full px-5 py-3 font-sans text-base font-medium transition-all duration-200 ${
-                      isPrimary
-                        ? "bg-mushroom-taupe text-whisper-white shadow-md dark:bg-mist-sage dark:text-slate-charcoal"
-                        : isActive
-                        ? "bg-page-text/10 text-page-text dark:bg-dark-text/10 dark:text-dark-text"
-                        : "border border-page-text/20 text-page-text hover:border-mushroom-taupe/50 hover:bg-mushroom-taupe/5 dark:border-dark-text/20 dark:text-dark-text dark:hover:border-mist-sage/50"
+                    className={`inline-flex min-h-[44px] items-center px-2 py-3 font-sans text-base font-medium transition-all duration-200 ${
+                      isActive
+                        ? "text-page-text underline decoration-mushroom-taupe decoration-2 underline-offset-4 dark:text-dark-text dark:decoration-mist-sage"
+                        : "text-page-text/70 hover:text-page-text dark:text-dark-text/70 dark:hover:text-dark-text"
                     }`}
                     aria-current={isActive ? "page" : undefined}
                   >
-                    {icon}
-                    <span>{label}</span>
+                    {label}
                   </Link>
                 );
               })}

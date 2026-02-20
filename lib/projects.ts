@@ -21,6 +21,27 @@ export type CaseStudy = {
 
 export const CASE_STUDIES: CaseStudy[] = [
   {
+    slug: "sign-now",
+    title: "Sign Now",
+    description:
+      "Real-time audio-to-ASL translation for healthcare settings. Two access modes, HIPAA-grade privacy, culturally authentic design. Top 5 overall · 1st Place Healthcare Track.",
+    tags: ["UX Research", "Accessibility", "Healthcare", "Mobile Design", "Award-Winning"],
+    imageAlt: "Sign Now — real-time ASL translation app interface",
+    imageSrc: "/images/sign-now/cover.jpg",
+    overview: {
+      role: "Lead UX Designer",
+      timeline: "Fall 2025 · 6 Weeks",
+      team: "Solo Designer",
+      tools: ["Figma", "Protopie", "User Interviews", "WCAG Audits"],
+    },
+    content: [
+      {
+        heading: "Overview",
+        body: "Real-time audio-to-ASL translation system for healthcare and public settings. Features two distinct access modes — in-app and Apple Dynamic Island — with culturally authentic signing and HIPAA-grade privacy.",
+      },
+    ],
+  },
+  {
     slug: "accessibility-translation-platform",
     title: "Accessibility Translation Platform",
     description:

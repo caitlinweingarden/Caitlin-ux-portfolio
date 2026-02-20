@@ -100,7 +100,7 @@ export default function ArtPage() {
             onClick={() => setFilter(value)}
             className={`min-h-[44px] rounded-full px-4 py-2 font-sans text-sm font-medium tracking-wide transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-mushroom-taupe focus-visible:ring-offset-2 ${
               filter === value
-                ? "bg-mushroom-taupe text-page-bg dark:bg-mist-sage dark:text-dark-bg"
+                ? "bg-accent-sage text-whisper-white dark:bg-mist-sage dark:text-dark-bg"
                 : "bg-pale-blush text-page-text hover:bg-mushroom-taupe/20 dark:bg-dark-cards dark:text-dark-text dark:hover:bg-dark-text/20"
             }`}
             aria-pressed={filter === value}

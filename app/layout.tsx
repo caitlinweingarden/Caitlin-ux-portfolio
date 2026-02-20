@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import {
-  Cormorant_Garamond,
-  DM_Sans,
-  Instrument_Serif,
+  Playfair_Display,
+  Inter,
 } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "./ThemeProvider";
@@ -10,26 +9,18 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import CustomCursor from "@/components/CustomCursor";
 
-const cormorant = Cormorant_Garamond({
+const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800", "900"],
   style: ["normal", "italic"],
-  variable: "--font-cormorant",
+  variable: "--font-playfair",
   display: "swap",
 });
 
-const dmSans = DM_Sans({
+const inter = Inter({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-dm-sans",
-  display: "swap",
-});
-
-const instrumentSerif = Instrument_Serif({
-  subsets: ["latin"],
-  weight: ["400"],
-  style: ["normal", "italic"],
-  variable: "--font-instrument",
+  variable: "--font-inter",
   display: "swap",
 });
 
@@ -47,7 +38,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${cormorant.variable} ${dmSans.variable} ${instrumentSerif.variable} flex min-h-screen flex-col bg-page-bg font-sans text-page-text antialiased dark:bg-dark-bg dark:text-dark-text`}
+        className={`${playfairDisplay.variable} ${inter.variable} flex min-h-screen flex-col bg-page-bg font-sans text-page-text antialiased dark:bg-dark-bg dark:text-dark-text`}
       >
         <script
           dangerouslySetInnerHTML={{

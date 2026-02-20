@@ -15,7 +15,7 @@ export default function ResumePage() {
           <div className="mt-8 flex flex-wrap gap-4">
             <a
               href="mailto:hello@caitlinweingarden.com"
-              className="inline-block rounded-lg bg-mushroom-taupe px-6 py-3 font-sans text-base font-medium text-page-bg transition-colors duration-300 hover:bg-mushroom-taupe/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-mushroom-taupe focus-visible:ring-offset-2 dark:bg-mist-sage dark:text-dark-bg dark:hover:bg-mist-sage/90"
+              className="inline-block rounded-lg bg-accent-sage px-6 py-3 font-sans text-base font-medium text-whisper-white transition-colors duration-300 hover:bg-page-text focus:outline-none focus-visible:ring-2 focus-visible:ring-mushroom-taupe focus-visible:ring-offset-2 dark:bg-mist-sage dark:text-dark-bg dark:hover:bg-page-text"
             >
               Request resume via email
             </a>

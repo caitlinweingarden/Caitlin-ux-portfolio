@@ -3,25 +3,27 @@
 @tailwind utilities;
 
 :root {
-  --page-bg: #fafaf8;
-  --page-text: #1a1a1a;
-  --whisper-white: #faf9f6;
-  --pale-blush: #f5e6e8;
-  --warm-sand: #d9c5a8;
-  --slate-charcoal: #2a2a2a;
-  --lavender-blush: #e8d5d8;
-  --mist-sage: #b8c5b4;
-  --silver-blue: #6b7a8a;
-  --mushroom-taupe: #6b5e5a;
-  --dark-bg: #181818;
-  --dark-cards: #2a2624;
-  --dark-text: #f5f5f0;
+  --page-bg:         #fafafa;
+  --page-text:       #1a0f0a;
+  --whisper-white:   #fafafa;
+  --pale-blush:      #f5ede8;
+  --warm-sand:       #ede0d8;
+  --slate-charcoal:  #1a0f0a;
+  --lavender-blush:  #f5ede8;
+  --mist-sage:       #c4b5af;
+  --silver-blue:     #8a7065;
+  --mushroom-taupe:  #c9748f;  /* accent only */
+  --dark-bg:         #181818;
+  --dark-cards:      #2a2624;
+  --dark-text:       #f5f0ec;
+  --accent-lavender: #e8d8d0;
+  --accent-sage:     #3d1f0f;  /* rich dark brown — buttons / CTAs */
 }
 
 .dark {
-  --bg: var(--dark-bg);
+  --bg:    var(--dark-bg);
   --cards: var(--dark-cards);
-  --text: var(--dark-text);
+  --text:  var(--dark-text);
 }
 
 /* Respect reduced motion */
@@ -35,7 +37,7 @@
   }
 }
 
-/* Focus visible for accessibility - high contrast */
+/* Focus visible — uses rose accent for small interactive detail */
 :focus-visible {
   outline: 2px solid var(--mushroom-taupe);
   outline-offset: 2px;
@@ -45,13 +47,18 @@
   outline-color: var(--mist-sage);
 }
 
-/* Smooth theme transition + scroll */
+/* Smooth theme transition + scroll — no horizontal overflow */
 html {
   scroll-behavior: smooth;
   transition: background-color 0.4s ease, color 0.4s ease;
+  overflow-x: hidden;
 }
 
-/* Skip to main content link - visible on focus */
+body {
+  overflow-x: hidden;
+}
+
+/* Skip to main content link */
 .skip-link {
   position: absolute;
   left: 1.5rem;
@@ -60,7 +67,7 @@ html {
   padding: 0.5rem 1rem;
   border-radius: 0.25rem;
   background: var(--page-text);
-  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  font-family: var(--font-inter), system-ui, sans-serif;
   font-size: 0.875rem;
   font-weight: 500;
   letter-spacing: 0.025em;
@@ -82,3 +89,34 @@ html {
 .dark .skip-link:focus {
   outline-color: var(--mist-sage);
 }
+
+/* ── Film grain overlay ────────────────────────────────────────────────────
+   SVG feTurbulence noise tiled seamlessly. Slowly drifts and pulses opacity
+   to create a nostalgic, shimmering grain effect.
+   ─────────────────────────────────────────────────────────────────────── */
+@keyframes grain-shimmer {
+  0%   { background-position: 0px 0px;     opacity: 0.10; }
+  20%  { background-position: 60px 30px;   opacity: 0.18; }
+  40%  { background-position: 120px 80px;  opacity: 0.12; }
+  60%  { background-position: 40px 140px;  opacity: 0.20; }
+  80%  { background-position: 160px 60px;  opacity: 0.13; }
+  100% { background-position: 0px 0px;     opacity: 0.10; }
+}
+
+.hero-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 300px 300px;
+  opacity: 0.10;
+  mix-blend-mode: overlay;
+  z-index: 0;
+  animation: grain-shimmer 9s ease-in-out infinite;
+}
+
+/* Hide scrollbar on gallery strips across all browsers */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }

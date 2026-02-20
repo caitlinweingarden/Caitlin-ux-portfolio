@@ -47,7 +47,7 @@ export default function ProjectCard({
             />
           ) : (
             <div
-              className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-mushroom-taupe/40 to-mist-sage/40"
+              className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-pale-blush to-warm-sand"
               aria-hidden
             />
           )}
@@ -78,7 +78,7 @@ export default function ProjectCard({
         )}
 
         {/* View Project - always at bottom of card */}
-        <span className="mt-6 block font-sans text-sm font-medium tracking-wide text-mushroom-taupe transition-colors group-hover:text-accent-sage dark:text-accent-sage dark:group-hover:text-mist-sage">
+        <span className="mt-6 block font-sans text-sm font-medium tracking-wide text-accent-sage transition-colors group-hover:text-mushroom-taupe dark:text-mist-sage dark:group-hover:text-pale-blush">
           View Project →
         </span>
       </Link>
