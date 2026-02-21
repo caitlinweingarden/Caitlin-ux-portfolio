@@ -3,11 +3,16 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import IntroAnimation from "@/components/IntroAnimation";
-import { StaticSparkle } from "@/components/Sparkle";
-import { useState, useEffect } from "react";
 
-// ── Data ─────────────────────────────────────────────────────────────────────
+// ── Data ──────────────────────────────────────────────────────────────────────
+
+const HERO_PROJECT = {
+  title: "Sign Now",
+  description: "Real-time audio-to-ASL translation · 1st Place Healthcare Track",
+  href: "/work/sign-now",
+  imageSrc: "/images/sign-now/cover.jpg",
+  tags: ["Accessibility", "Healthcare", "Award-Winning"],
+};
 
 const FEATURED_PROJECTS = [
   {
@@ -22,371 +27,198 @@ const FEATURED_PROJECTS = [
   },
 ];
 
-const HOVER_SPARKLE_POSITIONS = [
-  { x: -30, y: -30 },
-  { x: 30,  y: -35 },
-  { x: -40, y: 20  },
-  { x: 35,  y: 25  },
-  { x: 0,   y: -40 },
-];
+// ── Hero ──────────────────────────────────────────────────────────────────────
 
-const SPARKLE_COLORS = ["#C9748F", "#C4B5AF", "#3D1F0F"];
-// Deterministic sizes — avoids Math.random() hydration mismatch
-const SPARKLE_SIZES = [12, 14, 10, 16, 11];
-
-// ── Sub-components ────────────────────────────────────────────────────────────
-
-/* Heading: "Hi, I'm Caitlin." with sparkle hover */
-function HeroName() {
-  const [isHovered, setIsHovered] = useState(false);
+function Hero() {
   return (
-    <div
-      className="relative inline-block"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <h1 className="font-heading text-5xl font-bold leading-[1.1] text-page-text dark:text-dark-text md:text-6xl lg:text-7xl">
-        Hi, I&apos;m Caitlin.
-      </h1>
-      {isHovered &&
-        HOVER_SPARKLE_POSITIONS.map((pos, i) => (
-          <StaticSparkle
-            key={i}
-            size={SPARKLE_SIZES[i]}
-            color={SPARKLE_COLORS[i % SPARKLE_COLORS.length]}
-            delay={i * 0.1}
-            x={pos.x}
-            y={pos.y}
-          />
-        ))}
-    </div>
-  );
-}
-
-/* Tagline: ARTIST and ACCESSIBLE are bold + underlined */
-function HeroTagline() {
-  return (
-    <p className="mt-5 max-w-md font-sans text-lg leading-relaxed text-page-text/65 dark:text-dark-text/65 md:text-xl">
-      an{" "}
-      <strong className="font-bold text-page-text underline decoration-page-text/50 decoration-2 underline-offset-4 dark:text-dark-text dark:decoration-dark-text/50">
-        ARTIST
-      </strong>{" "}
-      turned product designer, translating{" "}
-      <strong className="font-bold text-page-text underline decoration-page-text/50 decoration-2 underline-offset-4 dark:text-dark-text dark:decoration-dark-text/50">
-        ACCESSIBLE
-      </strong>{" "}
-      experiences.
-    </p>
-  );
-}
-
-/* Project card */
-function ProjectCardLink({
-  project,
-}: {
-  project: (typeof FEATURED_PROJECTS)[number];
-}) {
-  return (
-    <Link
-      href={project.href}
-      className="flex h-full flex-col overflow-hidden rounded-2xl bg-pale-blush shadow-soft transition-all duration-300 hover:-translate-y-2 hover:shadow-soft-lg dark:bg-dark-cards"
-    >
-      <div className="relative aspect-video w-full overflow-hidden">
-        <div
-          className="absolute inset-0 bg-gradient-to-br from-pale-blush to-warm-sand"
-          aria-hidden
-        />
-        <div
-          className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"
-          aria-hidden
-        />
-        <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
-          <h3 className="font-heading text-xl font-semibold text-white md:text-2xl">
-            {project.title}
-          </h3>
-        </div>
-      </div>
-      <div className="flex flex-1 flex-col justify-between p-4 md:p-6">
-        <div className="flex flex-wrap gap-2">
-          {project.tags.map((tag) => (
-            <span
-              key={tag}
-              className="rounded-full bg-mushroom-taupe/20 px-3 py-1 font-sans text-sm font-medium text-page-text dark:bg-dark-text/20 dark:text-dark-text"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-        <span className="mt-4 inline-block font-sans text-sm font-medium text-accent-sage dark:text-mist-sage">
-          View Project →
-        </span>
-      </div>
-    </Link>
-  );
-}
-
-// ── Hero section ──────────────────────────────────────────────────────────────
-
-function Hero({ animate }: { animate: boolean }) {
-  const Wrap = animate ? motion.div : "div";
-  const wrapProps = animate
-    ? { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.5 } }
-    : {};
-
-  return (
-    /* Full-viewport hero — content below the fold on load */
     <section
-      className="relative flex min-h-screen flex-col px-6 pt-20 pb-24 md:px-12 lg:px-16"
+      className="relative flex min-h-screen items-center px-6 pt-20 pb-16 md:px-12 lg:px-16"
       aria-label="Introduction"
     >
-      {/* Subtle film-grain overlay */}
-      <div className="hero-grain" aria-hidden />
+      <div className="mx-auto w-full max-w-[1200px]">
+        <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-[60%_40%] md:gap-8 lg:gap-16">
 
-      {/* ── Two-column layout: text left ~36%, image right fills rest ── */}
-      <div className="mx-auto flex w-full max-w-[1200px] flex-1 flex-col items-center gap-10 md:flex-row md:items-center md:gap-16 lg:gap-20">
-
-        {/* Left column: text — pinned to left third, never grows wider */}
-        <div className="relative z-10 flex w-full flex-shrink-0 flex-col justify-center md:w-[36%]">
-
-          {/* Heading */}
-          {animate ? (
-            <motion.div
-              initial={{ opacity: 0, y: 22 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          {/* Left: Text */}
+          <motion.div
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <h1
+              className="text-[clamp(2.75rem,6vw,5rem)] font-bold leading-[1.0] text-page-text"
+              style={{ letterSpacing: "-0.04em" }}
             >
-              <HeroName />
-            </motion.div>
-          ) : (
-            <HeroName />
-          )}
+              Hi, I&apos;m{" "}
+              <span className="text-accent">Caitlin Weingarden</span>.
+            </h1>
 
-          {/* Tagline */}
-          {animate ? (
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <HeroTagline />
-            </motion.div>
-          ) : (
-            <HeroTagline />
-          )}
+            <p className="mt-6 max-w-md text-lg leading-relaxed text-page-text/70 md:text-xl">
+              An <strong className="font-bold text-page-text">artist</strong> turned{" "}
+              <strong className="font-bold text-page-text">product designer</strong>{" "}
+              translating{" "}
+              <em className="italic text-accent">accessible</em> experiences.
+            </p>
 
-          {/* CTA links */}
-          {animate ? (
-            <motion.div
-              className="mt-10 flex flex-wrap items-center gap-5"
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.38, ease: "easeOut" }}
-            >
-              <Link
-                href="/work"
-                className="rounded-sm bg-page-text px-6 py-3 font-sans text-sm font-medium tracking-wide text-page-bg transition-colors hover:bg-accent-sage dark:bg-dark-text dark:text-dark-bg dark:hover:bg-mist-sage"
-              >
-                View Work
-              </Link>
-              <Link
-                href="/about"
-                className="font-sans text-sm font-medium text-page-text/60 underline-offset-4 transition-colors hover:text-page-text hover:underline dark:text-dark-text/60 dark:hover:text-dark-text"
-              >
-                About Me →
-              </Link>
-            </motion.div>
-          ) : (
             <div className="mt-10 flex flex-wrap items-center gap-5">
               <Link
                 href="/work"
-                className="rounded-sm bg-page-text px-6 py-3 font-sans text-sm font-medium tracking-wide text-page-bg dark:bg-dark-text dark:text-dark-bg"
+                className="rounded-sm bg-page-text px-6 py-3 text-sm font-medium tracking-wide text-page-bg transition-colors duration-300 hover:bg-accent hover:text-page-text"
               >
                 View Work
               </Link>
               <Link
                 href="/about"
-                className="font-sans text-sm font-medium text-page-text/60 dark:text-dark-text/60"
+                className="text-sm font-medium text-page-text/60 underline-offset-4 transition-colors hover:text-page-text hover:underline"
               >
                 About Me →
               </Link>
             </div>
-          )}
-        </div>
+          </motion.div>
 
-        {/* Right column: image — fills remaining 2/3, height-capped so it
-            never pushes the scroll CTA off screen.
-            height = min(72vh, 44vw) keeps 4:5-ish portrait proportions
-            without ever overflowing a normal viewport. */}
-        <div className="relative z-10 flex flex-1 items-center justify-center">
-          {animate ? (
+          {/* Right: Featured Project Card with float */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
+          >
             <motion.div
-              className="relative w-full overflow-hidden"
-              style={{
-                /* Cap height: smaller of 72% viewport or ~44vw (matches 4:5 at typical widths) */
-                height: "min(72vh, 44vw)",
-                maxHeight: "72vh",
-                /* Vintage editorial offset shadow */
-                boxShadow:
-                  "6px 6px 0px 0px var(--warm-sand), 7px 7px 0px 1px rgba(26,15,10,0.12)",
-              }}
-              initial={{ x: -60, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.85, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
             >
-              <Image
-                src="/images/self_image.jpg"
-                alt="Caitlin Weingarden"
-                fill
-                className="object-cover object-top"
-                priority
-                sizes="(max-width: 768px) 90vw, 55vw"
-              />
-              {/* Thin vintage border overlay */}
-              <div
-                className="pointer-events-none absolute inset-0"
-                style={{ border: "1px solid rgba(26,15,10,0.14)" }}
-              />
+              <Link
+                href={HERO_PROJECT.href}
+                className="group block overflow-hidden rounded-2xl bg-pale-blush shadow-soft transition-shadow duration-500 hover:shadow-soft-lg"
+                aria-label={`View case study: ${HERO_PROJECT.title}`}
+              >
+                {/* Image area */}
+                <div className="relative aspect-[4/5] w-full overflow-hidden">
+                  {/* Gradient placeholder always rendered beneath image */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-accent/30 via-warm-sand to-accent/10" />
+                  <Image
+                    src={HERO_PROJECT.imageSrc}
+                    alt={`${HERO_PROJECT.title} case study`}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    sizes="(max-width: 768px) 90vw, 40vw"
+                  />
+                  {/* View Case Study CTA overlay */}
+                  <div className="absolute inset-0 flex items-center justify-center bg-page-text/0 transition-all duration-300 group-hover:bg-page-text/55">
+                    <span className="translate-y-3 text-sm font-bold uppercase tracking-[0.15em] text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                      View Case Study →
+                    </span>
+                  </div>
+                </div>
+
+                {/* Card footer */}
+                <div className="p-5">
+                  <h3 className="text-base font-bold text-page-text">
+                    {HERO_PROJECT.title}
+                  </h3>
+                  <p className="mt-1 text-sm text-page-text/55">
+                    {HERO_PROJECT.description}
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {HERO_PROJECT.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-full bg-accent/20 px-3 py-0.5 text-xs font-medium text-page-text"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </Link>
             </motion.div>
-          ) : (
-            <div
-              className="relative w-full overflow-hidden"
-              style={{ height: "min(72vh, 44vw)", maxHeight: "72vh" }}
-            >
-              <Image
-                src="/images/self_image.jpg"
-                alt="Caitlin Weingarden"
-                fill
-                className="object-cover object-top"
-                priority
-                sizes="(max-width: 768px) 90vw, 55vw"
-              />
-            </div>
-          )}
+          </motion.div>
+
         </div>
       </div>
-
-      {/* ── Scroll-down CTA — bottom left ─────────────────────── */}
-      {animate && (
-        <motion.div
-          className="absolute bottom-8 left-6 flex items-center gap-2 md:left-12 lg:left-16"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.4, delay: 0.9 }}
-          aria-hidden
-        >
-          <span className="font-sans text-xs uppercase tracking-[0.2em] text-page-text/35 dark:text-dark-text/35">
-            Scroll
-          </span>
-          <motion.span
-            className="text-page-text/35 dark:text-dark-text/35"
-            animate={{ y: [0, 5, 0] }}
-            transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
-          >
-            ↓
-          </motion.span>
-        </motion.div>
-      )}
     </section>
   );
 }
 
-// ── Projects section ──────────────────────────────────────────────────────────
+// ── Featured Projects ─────────────────────────────────────────────────────────
 
-function Projects({ animate }: { animate: boolean }) {
+function FeaturedProjects() {
   return (
-    /* Swoosh-in: each card translates up and fades as it enters the viewport */
     <section
       className="px-6 py-16 md:px-12 md:py-20 lg:px-16 lg:py-24"
       aria-labelledby="featured-heading"
     >
       <div className="mx-auto max-w-[1200px]">
-
-        {/* Section label */}
-        {animate ? (
-          <motion.p
-            className="mb-2 font-sans text-xs uppercase tracking-[0.18em] text-page-text/35 dark:text-dark-text/35"
-            initial={{ opacity: 0, y: 14 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.4 }}
-          >
-            Selected Work
-          </motion.p>
-        ) : (
-          <p className="mb-2 font-sans text-xs uppercase tracking-[0.18em] text-page-text/35 dark:text-dark-text/35">
-            Selected Work
-          </p>
-        )}
-
-        <h2
+        <p className="mb-2 text-xs uppercase tracking-[0.18em] text-page-text/35">
+          Selected Work
+        </p>
+        <motion.h2
           id="featured-heading"
-          className={
-            animate
-              ? "mb-10 font-heading text-3xl font-semibold italic text-page-text dark:text-dark-text md:text-4xl"
-              : "mb-10 font-heading text-3xl font-semibold italic text-page-text dark:text-dark-text md:text-4xl"
-          }
+          className="mb-10 text-3xl font-semibold text-page-text md:text-4xl"
+          style={{ letterSpacing: "-0.02em" }}
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.45 }}
         >
-          {animate ? (
-            <motion.span
-              initial={{ opacity: 0, y: 14 }}
+          Featured Projects
+        </motion.h2>
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
+          {FEATURED_PROJECTS.map((project, i) => (
+            <motion.article
+              key={project.href}
+              className="min-h-[350px] md:min-h-[400px]"
+              initial={{ opacity: 0, y: 36 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.45, delay: 0.05 }}
-              style={{ display: "block" }}
-            >
-              Featured Projects
-            </motion.span>
-          ) : (
-            "Featured Projects"
-          )}
-        </h2>
-
-        {/* Cards grid */}
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
-          {FEATURED_PROJECTS.map((project, i) =>
-            animate ? (
-              <motion.article
-                key={project.href}
-                className="min-h-[350px] md:min-h-[400px]"
-                initial={{ opacity: 0, y: 36 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: i * 0.12 }}
-              >
-                <ProjectCardLink project={project} />
-              </motion.article>
-            ) : (
-              <article key={project.href} className="min-h-[350px] md:min-h-[400px]">
-                <ProjectCardLink project={project} />
-              </article>
-            )
-          )}
-        </div>
-
-        {/* View all CTA */}
-        <div className="mt-8 text-center">
-          {animate ? (
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0.25 }}
+              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: i * 0.12 }}
             >
               <Link
-                href="/work"
-                className="inline-block rounded-sm border border-page-text/25 px-6 py-3 font-sans text-sm font-medium text-page-text transition-colors hover:border-page-text hover:bg-page-text hover:text-page-bg dark:border-dark-text/25 dark:text-dark-text dark:hover:border-dark-text dark:hover:bg-dark-text dark:hover:text-dark-bg"
+                href={project.href}
+                className="flex h-full flex-col overflow-hidden rounded-2xl bg-pale-blush shadow-soft transition-all duration-300 hover:-translate-y-2 hover:shadow-soft-lg"
               >
-                View all work
+                <div className="relative aspect-video w-full overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-accent/20 to-warm-sand" aria-hidden />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" aria-hidden />
+                  <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
+                    <h3 className="text-xl font-semibold text-white md:text-2xl">
+                      {project.title}
+                    </h3>
+                  </div>
+                </div>
+                <div className="flex flex-1 flex-col justify-between p-4 md:p-6">
+                  <div className="flex flex-wrap gap-2">
+                    {project.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-full bg-accent/15 px-3 py-1 text-sm font-medium text-page-text"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <span className="mt-4 inline-block text-sm font-medium text-accent-sage">
+                    View Project →
+                  </span>
+                </div>
               </Link>
-            </motion.div>
-          ) : (
+            </motion.article>
+          ))}
+        </div>
+
+        <div className="mt-8 text-center">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.25 }}
+          >
             <Link
               href="/work"
-              className="inline-block rounded-sm border border-page-text/25 px-6 py-3 font-sans text-sm font-medium text-page-text dark:border-dark-text/25 dark:text-dark-text"
+              className="inline-block rounded-sm border border-page-text/25 px-6 py-3 text-sm font-medium text-page-text transition-colors hover:border-page-text hover:bg-page-text hover:text-page-bg"
             >
               View all work
             </Link>
-          )}
+          </motion.div>
         </div>
       </div>
     </section>
@@ -396,58 +228,10 @@ function Projects({ animate }: { animate: boolean }) {
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default function HomePage() {
-  const [isMounted, setIsMounted]       = useState(false);
-  const [showIntro, setShowIntro]       = useState(false);
-  const [contentVisible, setContentVisible] = useState(true);
-
-  useEffect(() => {
-    setIsMounted(true);
-    const introPlayed = sessionStorage.getItem("introPlayed");
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-
-    if (introPlayed === "true" || prefersReducedMotion) {
-      setShowIntro(false);
-      setContentVisible(true);
-    } else {
-      setShowIntro(true);
-      setContentVisible(false);
-    }
-  }, []);
-
-  const handleIntroComplete = () => {
-    if (typeof window !== "undefined")
-      sessionStorage.setItem("introPlayed", "true");
-    setShowIntro(false);
-    setContentVisible(true);
-  };
-
-  /* ── Pre-mount static render (avoids hydration mismatch) ── */
-  if (!isMounted) {
-    return (
-      <>
-        <Hero animate={false} />
-        <Projects animate={false} />
-      </>
-    );
-  }
-
   return (
     <>
-      {showIntro && <IntroAnimation onComplete={handleIntroComplete} />}
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: contentVisible ? 1 : 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-      >
-        {/* Full-viewport hero — everything else starts below the fold */}
-        <Hero animate={true} />
-
-        {/* Projects — swoosh in as user scrolls down */}
-        <Projects animate={true} />
-      </motion.div>
+      <Hero />
+      <FeaturedProjects />
     </>
   );
 }
