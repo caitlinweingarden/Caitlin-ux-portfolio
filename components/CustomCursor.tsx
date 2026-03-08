@@ -86,7 +86,7 @@ export default function CustomCursor() {
           <path
             d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
             fill="#E8D5D8"
-            className="dark:fill-[#9B8EA0]"
+            className=""
             opacity="0.9"
           />
           <path
@@ -96,7 +96,7 @@ export default function CustomCursor() {
             strokeLinecap="round"
             strokeLinejoin="round"
             opacity="0.6"
-            className="dark:stroke-[#B8C5B4]"
+            className=""
           />
         </svg>
       </motion.div>
@@ -104,7 +104,7 @@ export default function CustomCursor() {
       {/* Click ripple — appears at actual mouse position, not spring-lagged position */}
       {isClicking && (
         <motion.div
-          className="absolute rounded-full border-2 border-pale-blush dark:border-accent-lavender"
+          className="absolute rounded-full border-2 border-accent"
           style={{
             left: clickPos.x,
             top: clickPos.y,

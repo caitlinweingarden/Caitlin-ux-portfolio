@@ -15,9 +15,10 @@ export default async function CaseStudyPage({ params }: Props) {
   if (!project) notFound();
 
   return (
-    <article className="mx-auto max-w-7xl px-6 pt-24 pb-16 md:px-12 md:pt-32 md:pb-20 lg:px-16 lg:pb-24">
+    <article className="mx-auto max-w-[1200px] pt-24 pb-16 md:pt-32 md:pb-20 lg:pb-24">
+
       {/* Hero image */}
-      <div className="relative mb-12 aspect-video w-full overflow-hidden rounded-2xl bg-pale-blush dark:bg-dark-cards md:mb-16">
+      <div className="relative mb-12 aspect-video w-full overflow-hidden rounded-2xl bg-pale-blush md:mb-16">
         {project.imageSrc ? (
           <Image
             src={project.imageSrc}
@@ -25,11 +26,11 @@ export default async function CaseStudyPage({ params }: Props) {
             fill
             className="object-cover"
             priority
-            sizes="(max-width: 768px) 100vw, 1280px"
+            sizes="(max-width: 768px) 100vw, 1200px"
           />
         ) : (
           <div
-            className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-mushroom-taupe/50 to-mist-sage/50"
+            className="absolute inset-0 bg-gradient-to-br from-accent/30 to-warm-sand"
             aria-hidden
           />
         )}
@@ -40,16 +41,19 @@ export default async function CaseStudyPage({ params }: Props) {
           {project.tags.map((tag) => (
             <span
               key={tag}
-              className="rounded-full bg-mushroom-taupe/20 px-3 py-1 font-sans text-sm font-medium tracking-wide text-page-text dark:bg-dark-text/20 dark:text-dark-text"
+              className="rounded-full bg-accent/20 px-3 py-1 text-sm font-medium tracking-wide text-page-text"
             >
               {tag}
             </span>
           ))}
         </div>
-        <h1 className="font-heading text-4xl font-bold leading-tight text-page-text dark:text-dark-text md:text-5xl">
+        <h1
+          className="text-4xl font-bold leading-tight text-page-text md:text-5xl"
+          style={{ letterSpacing: "-0.03em" }}
+        >
           {project.title}
         </h1>
-        <p className="mt-4 max-w-2xl font-sans text-base leading-relaxed text-page-text/90 dark:text-dark-text/90">
+        <p className="mt-4 max-w-2xl text-base leading-relaxed text-page-text/70">
           {project.description}
         </p>
       </header>
@@ -63,63 +67,60 @@ export default async function CaseStudyPage({ params }: Props) {
           Project overview
         </h2>
         <div>
-          <h3 className="font-sans text-sm font-medium uppercase tracking-wide text-page-text/70 dark:text-dark-text/70">
+          <h3 className="text-sm font-medium uppercase tracking-wide text-page-text/60">
             Role
           </h3>
-          <p className="mt-2 font-sans text-base text-page-text dark:text-dark-text">
-            {project.overview.role}
-          </p>
+          <p className="mt-2 text-base text-page-text">{project.overview.role}</p>
         </div>
         <div>
-          <h3 className="font-sans text-sm font-medium uppercase tracking-wide text-page-text/70 dark:text-dark-text/70">
+          <h3 className="text-sm font-medium uppercase tracking-wide text-page-text/60">
             Timeline
           </h3>
-          <p className="mt-2 font-sans text-base text-page-text dark:text-dark-text">
-            {project.overview.timeline}
-          </p>
+          <p className="mt-2 text-base text-page-text">{project.overview.timeline}</p>
         </div>
         {project.overview.team && (
           <div>
-            <h3 className="font-sans text-sm font-medium uppercase tracking-wide text-page-text/70 dark:text-dark-text/70">
+            <h3 className="text-sm font-medium uppercase tracking-wide text-page-text/60">
               Team
             </h3>
-            <p className="mt-2 font-sans text-base text-page-text dark:text-dark-text">
-              {project.overview.team}
-            </p>
+            <p className="mt-2 text-base text-page-text">{project.overview.team}</p>
           </div>
         )}
         <div>
-          <h3 className="font-sans text-sm font-medium uppercase tracking-wide text-page-text/70 dark:text-dark-text/70">
+          <h3 className="text-sm font-medium uppercase tracking-wide text-page-text/60">
             Tools
           </h3>
-          <p className="mt-2 font-sans text-base text-page-text dark:text-dark-text">
+          <p className="mt-2 text-base text-page-text">
             {project.overview.tools.join(", ")}
           </p>
         </div>
       </section>
 
-      {/* Content sections */}
+      {/* Content sections — container-editorial keeps body text at 65ch */}
       <div className="space-y-16">
         {project.content.map((section, i) => (
           <section key={i}>
-            <h2 className="mb-4 font-heading text-3xl font-semibold italic text-page-text dark:text-dark-text md:text-4xl">
+            <h2
+              className="mb-4 text-3xl font-semibold text-page-text md:text-4xl"
+              style={{ letterSpacing: "-0.02em" }}
+            >
               {section.heading}
             </h2>
-            <div className="max-w-3xl font-sans text-base leading-relaxed text-page-text/90 dark:text-dark-text/90">
+            <div className="container-editorial text-base leading-relaxed text-page-text/80">
               {section.body}
             </div>
           </section>
         ))}
       </div>
 
-      {/* Next/Previous */}
+      {/* Back to work */}
       <nav
-        className="mt-16 flex flex-wrap items-center justify-between gap-4 border-t border-page-text/10 pt-8 dark:border-dark-text/10"
+        className="mt-16 flex flex-wrap items-center justify-between gap-4 border-t border-page-text/10 pt-8"
         aria-label="Case study navigation"
       >
         <Link
           href="/work"
-          className="font-sans text-sm font-medium tracking-wide text-mushroom-taupe transition-colors hover:text-mist-sage focus:outline-none focus-visible:ring-2 focus-visible:ring-mushroom-taupe focus-visible:ring-offset-2"
+          className="text-sm font-medium tracking-wide text-mushroom-taupe transition-colors hover:text-accent-sage focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
         >
           ← Back to work
         </Link>

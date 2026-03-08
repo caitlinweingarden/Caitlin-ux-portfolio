@@ -15,6 +15,14 @@
   --silver-blue:    #8A7065;
 }
 
+/* ── Hard link-color reset — independent of Tailwind preflight ─────────── */
+/* Tailwind base resets this too, but this rule runs even if a chunk loads  */
+/* late, preventing the browser-default purple flash.                        */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
 /* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -40,6 +48,7 @@ html {
 
 body {
   overflow-x: hidden;
+  font-size: 15px;
 }
 
 /* Skip to main content */
@@ -97,4 +106,39 @@ body {
 .container-editorial {
   max-width: 65ch;
   margin: 0 auto;
+}
+
+/* ── Sign Now case study — scoped tokens & utilities ───────────────────── */
+.sn {
+  --cream:   #fafafa;
+  --blush:   #f5ede8;
+  --sage:    #f5ede8;
+  --taupe:   #c4b5af;
+  --terra:   #c9748f;
+  --ink:          #1a0f0a;
+  --ink-70:       rgba(26, 15, 10, 0.70);
+  --ink-40:       rgba(26, 15, 10, 0.40);
+}
+
+.dark .sn {
+  --cream:   #1a1410;
+  --blush:   #1e1814;
+  --sage:    #221a18;
+  --taupe:   #4a3828;
+  --terra:   #d4899c;
+  --ink:          #f5f0ec;
+  --ink-70:       rgba(245, 240, 236, 0.70);
+  --ink-40:       rgba(245, 240, 236, 0.40);
+}
+
+.sn-lift {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.sn-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(201, 116, 143, 0.12);
+}
+.sn-qbar {
+  border-left: 3px solid var(--terra);
+  padding-left: 1.25rem;
 }

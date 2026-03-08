@@ -6,11 +6,11 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 
 const NAV_LINKS = [
-  { href: "/work",    label: "Work"    },
-  { href: "/art",     label: "Art"     },
-  { href: "/about",   label: "About"   },
-  { href: "/resume",  label: "Resume"  },
-  { href: "/contact", label: "Contact" },
+  { href: "/work",       label: "Work"       },
+  { href: "/playground", label: "Playground" },
+  { href: "/about",      label: "About"      },
+  { href: "/resume",     label: "Resume"     },
+  { href: "/contact",    label: "Contact"    },
 ] as const;
 
 export default function Navigation() {
@@ -40,8 +40,8 @@ export default function Navigation() {
         className="fixed left-0 right-0 top-0 z-[60] w-full border-b border-accent/10 bg-page-bg/95 backdrop-blur-md"
         aria-label="Main navigation"
       >
-        <div className="px-6 md:px-12 lg:px-16">
-          <div className="mx-auto flex max-w-[1200px] items-center py-3">
+        <div className="px-6 md:px-12 lg:px-24">
+          <div className="mx-auto flex max-w-[1440px] items-center justify-between py-3">
 
             {/* Logo */}
             <Link
@@ -61,7 +61,7 @@ export default function Navigation() {
             </Link>
 
             {/* Desktop nav */}
-            <div className="hidden flex-1 items-center justify-end gap-8 md:flex">
+            <div className="hidden items-center gap-8 md:flex">
               {NAV_LINKS.map(({ href, label }) => {
                 const isActive =
                   pathname === href ||
@@ -70,10 +70,10 @@ export default function Navigation() {
                   <Link
                     key={href}
                     href={href}
-                    className={`text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${
+                    className={`text-sm font-medium text-[#3D1F0F] transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${
                       isActive
-                        ? "text-page-text underline decoration-accent decoration-2 underline-offset-4"
-                        : "text-page-text/60 hover:text-page-text"
+                        ? "underline decoration-accent decoration-2 underline-offset-4 opacity-100"
+                        : "opacity-60 hover:opacity-100"
                     }`}
                     aria-current={isActive ? "page" : undefined}
                   >
@@ -84,7 +84,7 @@ export default function Navigation() {
             </div>
 
             {/* Mobile: hamburger */}
-            <div className="flex flex-1 items-center justify-end md:hidden">
+            <div className="flex items-center justify-end md:hidden">
               <button
                 type="button"
                 onClick={() => setMobileOpen((o) => !o)}

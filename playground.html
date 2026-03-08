@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Playground — Caitlin Weingarden</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/interactjs@1.10.27/dist/interact.min.js"></script>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #0a0a0a;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* ── Background story text ───────────────────────────────── */
+    .story-text {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .story-text p {
+      text-align: center;
+      color: rgba(255, 255, 255, 0.08);
+      font-size: clamp(1.1rem, 2.4vw, 1.8rem);
+      font-weight: 900;
+      line-height: 1.45;
+      max-width: 640px;
+      letter-spacing: -0.03em;
+    }
+
+    /* ── Canvas ──────────────────────────────────────────────── */
+    #canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+    }
+
+    /* ── Polaroid items ──────────────────────────────────────── */
+    .gallery-item {
+      position: absolute;
+      background: #ffffff;
+      padding: 8px 8px 30px 8px;
+      width: 250px;
+      max-width: 250px;
+      box-shadow:
+        0 2px 6px  rgba(0, 0, 0, 0.45),
+        0 10px 36px rgba(0, 0, 0, 0.60);
+      cursor: grab;
+      user-select: none;
+      will-change: transform;
+      touch-action: none;
+      transition: box-shadow 0.2s ease;
+    }
+
+    .gallery-item:hover {
+      box-shadow:
+        0 4px 12px  rgba(0, 0, 0, 0.55),
+        0 20px 56px rgba(0, 0, 0, 0.75);
+    }
+
+    .gallery-item:active {
+      cursor: grabbing;
+    }
+
+    .gallery-item img,
+    .gallery-item video {
+      display: block;
+      width: 100%;
+      height: auto;
+      pointer-events: none;
+      -webkit-user-drag: none;
+    }
+
+    /* ── Hint ────────────────────────────────────────────────── */
+    .hint {
+      position: fixed;
+      bottom: 1.75rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255, 255, 255, 0.22);
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      pointer-events: none;
+      z-index: 200;
+      animation: hint-fade 5s ease 1s forwards;
+    }
+
+    @keyframes hint-fade {
+      0%   { opacity: 1; }
+      65%  { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    /* ── Mobile: scrollable grid ─────────────────────────────── */
+    @media (max-width: 767px) {
+      html, body {
+        overflow-y: auto;
+        height: auto;
+      }
+
+      .story-text {
+        position: relative;
+        inset: auto;
+        display: block;
+        padding: 4rem 1.5rem 1.5rem;
+      }
+
+      .story-text p {
+        color: rgba(255, 255, 255, 0.55);
+        font-size: 1rem;
+        letter-spacing: -0.02em;
+        text-align: center;
+      }
+
+      #canvas {
+        position: relative;
+        inset: auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        padding: 1rem 1rem 3rem;
+      }
+
+      .gallery-item {
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+        transform: none !important;
+        width: 100% !important;
+        max-width: 100%;
+        cursor: default;
+      }
+
+      .hint { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="story-text">
+    <p>I like to create and tell a story—whether that's through baking, painting, video editing, or photography. I love it all.</p>
+  </div>
+
+  <div id="canvas">
+
+    <!-- ── Videos: playground_1–5 ──────────────────────────── -->
+    <div class="gallery-item" data-rot="-3">
+      <video autoplay muted loop playsinline poster="Art/playground_6.jpg">
+        <source src="Art/playground_1.mov" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="gallery-item" data-rot="2">
+      <video autoplay muted loop playsinline poster="Art/playground_7.jpg">
+        <source src="Art/playground_2.mov" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="gallery-item" data-rot="-2">
+      <video autoplay muted loop playsinline poster="Art/playground_8.jpg">
+        <source src="Art/playground_3.mov" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="gallery-item" data-rot="4">
+      <video autoplay muted loop playsinline poster="Art/playground_9.jpg">
+        <source src="Art/playground_4.mov" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="gallery-item" data-rot="-1">
+      <video autoplay muted loop playsinline poster="Art/playground_10.jpg">
+        <source src="Art/playground_5.mov" type="video/mp4">
+      </video>
+    </div>
+
+    <!-- ── Images: playground_6–12 ─────────────────────────── -->
+    <div class="gallery-item" data-rot="3">
+      <img src="Art/playground_6.jpg" alt="">
+    </div>
+
+    <div class="gallery-item" data-rot="-5">
+      <img src="Art/playground_7.jpg" alt="">
+    </div>
+
+    <div class="gallery-item" data-rot="1">
+      <img src="Art/playground_8.jpg" alt="">
+    </div>
+
+    <div class="gallery-item" data-rot="-3">
+      <img src="Art/playground_9.jpg" alt="">
+    </div>
+
+    <div class="gallery-item" data-rot="2">
+      <img src="Art/playground_10.jpg" alt="">
+    </div>
+
+    <div class="gallery-item" data-rot="-2">
+      <img src="Art/playground_11.jpg" alt="">
+    </div>
+
+    <div class="gallery-item" data-rot="4">
+      <img src="Art/playground_12.jpg" alt="">
+    </div>
+
+  </div>
+
+  <div class="hint">drag to explore</div>
+
+  <script>
+    const isMobile = () => window.innerWidth < 768;
+
+    // ── Scatter positions ──────────────────────────────────────
+    // [leftFraction, topFraction] — fractions of viewport
+    // 0-4: videos (top row, spread wide)
+    // 5-11: images (mid + lower area)
+    const SCATTER = [
+      [0.03,  0.05],  // video 1
+      [0.22,  0.03],  // video 2
+      [0.44,  0.05],  // video 3
+      [0.64,  0.03],  // video 4
+      [0.81,  0.06],  // video 5
+      [0.05,  0.52],  // image 6
+      [0.27,  0.43],  // image 7
+      [0.13,  0.26],  // image 8
+      [0.50,  0.38],  // image 9
+      [0.70,  0.50],  // image 10
+      [0.37,  0.59],  // image 11
+      [0.57,  0.64],  // image 12
+    ];
+
+    function scatterItems() {
+      if (isMobile()) return;
+      const items = document.querySelectorAll('.gallery-item');
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      items.forEach((el, i) => {
+        const [lf, tf] = SCATTER[i] ?? [0.1 + i * 0.07, 0.1 + i * 0.08];
+        const rot = parseFloat(el.dataset.rot) || 0;
+
+        el.style.left      = (lf * vw) + 'px';
+        el.style.top       = (tf * vh) + 'px';
+        el.style.transform = `rotate(${rot}deg)`;
+        el.setAttribute('data-x', 0);
+        el.setAttribute('data-y', 0);
+        el.style.zIndex    = 10 + i;
+      });
+    }
+
+    // ── Z-index management ─────────────────────────────────────
+    let zTop = 30;
+    function bringToFront(el) {
+      el.style.zIndex = ++zTop;
+    }
+
+    document.querySelectorAll('.gallery-item').forEach(el => {
+      el.addEventListener('mousedown',  () => bringToFront(el));
+      el.addEventListener('touchstart', () => bringToFront(el), { passive: true });
+    });
+
+    // ── Drag (desktop only) ────────────────────────────────────
+    function initDrag() {
+      interact('.gallery-item').draggable({
+        inertia: {
+          resistance: 6,
+          minSpeed: 80,
+          endSpeed: 30,
+        },
+        modifiers: [
+          interact.modifiers.restrictRect({
+            restriction: 'body',
+            endOnly: false,
+          }),
+        ],
+        listeners: {
+          start(event) {
+            bringToFront(event.target);
+          },
+          move(event) {
+            const t   = event.target;
+            const x   = (parseFloat(t.getAttribute('data-x')) || 0) + event.dx;
+            const y   = (parseFloat(t.getAttribute('data-y')) || 0) + event.dy;
+            const rot = t.dataset.rot || 0;
+            t.style.transform = `translate(${x}px, ${y}px) rotate(${rot}deg)`;
+            t.setAttribute('data-x', x);
+            t.setAttribute('data-y', y);
+          },
+        },
+      });
+    }
+
+    // ── Init ───────────────────────────────────────────────────
+    if (!isMobile()) {
+      scatterItems();
+      initDrag();
+    }
+
+    // Re-scatter on resize (debounced)
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        if (!isMobile()) scatterItems();
+      }, 250);
+    });
+  </script>
+</body>
+</html>

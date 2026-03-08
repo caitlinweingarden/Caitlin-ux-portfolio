@@ -22,7 +22,7 @@ export default function RootLayout({
         <ThemeProvider>
           <CustomCursor />
           <Navigation />
-          <main id="main-content" tabIndex={-1} className="flex-1">
+          <main id="main-content" tabIndex={-1} className="mx-auto w-full max-w-[1440px] flex-1 px-6 md:px-12 lg:px-24">
             {children}
           </main>
           <Footer />

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 // ─── Section config ────────────────────────────────────────────────────────
 const SECTIONS = [
@@ -15,14 +16,16 @@ const SECTIONS = [
   { id: "reflection", label: "Reflection",         num: "08" },
 ] as const;
 
-// ─── Image Placeholder ─────────────────────────────────────────────────────
+// ─── Image component ────────────────────────────────────────────────────────
 function Img({
   ratio = "16/9",
   label = "Image placeholder",
+  src,
   caption,
 }: {
   ratio?: string;
   label?: string;
+  src?: string;
   caption?: string;
 }) {
   const [w, h] = ratio.split("/").map(Number);
@@ -30,28 +33,38 @@ function Img({
   return (
     <figure className="w-full">
       <div className="relative w-full overflow-hidden rounded-2xl" style={{ paddingTop: pt }}>
-        <div
-          className="absolute inset-0 flex flex-col items-center justify-center gap-3"
-          style={{ background: "var(--blush)", border: "1px solid var(--taupe)" }}
-        >
-          <svg
-            width="36" height="36" viewBox="0 0 24 24"
-            fill="none" stroke="var(--taupe)" strokeWidth="1.5"
-            strokeLinecap="round" strokeLinejoin="round"
+        {src ? (
+          <Image
+            src={src}
+            alt={caption || label}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 900px"
+          />
+        ) : (
+          <div
+            className="absolute inset-0 flex flex-col items-center justify-center gap-3"
+            style={{ background: "var(--blush)", border: "1px solid var(--taupe)" }}
           >
-            <rect x="3" y="3" width="18" height="18" rx="2" />
-            <circle cx="8.5" cy="8.5" r="1.5" />
-            <polyline points="21 15 16 10 5 21" />
-          </svg>
-          <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.8rem", color: "var(--taupe)", letterSpacing: "0.04em" }}>
-            {label}
-          </span>
-        </div>
+            <svg
+              width="36" height="36" viewBox="0 0 24 24"
+              fill="none" stroke="var(--taupe)" strokeWidth="1.5"
+              strokeLinecap="round" strokeLinejoin="round"
+            >
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <circle cx="8.5" cy="8.5" r="1.5" />
+              <polyline points="21 15 16 10 5 21" />
+            </svg>
+            <span className="font-sans" style={{ fontSize: "0.8rem", color: "var(--taupe)", letterSpacing: "0.04em" }}>
+              {label}
+            </span>
+          </div>
+        )}
       </div>
       {caption && (
         <figcaption
-          className="mt-3 text-center text-sm"
-          style={{ fontFamily: "'DM Sans', sans-serif", color: "var(--taupe)" }}
+          className="mt-3 text-center text-sm font-sans"
+          style={{ color: "var(--taupe)" }}
         >
           {caption}
         </figcaption>
@@ -68,7 +81,6 @@ function SectionNum({ num, children }: { num: string; children: React.ReactNode 
         className="pointer-events-none absolute -top-4 -left-2 select-none leading-none"
         aria-hidden
         style={{
-          fontFamily: "'Playfair Display', Georgia, serif",
           fontSize: "clamp(4rem, 10vw, 7.5rem)",
           fontWeight: 700,
           color: "var(--ink)",
@@ -129,42 +141,11 @@ export default function SignNowPage() {
   const T = "transition-all duration-700 ease-out";
 
   // ─── Section padding shorthand
-  const SP = "px-6 py-20 md:px-12 lg:px-16 xl:px-24";
+  const SP = "py-20";
   const INNER = "mx-auto max-w-5xl";
 
   return (
     <>
-      {/* ── Fonts + CSS variables ───────────────────────────────── */}
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
-
-        .sn {
-          --cream:  #fafafa;
-          --blush:  #f5ede8;
-          --sage:   #f5ede8;
-          --taupe:  #c4b5af;
-          --terra:  #c9748f;
-          --ink:         #1a0f0a;
-          --ink-70:      rgba(26,15,10,0.70);
-          --ink-40:      rgba(26,15,10,0.40);
-        }
-        .dark .sn {
-          --cream:  #1a1410;
-          --blush:  #1e1814;
-          --sage:   #221a18;
-          --taupe:  #4a3828;
-          --terra:  #d4899c;
-          --ink:         #f5f0ec;
-          --ink-70:      rgba(245,240,236,0.70);
-          --ink-40:      rgba(245,240,236,0.40);
-        }
-
-        .sn a { color: inherit; }
-        .sn-lift { transition: transform .25s ease, box-shadow .25s ease; }
-        .sn-lift:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(201,116,143,.12); }
-        .sn-qbar { border-left: 3px solid var(--terra); padding-left: 1.25rem; }
-      `}</style>
-
       {/* ── Sticky dot nav (desktop only) ───────────────────────── */}
       <nav
         className="fixed left-5 top-1/2 z-50 hidden -translate-y-1/2 flex-col gap-3 lg:flex"
@@ -194,7 +175,6 @@ export default function SignNowPage() {
         style={{
           background: "var(--ink)",
           color: "var(--cream)",
-          fontFamily: "'DM Sans', sans-serif",
         }}
       >
         ← Work
@@ -204,12 +184,12 @@ export default function SignNowPage() {
       {/* MAIN                                                       */}
       {/* ══════════════════════════════════════════════════════════ */}
       <div
-        className="sn"
-        style={{ background: "var(--cream)", color: "var(--ink)", fontFamily: "'DM Sans', sans-serif" }}
+        className="sn font-sans"
+        style={{ background: "var(--cream)", color: "var(--ink)" }}
       >
 
         {/* ════════ HERO ════════ */}
-        <header className="px-6 pt-32 pb-16 md:px-12 lg:px-16 xl:px-24">
+        <header className="pt-32 pb-16">
           <div className={INNER}>
             {/* Breadcrumb */}
             <nav
@@ -236,8 +216,8 @@ export default function SignNowPage() {
             <div className={`${T} ${r("hero-title")}`} data-reveal="hero-title">
               <div className="flex items-start gap-2">
                 <h1
+                  className="font-sans"
                   style={{
-                    fontFamily: "'Playfair Display', Georgia, serif",
                     fontSize: "clamp(3.5rem, 10vw, 8rem)",
                     fontWeight: 700,
                     letterSpacing: "-0.02em",
@@ -256,7 +236,7 @@ export default function SignNowPage() {
             <p
               className={`mt-6 max-w-2xl text-xl leading-relaxed md:text-2xl ${T} ${r("hero-sub")}`}
               data-reveal="hero-sub"
-              style={{ color: "var(--ink-70)", fontFamily: "'DM Sans', sans-serif" }}
+              style={{ color: "var(--ink-70)" }}
             >
               Empowering Deaf users to access critical spoken information, without waiting for interpreter delays.
             </p>
@@ -297,6 +277,7 @@ export default function SignNowPage() {
             <div className={`mt-10 ${T} ${r("hero-img")}`} data-reveal="hero-img">
               <Img
                 ratio="21/9"
+                src="/images/sign-now/hero.png"
                 label="sign-now-hero.png"
                 caption="Sign Now: Real-time audio-to-ASL translation for healthcare settings"
               />
@@ -305,15 +286,15 @@ export default function SignNowPage() {
         </header>
 
         {/* ════════ TL;DR ════════ */}
-        <section style={{ background: "var(--blush)" }} className="px-6 py-16 md:px-12 lg:px-16 xl:px-24">
+        <section style={{ background: "var(--blush)" }} className="py-16">
           <div className={INNER}>
             <div className={`${T} ${r("tldr")}`} data-reveal="tldr">
               <p className="mb-4 text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--terra)" }}>
                 TL;DR: For Recruiters
               </p>
               <p
-                className="max-w-3xl text-xl leading-relaxed md:text-2xl"
-                style={{ fontFamily: "'Playfair Display', Georgia, serif", fontStyle: "italic", color: "var(--ink)" }}
+                className="max-w-3xl text-xl italic font-sans leading-relaxed md:text-2xl"
+                style={{ color: "var(--ink)" }}
               >
                 &ldquo;I designed a real-time audio-to-ASL translation system for healthcare settings: two access
                 modes, HIPAA-grade privacy, culturally authentic design. Competed against 72+ teams, won
@@ -327,7 +308,7 @@ export default function SignNowPage() {
                 ].map(({ icon, stat, sub }) => (
                   <div key={stat} className="flex flex-col gap-1">
                     <span className="text-3xl">{icon}</span>
-                    <span className="text-2xl font-bold" style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "var(--ink)" }}>
+                    <span className="text-2xl font-bold font-sans" style={{ color: "var(--ink)" }}>
                       {stat}
                     </span>
                     <span className="text-sm" style={{ color: "var(--ink-70)" }}>{sub}</span>
@@ -344,8 +325,8 @@ export default function SignNowPage() {
             <div className={`${T} ${r("s-overview")}`} data-reveal="s-overview">
               <SectionNum num="01">
                 <h2
-                  className="mb-8 text-4xl font-bold md:text-5xl"
-                  style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "var(--ink)" }}
+                  className="mb-8 text-4xl font-bold font-sans md:text-5xl"
+                  style={{ color: "var(--ink)" }}
                 >
                   Overview
                 </h2>
@@ -367,8 +348,8 @@ export default function SignNowPage() {
             <div className={`${T} ${r("s-problem-head")}`} data-reveal="s-problem-head">
               <SectionNum num="02">
                 <h2
-                  className="mb-4 text-4xl font-bold tracking-wide md:text-5xl"
-                  style={{ fontFamily: "'DM Sans', sans-serif", letterSpacing: "0.06em", color: "var(--ink)" }}
+                  className="mb-4 text-4xl font-bold font-sans tracking-wide md:text-5xl"
+                  style={{ letterSpacing: "0.06em", color: "var(--ink)" }}
                 >
                   CURRENTLY...
                 </h2>
@@ -442,8 +423,8 @@ export default function SignNowPage() {
                 >
                   <span className="text-2xl">{icon}</span>
                   <h3
-                    className="mt-3 mb-2 text-lg font-semibold"
-                    style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "var(--ink)" }}
+                    className="mt-3 mb-2 text-lg font-semibold font-sans"
+                    style={{ color: "var(--ink)" }}
                   >
                     {title}
                   </h3>
@@ -468,7 +449,7 @@ export default function SignNowPage() {
                   { stat: "15 Min", label: "Saved per Hospital Visit" },
                 ].map(({ stat, label }) => (
                   <div key={label}>
-                    <p className="text-2xl font-bold" style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "var(--ink)" }}>
+                    <p className="text-2xl font-bold font-sans" style={{ color: "var(--ink)" }}>
                       {stat}
                     </p>
                     <p className="text-sm" style={{ color: "var(--ink-70)" }}>{label}</p>
@@ -487,12 +468,8 @@ export default function SignNowPage() {
                 How Might We
               </p>
               <p
-                className="mx-auto max-w-2xl text-xl leading-relaxed md:text-2xl lg:text-3xl"
-                style={{
-                  fontFamily: "'Playfair Display', Georgia, serif",
-                  fontStyle: "italic",
-                  color: "var(--ink)",
-                }}
+                className="mx-auto max-w-2xl text-xl italic font-sans leading-relaxed md:text-2xl lg:text-3xl"
+                style={{ color: "var(--ink)" }}
               >
                 &ldquo;How might we give Deaf users immediate access to spoken language, in any setting,
                 at any urgency level, without depending on a third-party interpreter?&rdquo;
@@ -509,8 +486,8 @@ export default function SignNowPage() {
             <div className={`${T} ${r("s-research-head")}`} data-reveal="s-research-head">
               <SectionNum num="03">
                 <h2
-                  className="mb-4 text-4xl font-bold tracking-wide md:text-5xl"
-                  style={{ fontFamily: "'DM Sans', sans-serif", letterSpacing: "0.04em", color: "var(--ink)" }}
+                  className="mb-4 text-4xl font-bold font-sans tracking-wide md:text-5xl"
+                  style={{ letterSpacing: "0.04em", color: "var(--ink)" }}
                 >
                   TALKING TO THE COMMUNITY
                 </h2>
@@ -554,8 +531,8 @@ export default function SignNowPage() {
                     {num}
                   </p>
                   <h3
-                    className="mb-3 text-xl font-bold"
-                    style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "var(--ink)" }}
+                    className="mb-3 text-xl font-bold font-sans"
+                    style={{ color: "var(--ink)" }}
                   >
                     {title}
                   </h3>
@@ -577,12 +554,8 @@ export default function SignNowPage() {
               ].map((q) => (
                 <div key={q} className="sn-qbar">
                   <p
-                    className="text-base leading-relaxed md:text-lg"
-                    style={{
-                      fontFamily: "'Playfair Display', Georgia, serif",
-                      fontStyle: "italic",
-                      color: "var(--ink)",
-                    }}
+                    className="text-base italic font-sans leading-relaxed md:text-lg"
+                    style={{ color: "var(--ink)" }}
                   >
                     &ldquo;{q}&rdquo;
                   </p>
@@ -593,6 +566,7 @@ export default function SignNowPage() {
             <div className={`${T} ${r("s-research-img")}`} data-reveal="s-research-img">
               <Img
                 ratio="4/3"
+                src="/images/sign-now/research.png"
                 label="sign-now-research.png"
                 caption="Research synthesis: themes from community interviews and clinical staff conversations"
               />
@@ -608,8 +582,8 @@ export default function SignNowPage() {
             <div className={`${T} ${r("s-decisions-head")}`} data-reveal="s-decisions-head">
               <SectionNum num="04">
                 <h2
-                  className="mb-4 text-4xl font-bold md:text-5xl"
-                  style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "var(--ink)" }}
+                  className="mb-4 text-4xl font-bold font-sans md:text-5xl"
+                  style={{ color: "var(--ink)" }}
                 >
                   Key Design Decisions
                 </h2>
@@ -652,8 +626,8 @@ export default function SignNowPage() {
                 >
                   <span className="text-3xl">{icon}</span>
                   <h3
-                    className="mt-4 mb-3 text-lg font-semibold"
-                    style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "var(--ink)" }}
+                    className="mt-4 mb-3 text-lg font-semibold font-sans"
+                    style={{ color: "var(--ink)" }}
                   >
                     {title}
                   </h3>
@@ -672,8 +646,8 @@ export default function SignNowPage() {
             <div className={`${T} ${r("s-solution-head")}`} data-reveal="s-solution-head">
               <SectionNum num="05">
                 <h2
-                  className="mb-4 text-4xl font-bold md:text-5xl"
-                  style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "var(--ink)" }}
+                  className="mb-4 text-4xl font-bold font-sans md:text-5xl"
+                  style={{ color: "var(--ink)" }}
                 >
                   The Solution
                 </h2>
@@ -695,8 +669,8 @@ export default function SignNowPage() {
                     Mode 01
                   </p>
                   <h3
-                    className="mb-4 text-2xl font-bold"
-                    style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "var(--ink)" }}
+                    className="mb-4 text-2xl font-bold font-sans"
+                    style={{ color: "var(--ink)" }}
                   >
                     In-App Experience
                   </h3>
@@ -724,7 +698,7 @@ export default function SignNowPage() {
                   </div>
                 </div>
                 <div className="p-4 md:p-6 md:flex md:items-center">
-                  <Img ratio="4/3" label="sign-now-in-app.png" caption="In-app translation interface" />
+                  <Img ratio="4/3" src="/images/sign-now/hifi.png" label="sign-now-in-app.png" caption="In-app translation interface" />
                 </div>
               </div>
             </div>
@@ -737,15 +711,15 @@ export default function SignNowPage() {
             >
               <div className="grid md:grid-cols-2" style={{ background: "var(--sage)" }}>
                 <div className="p-4 md:order-last md:p-6 md:flex md:items-center">
-                  <Img ratio="4/3" label="sign-now-dynamic-island.png" caption="Dynamic Island quick access" />
+                  <Img ratio="4/3" src="/images/sign-now/dynamic-island.png" label="sign-now-dynamic-island.png" caption="Dynamic Island quick access" />
                 </div>
                 <div className="p-8">
                   <p className="mb-2 text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--terra)" }}>
                     Mode 02
                   </p>
                   <h3
-                    className="mb-4 text-2xl font-bold"
-                    style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "var(--ink)" }}
+                    className="mb-4 text-2xl font-bold font-sans"
+                    style={{ color: "var(--ink)" }}
                   >
                     Dynamic Island Quick Access
                   </h3>
@@ -785,8 +759,8 @@ export default function SignNowPage() {
             <div className={`${T} ${r("s-process-head")}`} data-reveal="s-process-head">
               <SectionNum num="06">
                 <h2
-                  className="mb-10 text-4xl font-bold md:text-5xl"
-                  style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "var(--ink)" }}
+                  className="mb-10 text-4xl font-bold font-sans md:text-5xl"
+                  style={{ color: "var(--ink)" }}
                 >
                   The Process
                 </h2>
@@ -816,12 +790,12 @@ export default function SignNowPage() {
                       )}
                       <div
                         className="relative z-10 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-sm font-bold"
-                        style={{ background: "var(--terra)", color: "var(--cream)", fontFamily: "'DM Sans', sans-serif" }}
+                        style={{ background: "var(--terra)", color: "var(--cream)" }}
                       >
                         {step}
                       </div>
                       <div className="pt-1.5">
-                        <h4 className="font-semibold" style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "var(--ink)" }}>
+                        <h4 className="font-semibold font-sans" style={{ color: "var(--ink)" }}>
                           {title}
                         </h4>
                         <p className="mt-1 text-sm leading-relaxed" style={{ color: "var(--ink-70)" }}>{body}</p>
@@ -859,12 +833,12 @@ export default function SignNowPage() {
               {/* 2×2 process image grid */}
               <div className="grid grid-cols-2 gap-4">
                 {[
-                  { label: "sign-now-sketches.png", caption: "Sketches" },
-                  { label: "sign-now-lofi.png",     caption: "Lo-Fi" },
-                  { label: "sign-now-midfi.png",    caption: "Mid-Fi" },
-                  { label: "sign-now-hifi.png",     caption: "Hi-Fi" },
-                ].map(({ label, caption }) => (
-                  <Img key={label} ratio="1/1" label={label} caption={caption} />
+                  { label: "sign-now-sketches.png", src: "/images/sign-now/figma.png",   caption: "Sketches" },
+                  { label: "sign-now-lofi.png",     src: "/images/sign-now/lofi.png",    caption: "Lo-Fi" },
+                  { label: "sign-now-midfi.png",    src: "/images/sign-now/lofi-bw.png", caption: "Mid-Fi" },
+                  { label: "sign-now-hifi.png",     src: "/images/sign-now/hifi.png",    caption: "Hi-Fi" },
+                ].map(({ label, src, caption }) => (
+                  <Img key={label} ratio="1/1" src={src} label={label} caption={caption} />
                 ))}
               </div>
             </div>
@@ -879,8 +853,8 @@ export default function SignNowPage() {
             <div className={`${T} ${r("s-impact-head")}`} data-reveal="s-impact-head">
               <SectionNum num="07">
                 <h2
-                  className="mb-10 text-4xl font-bold md:text-5xl"
-                  style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "var(--ink)" }}
+                  className="mb-10 text-4xl font-bold font-sans md:text-5xl"
+                  style={{ color: "var(--ink)" }}
                 >
                   Impact
                 </h2>
@@ -927,8 +901,8 @@ export default function SignNowPage() {
                 >
                   <span className="text-3xl">{icon}</span>
                   <h3
-                    className="mt-4 mb-4 text-xl font-bold"
-                    style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "var(--ink)" }}
+                    className="mt-4 mb-4 text-xl font-bold font-sans"
+                    style={{ color: "var(--ink)" }}
                   >
                     {title}
                   </h3>
@@ -958,8 +932,8 @@ export default function SignNowPage() {
                   <div key={stat} className="flex flex-col items-center gap-1">
                     <span className="text-3xl">{icon}</span>
                     <span
-                      className="text-xl font-bold"
-                      style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "var(--ink)" }}
+                      className="text-xl font-bold font-sans"
+                      style={{ color: "var(--ink)" }}
                     >
                       {stat}
                     </span>
@@ -979,8 +953,8 @@ export default function SignNowPage() {
             <div className={`${T} ${r("s-reflection-head")}`} data-reveal="s-reflection-head">
               <SectionNum num="08">
                 <h2
-                  className="mb-4 text-4xl font-bold md:text-5xl"
-                  style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "var(--ink)" }}
+                  className="mb-4 text-4xl font-bold font-sans md:text-5xl"
+                  style={{ color: "var(--ink)" }}
                 >
                   Reflection
                 </h2>
@@ -1016,8 +990,8 @@ export default function SignNowPage() {
                 >
                   <span className="text-3xl" style={{ color: "var(--terra)" }}>{accent}</span>
                   <h3
-                    className="mt-4 mb-3 text-xl font-semibold"
-                    style={{ fontFamily: "'Playfair Display', Georgia, serif", fontStyle: "italic", color: "var(--ink)" }}
+                    className="mt-4 mb-3 text-xl font-semibold italic font-sans"
+                    style={{ color: "var(--ink)" }}
                   >
                     {title}
                   </h3>
@@ -1055,12 +1029,8 @@ export default function SignNowPage() {
               style={{ background: "var(--cream)" }}
             >
               <p
-                className="max-w-2xl text-xl leading-relaxed md:text-2xl"
-                style={{
-                  fontFamily: "'Playfair Display', Georgia, serif",
-                  fontStyle: "italic",
-                  color: "var(--ink)",
-                }}
+                className="max-w-2xl text-xl italic font-sans leading-relaxed md:text-2xl"
+                style={{ color: "var(--ink)" }}
               >
                 &ldquo;More importantly, it solidified my commitment to designing technology that connects
                 people and doesn&apos;t leave Deaf users behind.&rdquo;
@@ -1075,8 +1045,8 @@ export default function SignNowPage() {
           <div className={INNER}>
             <div className={`${T} ${r("s-continued")}`} data-reveal="s-continued">
               <h2
-                className="mb-10 text-3xl font-bold"
-                style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "var(--ink)" }}
+                className="mb-10 text-3xl font-bold font-sans"
+                style={{ color: "var(--ink)" }}
               >
                 If We Continued...
               </h2>
@@ -1094,8 +1064,8 @@ export default function SignNowPage() {
                   >
                     <span className="text-2xl">{icon}</span>
                     <h3
-                      className="mt-3 mb-2 text-base font-semibold"
-                      style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "var(--ink)" }}
+                      className="mt-3 mb-2 text-base font-semibold font-sans"
+                      style={{ color: "var(--ink)" }}
                     >
                       {title}
                     </h3>
@@ -1109,7 +1079,7 @@ export default function SignNowPage() {
 
         {/* ════════ BOTTOM NAV ════════ */}
         <div
-          className="px-6 pb-24 md:px-12 lg:px-16 xl:px-24"
+          className="pb-24"
           style={{ borderTop: "1px solid var(--taupe)" }}
         >
           <div className={INNER}>
@@ -1117,14 +1087,14 @@ export default function SignNowPage() {
               <Link
                 href="/work"
                 className="text-sm font-medium transition-colors hover:underline"
-                style={{ fontFamily: "'DM Sans', sans-serif", color: "var(--terra)" }}
+                style={{ color: "var(--terra)" }}
               >
                 ← Back to Work
               </Link>
               <Link
                 href="/work"
                 className="text-sm font-medium transition-colors hover:underline"
-                style={{ fontFamily: "'DM Sans', sans-serif", color: "var(--terra)" }}
+                style={{ color: "var(--terra)" }}
               >
                 Next Project →
               </Link>

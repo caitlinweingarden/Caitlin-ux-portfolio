@@ -32,7 +32,7 @@ const FEATURED_PROJECTS = [
 function Hero() {
   return (
     <section
-      className="relative flex min-h-screen items-center px-6 pt-20 pb-16 md:px-12 lg:px-16"
+      className="relative flex min-h-screen items-center pt-20 pb-16"
       aria-label="Introduction"
     >
       <div className="mx-auto w-full max-w-[1200px]">
@@ -45,11 +45,11 @@ function Hero() {
             transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
           >
             <h1
-              className="text-[clamp(2.75rem,6vw,5rem)] font-bold leading-[1.0] text-page-text"
+              className="text-5xl font-bold leading-[1.0] text-page-text md:text-6xl lg:text-7xl"
               style={{ letterSpacing: "-0.04em" }}
             >
               Hi, I&apos;m{" "}
-              <span className="text-accent">Caitlin Weingarden</span>.
+              <span className="font-bold text-accent">Caitlin Weingarden</span>.
             </h1>
 
             <p className="mt-6 max-w-md text-lg leading-relaxed text-page-text/70 md:text-xl">
@@ -75,49 +75,56 @@ function Hero() {
             </div>
           </motion.div>
 
-          {/* Right: Featured Project Card with float */}
+          {/* Right: Featured Work card — glassmorphism with float */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
+            className="relative"
           >
+            {/* Soft gradient blob behind the glass card */}
+            <div
+              className="pointer-events-none absolute inset-0 -z-10 rounded-3xl"
+              style={{
+                background:
+                  "radial-gradient(ellipse at 60% 40%, rgba(244,172,183,0.35) 0%, rgba(253,226,228,0.20) 55%, transparent 80%)",
+              }}
+              aria-hidden
+            />
+
             <motion.div
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
             >
-              <Link
-                href={HERO_PROJECT.href}
-                className="group block overflow-hidden rounded-2xl bg-pale-blush shadow-soft transition-shadow duration-500 hover:shadow-soft-lg"
-                aria-label={`View case study: ${HERO_PROJECT.title}`}
-              >
-                {/* Image area */}
-                <div className="relative aspect-[4/5] w-full overflow-hidden">
-                  {/* Gradient placeholder always rendered beneath image */}
+              <div className="overflow-hidden rounded-2xl bg-white/40 shadow-soft backdrop-blur-md">
+
+                {/* Image strip — gradient placeholder until cover exists */}
+                <div className="relative aspect-video w-full overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-accent/30 via-warm-sand to-accent/10" />
                   <Image
                     src={HERO_PROJECT.imageSrc}
                     alt={`${HERO_PROJECT.title} case study`}
                     fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    className="object-cover"
                     sizes="(max-width: 768px) 90vw, 40vw"
                   />
-                  {/* View Case Study CTA overlay */}
-                  <div className="absolute inset-0 flex items-center justify-center bg-page-text/0 transition-all duration-300 group-hover:bg-page-text/55">
-                    <span className="translate-y-3 text-sm font-bold uppercase tracking-[0.15em] text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                      View Case Study →
-                    </span>
-                  </div>
                 </div>
 
-                {/* Card footer */}
-                <div className="p-5">
-                  <h3 className="text-base font-bold text-page-text">
+                {/* Card body */}
+                <div className="p-6 md:p-8">
+                  <p className="mb-2 text-xs uppercase tracking-[0.18em] text-page-text/40">
+                    Featured Work
+                  </p>
+                  <h3
+                    className="text-xl font-bold text-page-text md:text-2xl"
+                    style={{ letterSpacing: "-0.02em" }}
+                  >
                     {HERO_PROJECT.title}
                   </h3>
-                  <p className="mt-1 text-sm text-page-text/55">
+                  <p className="mt-2 text-sm leading-relaxed text-page-text/60">
                     {HERO_PROJECT.description}
                   </p>
-                  <div className="mt-3 flex flex-wrap gap-2">
+                  <div className="mt-4 flex flex-wrap gap-2">
                     {HERO_PROJECT.tags.map((tag) => (
                       <span
                         key={tag}
@@ -127,8 +134,14 @@ function Hero() {
                       </span>
                     ))}
                   </div>
+                  <Link
+                    href="/work"
+                    className="mt-6 inline-block rounded-sm bg-page-text px-5 py-2.5 text-sm font-medium tracking-wide text-page-bg transition-colors duration-300 hover:bg-accent hover:text-page-text"
+                  >
+                    View Work
+                  </Link>
                 </div>
-              </Link>
+              </div>
             </motion.div>
           </motion.div>
 
@@ -143,7 +156,7 @@ function Hero() {
 function FeaturedProjects() {
   return (
     <section
-      className="px-6 py-16 md:px-12 md:py-20 lg:px-16 lg:py-24"
+      className="py-16 md:py-20 lg:py-24"
       aria-labelledby="featured-heading"
     >
       <div className="mx-auto max-w-[1200px]">

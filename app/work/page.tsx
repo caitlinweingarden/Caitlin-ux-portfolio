@@ -6,7 +6,7 @@ import { CASE_STUDIES } from "@/lib/projects";
 
 export default function WorkPage() {
   return (
-    <div className="mx-auto max-w-[1200px] px-6 pt-24 pb-16 md:px-12 md:pt-32 md:pb-20 lg:px-16 lg:pb-24">
+    <div className="mx-auto max-w-[1200px] pt-24 pb-16 md:pt-32 md:pb-20 lg:pb-24">
       <motion.header
         className="mb-12 md:mb-16"
         initial={{ opacity: 0, y: 12 }}

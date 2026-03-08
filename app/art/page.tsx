@@ -87,7 +87,7 @@ export default function ArtPage() {
   const currentItem = lightboxIndex !== null ? filteredItems[lightboxIndex] : null;
 
   return (
-    <div className="px-6 pt-24 pb-16 md:px-12 md:pt-32 md:pb-20 lg:px-16 lg:pb-24">
+    <div className="pt-24 pb-16 md:pt-32 md:pb-20 lg:pb-24">
 
       <motion.header
         className="mb-12 md:mb-16"

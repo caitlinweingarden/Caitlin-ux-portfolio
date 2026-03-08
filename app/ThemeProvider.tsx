@@ -28,13 +28,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  useEffect(() => {
-    if (!mounted) return;
+ useEffect(() => {
     const root = document.documentElement;
-    root.classList.remove("light", "dark");
-    root.classList.add(theme);
-    localStorage.setItem(THEME_KEY, theme);
-  }, [theme, mounted]);
+    root.classList.remove("dark"); // Remove dark mode support
+    root.classList.add("light");  // Force light mode
+    // localStorage.setItem(THEME_KEY, theme); <-- Comment this line out
+  }, []); // Remove [theme, mounted] so it only runs once
 
   const toggleTheme = () => setTheme((t) => (t === "light" ? "dark" : "light"));
 

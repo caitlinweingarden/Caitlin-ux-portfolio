@@ -1,12 +1,14 @@
 # Caitlin Weingarden — UX Portfolio
 
-A modern, sophisticated UX portfolio with a soft art-inspired aesthetic. Built with Next.js 14, TypeScript, Tailwind CSS, and Framer Motion.
+A modernistic, editorial UX portfolio with a nostalgic Neapolitan aesthetic. 
+Built with Next.js 14, TypeScript, Tailwind CSS, and Framer Motion.
 
 ## Features
 
 - **Responsive**: Mobile-first breakpoints (375px, 768px, 1024px, 1440px)
-- **Accessible**: WCAG 2.1 AA–oriented (semantic HTML, focus states, skip link, reduced motion)
-- **Theme**: Light/dark mode with system preference and `localStorage` persistence
+- **Accessible**: High-contrast legibility (WCAG 2.1 AA compliant), semantic HTML, focus states, skip link, and reduced motion.
+- **Theme**: Art-inspired Neapolitan palette (Creamy Pink, Espresso Brown, and Strawberry accents). 
+- **Typography**: Unified Helvetica-based editorial system for maximum legibility.
 - **Pages**: Home, Work (case studies), Art (masonry gallery + lightbox), About, Resume
 
 ## Getting started
@@ -45,7 +47,7 @@ A modern, sophisticated UX portfolio with a soft art-inspired aesthetic. Built w
 - TypeScript
 - Tailwind CSS
 - Framer Motion
-- next/font (Playfair Display, Manrope)
+- next/font (Helvetica Neue / System Sans-Serif)
 - next/image
 
 ## Deploy (e.g. Vercel)
