@@ -31,7 +31,6 @@ export default function Navigation() {
         className="sticky top-0 z-50 w-full backdrop-blur-sm"
         style={{
           background:   "rgba(255,253,249,0.94)",
-          borderBottom: "1px solid rgba(45,27,20,0.06)",
         }}
         aria-label="Main navigation"
       >
@@ -52,20 +51,8 @@ export default function Navigation() {
                   <Link
                     key={href}
                     href={href}
-                    className="font-bold transition-opacity duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2D1B14] focus-visible:ring-offset-1"
-                    style={{
-                      fontSize:            "10px",
-                      letterSpacing:       "0.08em",
-                      color:               "#2D1B14",
-                      opacity:             isActive ? 1 : 0.40,
-                      textDecoration:      isActive ? "underline" : "none",
-                      textDecorationColor: "#2D1B14",
-                      textUnderlineOffset: "5px",
-                    }}
-                    onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
-                    onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLElement).style.opacity = isActive ? "1" : "0.40";
-                    }}
+                    className="font-bold focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2D1B14] focus-visible:ring-offset-1 nav-link"
+                    style={{ fontSize: "10px", letterSpacing: "0.08em" }}
                     aria-current={isActive ? "page" : undefined}
                   >
                     {text}
@@ -74,31 +61,66 @@ export default function Navigation() {
               })}
             </div>
 
-            {/* Mobile: centered ♡ toggles the menu overlay */}
-            <div className="flex w-full items-center justify-center md:hidden">
+            {/* Mobile: ♡ logo left (home link) + MENU toggle right */}
+            <div className="flex w-full items-center justify-between md:hidden">
+              {/* Module 2: ♡ signature logo top-left — links home */}
+              <Link
+                href="/"
+                onClick={closeMobile}
+                className="flex min-h-[44px] min-w-[44px] items-center focus:outline-none"
+                aria-label="Home"
+              >
+                <span
+                  style={{
+                    fontSize:   "18px",
+                    color:      "#2D1B14",
+                    opacity:    0.60,
+                    lineHeight: 1,
+                  }}
+                  aria-hidden
+                >
+                  ♡
+                </span>
+              </Link>
+
+              {/* Menu toggle — right side */}
               <button
                 type="button"
                 onClick={() => setMobileOpen((o) => !o)}
                 aria-expanded={mobileOpen}
                 aria-controls="mobile-menu"
                 aria-label={mobileOpen ? "Close menu" : "Open menu"}
-                className="flex min-h-[44px] min-w-[44px] items-center justify-center focus:outline-none"
+                className="flex min-h-[44px] min-w-[44px] items-center justify-end focus:outline-none"
                 style={{ background: "none", border: "none" }}
               >
-                <span
-                  style={{
-                    fontSize:   "20px",
-                    color:      "#2D1B14",
-                    opacity:    mobileOpen ? 1 : 0.55,
-                    display:    "block",
-                    lineHeight: 1,
-                    transition: "opacity 0.2s ease, transform 0.2s ease",
-                    transform:  mobileOpen ? "scale(1.15)" : "scale(1)",
-                  }}
-                  aria-hidden
-                >
-                  ♡
-                </span>
+                {mobileOpen ? (
+                  /* X close icon */
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    aria-hidden
+                    style={{ opacity: 1, transition: "opacity 0.2s ease" }}
+                  >
+                    <line x1="2" y1="2" x2="14" y2="14" stroke="#2D1B14" strokeWidth="1.5" strokeLinecap="round" />
+                    <line x1="14" y1="2" x2="2" y2="14" stroke="#2D1B14" strokeWidth="1.5" strokeLinecap="round" />
+                  </svg>
+                ) : (
+                  /* Hamburger icon */
+                  <svg
+                    width="16"
+                    height="12"
+                    viewBox="0 0 16 12"
+                    fill="none"
+                    aria-hidden
+                    style={{ opacity: 0.40, transition: "opacity 0.2s ease" }}
+                  >
+                    <line x1="0" y1="1"  x2="16" y2="1"  stroke="#2D1B14" strokeWidth="1.5" strokeLinecap="round" />
+                    <line x1="0" y1="6"  x2="16" y2="6"  stroke="#2D1B14" strokeWidth="1.5" strokeLinecap="round" />
+                    <line x1="0" y1="11" x2="16" y2="11" stroke="#2D1B14" strokeWidth="1.5" strokeLinecap="round" />
+                  </svg>
+                )}
               </button>
             </div>
 
@@ -120,6 +142,20 @@ export default function Navigation() {
         }`}
         style={{ backgroundColor: "#FFFDF9" }}
       >
+        {/* X close button — top-right, always visible inside overlay */}
+        <button
+          type="button"
+          onClick={closeMobile}
+          aria-label="Close menu"
+          className="absolute top-5 right-6 flex min-h-[44px] min-w-[44px] items-center justify-end focus:outline-none"
+          style={{ background: "none", border: "none" }}
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+            <line x1="2" y1="2" x2="14" y2="14" stroke="#2D1B14" strokeWidth="1.5" strokeLinecap="round" />
+            <line x1="14" y1="2" x2="2" y2="14" stroke="#2D1B14" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+        </button>
+
         <nav className="flex flex-col items-center gap-8" aria-label="Mobile navigation">
           {NAV_LINKS.map(({ href, text }) => {
             const isActive = pathname === href;
@@ -128,16 +164,8 @@ export default function Navigation() {
                 key={href}
                 href={href}
                 onClick={closeMobile}
-                className="block font-bold transition-opacity duration-200"
-                style={{
-                  fontSize:            "10px",
-                  color:               "#2D1B14",
-                  opacity:             isActive ? 1 : 0.40,
-                  letterSpacing:       "0.12em",
-                  textDecoration:      isActive ? "underline" : "none",
-                  textDecorationColor: "#2D1B14",
-                  textUnderlineOffset: "5px",
-                }}
+                className="block font-bold nav-link"
+                style={{ fontSize: "10px", letterSpacing: "0.12em" }}
                 aria-current={isActive ? "page" : undefined}
               >
                 {text}

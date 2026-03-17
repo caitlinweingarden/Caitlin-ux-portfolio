@@ -63,13 +63,12 @@ function CaseImage({
   );
 }
 
-function Sticker({ children, rotate = "-2deg" }: { children: string; rotate?: string }) {
+function Sticker({ children }: { children: string }) {
   return (
     <span
       className="inline-block rounded-lg px-3 py-1.5 text-xs font-bold text-page-text"
       style={{
         backgroundColor: "#FFB6C1",
-        transform: `rotate(${rotate})`,
         letterSpacing: "0.01em",
         lineHeight: 1.4,
       }}
@@ -99,13 +98,11 @@ export default function SignNowCaseStudy() {
     <div className="pb-24 md:pb-32">
 
       {/* ── Project header ───────────────────────────────────────────────────── */}
-      {/* Module 6: data-cursor="impact" triggers "IMPROVING LIVES ♡" on hover */}
       <motion.div
         className="mx-auto max-w-7xl px-8 pt-24 md:pt-32"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        data-cursor="impact"
       >
         {/* Back link */}
         <Link
@@ -220,9 +217,9 @@ export default function SignNowCaseStudy() {
       >
         <div className="grid grid-cols-1 gap-10 border-t border-page-text/10 pt-10 md:grid-cols-3">
           {[
-            { stat: "20%",  label: "Improved Communication" },
-            { stat: "$2B",  label: "Expected Annual Value" },
-            { stat: "15 min", label: "Saved per Hospital Visit" },
+            { stat: "20%",     label: "Improved Communication" },
+            { stat: "$2B",     label: "Expected Annual Value" },
+            { stat: "15 Mins", label: "Saved per Hospital Visit" },
           ].map(({ stat, label }) => (
             <div key={label}>
               <p
@@ -245,10 +242,10 @@ export default function SignNowCaseStudy() {
       <motion.section
         id="why"
         className="mx-auto max-w-7xl px-8"
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 48 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.5 }}
+        viewport={{ once: true, margin: "-30px" }}
+        transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
       >
         <SectionLabel num="01" label="Why This Matters" />
         <ul className="max-w-3xl space-y-4">
@@ -288,10 +285,10 @@ export default function SignNowCaseStudy() {
       <motion.section
         id="problem"
         className="mx-auto max-w-7xl px-8"
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 48 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.5 }}
+        viewport={{ once: true, margin: "-30px" }}
+        transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
       >
         <SectionLabel num="02" label="The Problem" />
 
@@ -376,10 +373,10 @@ export default function SignNowCaseStudy() {
       <motion.section
         id="research"
         className="mx-auto max-w-7xl px-8"
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 48 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.5 }}
+        viewport={{ once: true, margin: "-30px" }}
+        transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
       >
         <SectionLabel num="03" label="Research and Insights" />
         <ul className="mb-14 max-w-3xl space-y-4">
@@ -451,10 +448,10 @@ export default function SignNowCaseStudy() {
       <motion.section
         id="personas"
         className="mx-auto max-w-7xl px-8"
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 48 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.5 }}
+        viewport={{ once: true, margin: "-30px" }}
+        transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
       >
         <SectionLabel num="04" label="Personas" />
         <p className="mb-10 max-w-xl text-base leading-relaxed text-page-text/60">
@@ -462,42 +459,48 @@ export default function SignNowCaseStudy() {
           with any of them in mind.
         </p>
 
-        <div className="mb-14 grid gap-8 md:grid-cols-3">
+        <div className="mb-14 grid gap-6 md:grid-cols-3">
           {[
             {
-              label:     "Persona 01",
-              emoji:     "👴",
-              name:      "Elias",
-              age:       "68, Retired Educator",
-              backstory: "Elias lost most of his hearing at 52. He navigates hospital visits alone and has left appointments without understanding his diagnosis because no interpreter was available.",
-              goal:      "Receive clear, dignified medical information without burdening family members or waiting for a service that may never arrive.",
-              pain:      "The anxiety of not knowing what the doctor said stays with him for days. Uncertainty about his own health feels like a second diagnosis.",
-              quote:     "I sit in the exam room and smile and nod. I go home and I still don't know what's wrong.",
+              label:  "Persona 01",
+              emoji:  "🏥",
+              name:   "Elias",
+              age:    "68 · Retired Educator",
+              pains:  [
+                "Left appointments without understanding diagnosis",
+                "No interpreter available when needed most",
+                "Days of uncertainty after every visit",
+              ],
+              quote:  "I sit in the exam room and smile and nod.",
             },
             {
-              label:     "Persona 02",
-              emoji:     "🎓",
-              name:      "Jordan",
-              age:       "20, University Student",
-              backstory: "Jordan is Deaf from birth and uses ASL as their primary language. They navigate campus, classes, and social life with confidence but hit walls in unexpected moments: a campus clinic visit, a TA office hour, a group project kickoff.",
-              goal:      "Communicate fluidly in everyday environments without having to plan ahead or carry interpreting services into every interaction.",
-              pain:      "Accommodation requests take days. Real life does not wait for paperwork.",
-              quote:     "I shouldn't need to schedule a week in advance just to talk to my professor.",
+              label:  "Persona 02",
+              emoji:  "🎓",
+              name:   "Jordan",
+              age:    "20 · University Student",
+              pains:  [
+                "Accommodation requests take days to process",
+                "Campus clinic visits require advance planning",
+                "Real life does not wait for paperwork",
+              ],
+              quote:  "I shouldn't need to schedule a week in advance.",
             },
             {
-              label:     "Persona 03",
-              emoji:     "👩‍👧",
-              name:      "Sarah",
-              age:       "34, Working Mom",
-              backstory: "Sarah is a CODA (Child of Deaf Adults) who signs fluently and often serves as an informal interpreter for her mother. She works full-time and cannot always be available, and the emotional weight of that role is unsustainable.",
-              goal:      "Give her mother a tool that restores independence so Sarah can be a daughter instead of a communication proxy.",
-              pain:      "Her mother deserves to advocate for herself. The current system forces Sarah into a role that no family member should have to fill.",
-              quote:     "Every time she calls me into a doctor's appointment, I feel like I've failed to give her something she deserves.",
+              label:  "Persona 03",
+              emoji:  "👩‍👧",
+              name:   "Sarah",
+              age:    "34 · CODA, Working Mom",
+              pains:  [
+                "Cannot always be available for her mother",
+                "Emotional weight of the interpreter role unsustainable",
+                "Her mother deserves to advocate for herself",
+              ],
+              quote:  "She deserves to speak for herself.",
             },
           ].map((persona) => (
             <div
               key={persona.name}
-              className="rounded-2xl p-7"
+              className="rounded-xl p-5"
               style={{
                 border:     "1px solid rgba(45,27,20,0.10)",
                 background: "rgba(255,182,193,0.04)",
@@ -505,8 +508,8 @@ export default function SignNowCaseStudy() {
             >
               <div className="mb-4 flex items-center gap-3">
                 <span
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-xl"
-                  style={{ background: "rgba(255,182,193,0.18)" }}
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-lg"
+                  style={{ background: "rgba(255,182,193,0.15)" }}
                   aria-hidden
                 >
                   {persona.emoji}
@@ -518,28 +521,86 @@ export default function SignNowCaseStudy() {
                   >
                     {persona.label}
                   </p>
-                  <h3 className="text-base font-bold text-page-text leading-tight">{persona.name}</h3>
+                  <h3 className="text-sm font-bold text-page-text leading-tight">{persona.name}</h3>
                 </div>
               </div>
-              <p className="mb-4 text-xs font-medium text-page-text/45">{persona.age}</p>
-              <p className="mb-5 text-sm leading-relaxed text-page-text/60">
-                {persona.backstory}
-              </p>
-              <div className="mb-3">
-                <p className="mb-1 text-xs font-bold uppercase tracking-wide" style={{ color: "#2D1B14" }}>
-                  Goal
-                </p>
-                <p className="text-sm leading-relaxed text-page-text/65">{persona.goal}</p>
-              </div>
-              <div className="mb-5">
-                <p className="mb-1 text-xs font-bold uppercase tracking-wide" style={{ color: "#2D1B14" }}>
-                  Pain Point
-                </p>
-                <p className="text-sm leading-relaxed text-page-text/65">{persona.pain}</p>
-              </div>
-              <p className="text-sm italic leading-relaxed text-page-text/50">
+
+              <p className="mb-3 text-xs text-page-text/50">{persona.age}</p>
+
+              <ul className="mb-4 space-y-1.5">
+                {persona.pains.map((pain) => (
+                  <li key={pain} className="flex items-start gap-2 text-xs leading-snug text-page-text/65">
+                    <span className="mt-[0.3em] h-1 w-1 shrink-0 rounded-full" style={{ backgroundColor: "#FFB6C1" }} aria-hidden />
+                    {pain}
+                  </li>
+                ))}
+              </ul>
+
+              <p className="border-t border-page-text/08 pt-3 text-xs italic text-page-text/50">
                 &ldquo;{persona.quote}&rdquo;
               </p>
+            </div>
+          ))}
+        </div>
+      </motion.section>
+
+      <Divider />
+
+      {/* ── 04b Usability Testing ─────────────────────────────────────────────── */}
+      <motion.section
+        id="usability"
+        className="mx-auto max-w-7xl px-8"
+        initial={{ opacity: 0, y: 48 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-30px" }}
+        transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <SectionLabel num="04b" label="Usability Testing" />
+        <p className="mb-10 max-w-xl text-base leading-relaxed text-page-text/60">
+          Prototype sessions with Deaf adults and hard-of-hearing users surfaced
+          three consistent themes across all participants.
+        </p>
+
+        <div className="grid gap-5 md:grid-cols-3">
+          {[
+            {
+              quote:       "Incredibly intuitive, I didn't need any instructions.",
+              participant: "Participant 1",
+              context:     "Deaf adult, age 34",
+            },
+            {
+              quote:       "I could see myself using this every single day.",
+              participant: "Participant 2",
+              context:     "Hard-of-hearing adult, age 28",
+            },
+            {
+              quote:       "It felt natural, like it was designed for me.",
+              participant: "Participant 3",
+              context:     "ASL user, age 45",
+            },
+          ].map(({ quote, participant, context }) => (
+            <div
+              key={participant}
+              className="rounded-xl p-6"
+              style={{
+                background: "rgba(45,27,20,0.03)",
+                border:     "1px solid rgba(45,27,20,0.08)",
+              }}
+            >
+              <span
+                className="mb-3 block font-bold text-page-text/20"
+                style={{ fontSize: "2.5rem", lineHeight: 1, fontFamily: "Georgia, serif" }}
+                aria-hidden
+              >
+                &ldquo;
+              </span>
+              <p className="text-base font-medium leading-relaxed text-page-text" style={{ letterSpacing: "-0.01em" }}>
+                {quote}
+              </p>
+              <div className="mt-4 border-t border-page-text/08 pt-3">
+                <p className="text-xs font-bold text-page-text/55">{participant}</p>
+                <p className="text-xs text-page-text/40">{context}</p>
+              </div>
             </div>
           ))}
         </div>
@@ -551,10 +612,10 @@ export default function SignNowCaseStudy() {
       <motion.section
         id="ideation"
         className="mx-auto max-w-7xl px-8"
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 48 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.5 }}
+        viewport={{ once: true, margin: "-30px" }}
+        transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
       >
         <SectionLabel num="05" label="Design Process" />
         <p className="mb-10 max-w-2xl text-base leading-relaxed text-page-text/65">
@@ -587,21 +648,18 @@ export default function SignNowCaseStudy() {
       <motion.section
         id="solution"
         className="mx-auto max-w-7xl px-8"
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 48 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.5 }}
+        viewport={{ once: true, margin: "-30px" }}
+        transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
       >
         <SectionLabel num="06" label="The Solution" />
         <p className="mb-10 max-w-2xl text-base leading-relaxed text-page-text/65">
-          The final product renders{" "}
-          <strong className="font-bold text-page-text">
-            animated ASL in under 300ms
-          </strong>{" "}
-          to keep pace with natural conversation. Two modes serve distinct
-          contexts: the in-app full-screen view for focused exchanges and the
-          Dynamic Island persistent mode for background translation while
-          providers use other tools.
+          An in-app translation experience using{" "}
+          <strong style={{ fontWeight: 700, textDecoration: "underline", textDecorationColor: "rgba(255,182,193,0.85)", textUnderlineOffset: "3px", textDecorationThickness: "1.5px" }}>real human images</strong>{" "}
+          for clarity and trust: a multilingual AI-powered solution that makes
+          communication across languages and signing systems feel{" "}
+          <strong style={{ fontWeight: 700, textDecoration: "underline", textDecorationColor: "rgba(255,182,193,0.85)", textUnderlineOffset: "3px", textDecorationThickness: "1.5px" }}>seamless, immediate, and human</strong>.
         </p>
 
         {/* Hi-fi with sticker callouts */}
@@ -612,9 +670,31 @@ export default function SignNowCaseStudy() {
             caption="Final hi-fi: the translation interface prioritizes legibility over decoration, because the user may be stressed or in pain."
           />
           <div className="mt-4 flex flex-wrap gap-3">
-            <Sticker rotate="-2deg">High-contrast for clinical use</Sticker>
-            <Sticker rotate="1.5deg">Real-time 3D Rendering</Sticker>
+            <span
+              className="inline-block rounded-lg px-3 py-1.5 text-xs font-bold text-page-text"
+              style={{ backgroundColor: "#FFB6C1", letterSpacing: "0.01em", lineHeight: 1.4 }}
+            >
+              Dynamic Island mode keeps translation running while providers use other tools
+            </span>
+            <span
+              className="inline-block rounded-lg px-3 py-1.5 text-xs font-bold text-page-text"
+              style={{ backgroundColor: "#FFB6C1", letterSpacing: "0.01em", lineHeight: 1.4 }}
+            >
+              Real human images, not avatars, build clarity and trust for Deaf users
+            </span>
           </div>
+        </div>
+
+        <div className="mb-8 max-w-2xl">
+          <p className="text-base font-medium text-page-text" style={{ letterSpacing: "-0.01em" }}>
+            Access our translation platform with the click of a button.
+          </p>
+          <p className="mt-3 text-base leading-relaxed text-page-text/65">
+            The Dynamic Island persistent mode keeps translation running in the
+            background, allowing providers to use other tools without interrupting
+            the conversation. Patients stay informed throughout the entire clinical
+            encounter.
+          </p>
         </div>
 
         <CaseImage
@@ -622,6 +702,49 @@ export default function SignNowCaseStudy() {
           alt="Dynamic Island: persistent background translation"
           caption="Dynamic Island integration: one tap from the lock screen, no app launch required. Designed for the moment when a patient cannot wait."
         />
+      </motion.section>
+
+      <Divider />
+
+      {/* ── 07 Impact ────────────────────────────────────────────────────────── */}
+      <motion.section
+        id="impact"
+        className="mx-auto max-w-7xl px-8"
+        initial={{ opacity: 0, y: 48 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-30px" }}
+        transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <SectionLabel num="07" label="Impact" />
+        <div
+          className="max-w-3xl rounded-2xl p-8"
+          style={{ background: "rgba(255,182,193,0.07)", border: "1px solid rgba(255,182,193,0.22)" }}
+        >
+          <ul className="space-y-4">
+            <Bullet>
+              Awarded{" "}
+              <strong className="font-bold text-page-text">1st Place at the UMich Ross Tech Innovation Jam</strong>,
+              validating the solution across a competitive field of student teams.
+            </Bullet>
+            <Bullet>
+              Usability testing with Deaf and hard-of-hearing adults returned consistent results:
+              participants called the experience{" "}
+              <strong className="font-bold text-page-text">intuitive, natural, and immediately practical</strong>{" "}
+              for daily clinical use.
+            </Bullet>
+            <Bullet>
+              Replacing AI avatars with{" "}
+              <strong className="font-bold text-page-text">real human images</strong>{" "}
+              directly resolved the primary trust barrier surfaced in community research with Deaf leaders at ThinkSelf.
+            </Bullet>
+            <Bullet>
+              The{" "}
+              <strong className="font-bold text-page-text">Dynamic Island persistent mode</strong>{" "}
+              allows providers to keep translation running in the background, removing the
+              need to interrupt clinical workflows to restart the app.
+            </Bullet>
+          </ul>
+        </div>
       </motion.section>
 
       {/* ── Back to Work ─────────────────────────────────────────────────────── */}

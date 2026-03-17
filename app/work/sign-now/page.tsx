@@ -232,10 +232,25 @@ export default function SignNowPage() {
               <span className="ml-1 text-lg" style={{ color: "var(--taupe)" }} aria-hidden>⋆</span>
             </div>
 
+            {/* Data-first hook */}
+            <p
+              className={`mt-6 max-w-2xl font-bold ${T} ${r("hero-sub")}`}
+              data-reveal="hero-sub"
+              style={{
+                fontSize:      "clamp(1.1rem, 2.2vw, 1.5rem)",
+                lineHeight:    1.2,
+                letterSpacing: "-0.02em",
+                color:         "var(--ink)",
+              }}
+            >
+              Miscommunication isn&apos;t just a barrier;&nbsp;
+              <span style={{ color: "var(--terra)" }}>it&apos;s a $2.7 Billion yearly cost.</span>
+            </p>
+
             {/* Subtitle */}
             <p
-              className={`mt-6 max-w-2xl text-xl leading-relaxed md:text-2xl ${T} ${r("hero-sub")}`}
-              data-reveal="hero-sub"
+              className={`mt-4 max-w-2xl text-xl leading-relaxed md:text-2xl ${T} ${r("hero-sub-body")}`}
+              data-reveal="hero-sub-body"
               style={{ color: "var(--ink-70)" }}
             >
               Empowering Deaf users to access critical spoken information, without waiting for interpreter delays.
@@ -444,9 +459,10 @@ export default function SignNowPage() {
               </p>
               <div className="flex flex-wrap gap-8 md:gap-16">
                 {[
-                  { stat: "20%",    label: "Improved Communication" },
-                  { stat: "$2B",    label: "Expected Annual Value" },
-                  { stat: "15 Min", label: "Saved per Hospital Visit" },
+                  { stat: "$2.7B",   label: "In preventable yearly costs" },
+                  { stat: "$2,200",  label: "Added yearly healthcare cost per person" },
+                  { stat: "18 Min",  label: "Wasted per hospital visit" },
+                  { stat: "$150/hr", label: "Cost of current human interpreters" },
                 ].map(({ stat, label }) => (
                   <div key={label}>
                     <p className="text-2xl font-bold font-sans" style={{ color: "var(--ink)" }}>
@@ -563,91 +579,50 @@ export default function SignNowPage() {
               ))}
             </div>
 
-            {/* ── Persona cards — Module 5: named personas with avatar icons ── */}
+            {/* ── Persona snapshots ── */}
             <div
-              className={`mb-12 grid gap-6 md:grid-cols-2 ${T} ${r("s-research-personas")}`}
+              className={`mb-12 grid gap-5 md:grid-cols-3 ${T} ${r("s-research-personas")}`}
               data-reveal="s-research-personas"
             >
-              {/* Persona 1: Maya */}
-              <div
-                className="sn-lift rounded-2xl overflow-hidden"
-                style={{ border: "1px solid var(--taupe)" }}
-              >
+              {[
+                {
+                  emoji: "🏥",
+                  label: "Persona 01",
+                  name:  "Elias, 68",
+                  role:  "Retired veteran. Wears hearing aids.",
+                  body:  "Navigates VA appointments alone. Interpreter delays leave him nodding along to diagnoses he can't fully hear.",
+                },
+                {
+                  emoji: "🎓",
+                  label: "Persona 02",
+                  name:  "Jordan, 20",
+                  role:  "College student. Congenital hearing loss.",
+                  body:  "Relies on written notes in urgent care. Misses critical dosage instructions because no one has time to write everything down.",
+                },
+                {
+                  emoji: "👩‍👧",
+                  label: "Persona 03",
+                  name:  "Sarah, 34",
+                  role:  "Parent. Works in healthcare admin.",
+                  body:  "Coordinates care for her Deaf daughter. Scheduling a certified interpreter adds 2-3 days to every non-emergency visit.",
+                },
+              ].map(({ emoji, label, name, role, body }) => (
                 <div
-                  className="flex items-center gap-4 p-6"
-                  style={{ background: "var(--sage)", borderBottom: "1px solid var(--taupe)" }}
+                  key={name}
+                  className="sn-lift rounded-2xl p-6"
+                  style={{ background: "var(--cream)", border: "1px solid var(--taupe)" }}
                 >
-                  {/* Avatar icon — SVG geometric face */}
-                  <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-                    <circle cx="24" cy="24" r="24" fill="var(--terra)" opacity="0.18" />
-                    <circle cx="24" cy="20" r="9" fill="var(--terra)" opacity="0.55" />
-                    <ellipse cx="24" cy="40" rx="13" ry="8" fill="var(--terra)" opacity="0.4" />
-                    <circle cx="20" cy="19" r="1.5" fill="var(--ink)" opacity="0.7" />
-                    <circle cx="28" cy="19" r="1.5" fill="var(--ink)" opacity="0.7" />
-                    <path d="M20 23.5 Q24 26.5 28 23.5" stroke="var(--ink)" strokeWidth="1.4" strokeLinecap="round" fill="none" opacity="0.7" />
-                  </svg>
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-widest" style={{ color: "var(--terra)" }}>Persona 01</p>
-                    <h3 className="text-lg font-bold font-sans" style={{ color: "var(--ink)" }}>Maya Chen, 28</h3>
-                    <p className="text-xs" style={{ color: "var(--ink-70)" }}>Patient. Congenital hearing loss.</p>
+                  <p className="mb-2 text-xs font-bold uppercase tracking-widest" style={{ color: "var(--terra)" }}>{label}</p>
+                  <div className="mb-3 flex items-center gap-2">
+                    <span className="text-2xl" aria-hidden>{emoji}</span>
+                    <div>
+                      <h3 className="text-base font-bold font-sans leading-tight" style={{ color: "var(--ink)" }}>{name}</h3>
+                      <p className="text-xs" style={{ color: "var(--ink-70)" }}>{role}</p>
+                    </div>
                   </div>
+                  <p className="text-sm leading-relaxed" style={{ color: "var(--ink-70)" }}>{body}</p>
                 </div>
-                <div className="p-6" style={{ background: "var(--cream)" }}>
-                  <div className="mb-4">
-                    <p className="mb-1 text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--terra)" }}>Goal</p>
-                    <p className="text-sm leading-relaxed" style={{ color: "var(--ink-70)" }}>
-                      Communicate independently during medical appointments without waiting for an interpreter.
-                    </p>
-                  </div>
-                  <div>
-                    <p className="mb-1 text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--ink-40)" }}>Pain Point</p>
-                    <p className="text-sm leading-relaxed" style={{ color: "var(--ink-70)" }}>
-                      Interpreter delays create anxiety and risk miscommunication during critical diagnoses.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Persona 2: Marcus */}
-              <div
-                className="sn-lift rounded-2xl overflow-hidden"
-                style={{ border: "1px solid var(--taupe)" }}
-              >
-                <div
-                  className="flex items-center gap-4 p-6"
-                  style={{ background: "var(--blush)", borderBottom: "1px solid var(--taupe)" }}
-                >
-                  {/* Avatar icon — SVG geometric face variant */}
-                  <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-                    <circle cx="24" cy="24" r="24" fill="var(--ink)" opacity="0.08" />
-                    <circle cx="24" cy="20" r="9" fill="var(--ink)" opacity="0.30" />
-                    <ellipse cx="24" cy="40" rx="13" ry="8" fill="var(--ink)" opacity="0.22" />
-                    <circle cx="20" cy="19" r="1.5" fill="var(--ink)" opacity="0.7" />
-                    <circle cx="28" cy="19" r="1.5" fill="var(--ink)" opacity="0.7" />
-                    <path d="M20 23 Q24 25.5 28 23" stroke="var(--ink)" strokeWidth="1.4" strokeLinecap="round" fill="none" opacity="0.6" />
-                    <rect x="18" y="11" width="12" height="3" rx="1.5" fill="var(--ink)" opacity="0.25" />
-                  </svg>
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-widest" style={{ color: "var(--terra)" }}>Persona 02</p>
-                    <h3 className="text-lg font-bold font-sans" style={{ color: "var(--ink)" }}>Marcus Wright, 42</h3>
-                    <p className="text-xs" style={{ color: "var(--ink-70)" }}>Hospital administrator. Patient access coordinator.</p>
-                  </div>
-                </div>
-                <div className="p-6" style={{ background: "var(--cream)" }}>
-                  <div className="mb-4">
-                    <p className="mb-1 text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--terra)" }}>Goal</p>
-                    <p className="text-sm leading-relaxed" style={{ color: "var(--ink-70)" }}>
-                      Provide equitable, ADA-compliant care to all patients efficiently and without scheduling delays.
-                    </p>
-                  </div>
-                  <div>
-                    <p className="mb-1 text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--ink-40)" }}>Pain Point</p>
-                    <p className="text-sm leading-relaxed" style={{ color: "var(--ink-70)" }}>
-                      Staffing qualified interpreters is expensive and unreliable. Coverage gaps create liability exposure.
-                    </p>
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
 
             <div className={`${T} ${r("s-research-img")}`} data-reveal="s-research-img">
@@ -739,9 +714,49 @@ export default function SignNowPage() {
                   The Solution
                 </h2>
               </SectionNum>
-              <p className="mb-12 text-base leading-relaxed md:text-lg" style={{ color: "var(--ink-70)" }}>
+              <p className="mb-8 text-base leading-relaxed md:text-lg" style={{ color: "var(--ink-70)" }}>
                 Two access modes for two fundamentally different contexts.
               </p>
+
+              {/* Feature pills */}
+              <div className="mb-10 flex flex-wrap gap-3">
+                {[
+                  { label: "Real-Human Translation",  desc: "Built for trust and clarity: no AI avatars" },
+                  { label: "Dynamic Island",           desc: "1-second activation for emergencies" },
+                  { label: "2-Way Audio / Sign",       desc: "Real-time speech-to-ASL and ASL-to-Audio" },
+                ].map(({ label, desc }) => (
+                  <div
+                    key={label}
+                    className="rounded-full px-5 py-2.5"
+                    style={{
+                      background:   "var(--sage)",
+                      border:       "1px solid var(--taupe)",
+                      display:      "inline-flex",
+                      flexDirection: "column" as const,
+                      gap:          "2px",
+                    }}
+                  >
+                    <span className="text-xs font-bold" style={{ color: "var(--ink)", letterSpacing: "-0.01em" }}>
+                      {label}
+                    </span>
+                    <span className="text-[0.65rem] leading-tight" style={{ color: "var(--ink-70)" }}>
+                      {desc}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              {/* HIPAA vision */}
+              <div
+                className="mb-10 rounded-2xl px-6 py-5"
+                style={{ background: "var(--blush)", borderLeft: "3px solid var(--terra)" }}
+              >
+                <p className="text-sm leading-relaxed" style={{ color: "var(--ink-70)" }}>
+                  <strong style={{ color: "var(--ink)" }}>HIPAA compliant prototype</strong> currently
+                  beta-testing with state organizations, bridging the gap between digital accessibility
+                  and clinical-grade trust.
+                </p>
+              </div>
             </div>
 
             {/* Mode 1 — In-App */}
@@ -762,14 +777,14 @@ export default function SignNowPage() {
                     In-App Experience
                   </h3>
                   <p className="mb-6 text-sm leading-relaxed" style={{ color: "var(--ink-70)" }}>
-                    Full-featured translation interface for routine appointments and planned interactions.
+                    An in-app translation experience leveraging real human imagery for clarity and trust. This multilingual, AI-powered solution bridges the communication gap in real-time.
                   </p>
                   <ul className="mb-6 space-y-2">
                     {[
                       "Real-time voice-to-sign translation",
                       "Conversation history and context",
-                      "Adjustable signing speed",
-                      "Multiple signer avatars for personalization",
+                      "Multilingual support across ASL dialects",
+                      "HIPAA-compliant session handling",
                     ].map((f) => (
                       <li key={f} className="flex items-start gap-2 text-sm" style={{ color: "var(--ink-70)" }}>
                         <span style={{ color: "var(--terra)" }}>✓</span>{f}
@@ -811,7 +826,7 @@ export default function SignNowPage() {
                     Dynamic Island Quick Access
                   </h3>
                   <p className="mb-6 text-sm leading-relaxed" style={{ color: "var(--ink-70)" }}>
-                    Emergency access via Apple&apos;s Dynamic Island: one tap from any screen, no setup required.
+                    The Dynamic Island integration allows for 1-second activation, ensuring users can access translation services instantly at the click of a button.
                   </p>
                   <ul className="mb-6 space-y-2">
                     {[
@@ -1028,6 +1043,42 @@ export default function SignNowPage() {
                   </div>
                 ))}
               </div>
+            </div>
+
+            {/* Usability quote */}
+            <div
+              className={`mt-8 sn-qbar ${T} ${r("s-impact-quote")}`}
+              data-reveal="s-impact-quote"
+            >
+              <p className="text-base italic font-sans leading-relaxed md:text-lg" style={{ color: "var(--ink)" }}>
+                &ldquo;The interface is incredibly intuitive; it feels like a natural extension of my conversation.&rdquo;
+              </p>
+              <p className="mt-2 text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--terra)" }}>
+                Beta Tester
+              </p>
+            </div>
+
+            {/* Impact Power Statement */}
+            <div
+              className={`mt-10 rounded-2xl p-8 md:p-12 ${T} ${r("s-impact-power")}`}
+              data-reveal="s-impact-power"
+              style={{ background: "var(--blush)", border: "1.5px solid var(--terra)" }}
+            >
+              <p
+                className="max-w-3xl text-base leading-relaxed md:text-lg font-sans"
+                style={{ color: "var(--ink)" }}
+              >
+                SignNow is bridging the{" "}
+                <span style={{ textDecoration: "underline", textDecorationColor: "var(--terra)", textUnderlineOffset: "4px", textDecorationThickness: "1.5px", fontWeight: 600 }}>
+                  18-minute communication gap
+                </span>
+                , turning life-altering confusion into instant understanding. By delivering real-time,
+                human-centric translation in under 300ms, we are empowering{" "}
+                <span style={{ textDecoration: "underline", textDecorationColor: "var(--terra)", textUnderlineOffset: "4px", textDecorationThickness: "1.5px", fontWeight: 600 }}>
+                  1 million Americans
+                </span>{" "}
+                to navigate high-stakes environments with the autonomy they deserve.
+              </p>
             </div>
 
           </div>

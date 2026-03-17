@@ -22,7 +22,7 @@ const ASL = {
   description: "Breaking communication barriers with real-time ASL translation for healthcare environments.",
   imageSrc:    "/sign-now/Ready_to_Post_Images/Sign_Now_Hero.jpg",
   award:       "1ST PLACE \u2022 UMICH ROSS TECH INNOVATION JAM" as string | null,
-  cursor:      "impact",
+  cursor:      "case-study",
 };
 
 // Module 3: spring per spec
@@ -84,12 +84,8 @@ function ProjectCard({
 
             {/* Module 2: title — Deep Brown */}
             <h2
-              className="hover-glow font-bold text-page-text"
-              style={{
-                fontSize:      "clamp(1.15rem, 2vw, 1.5rem)",
-                letterSpacing: "-0.025em",
-                lineHeight:    1.15,
-              }}
+              className="hover-glow text-3xl font-bold text-page-text"
+              style={{ letterSpacing: "-0.025em", lineHeight: 1.15 }}
             >
               {project.title}
             </h2>
@@ -117,15 +113,12 @@ export default function WorkPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       >
+        {/* Module 2: intent statement — smaller than case study titles */}
         <h1
-          className="font-bold text-page-text"
-          style={{
-            fontSize:      "clamp(1.75rem, 4vw, 2.5rem)",
-            letterSpacing: "-0.03em",
-            lineHeight:    1.1,
-          }}
+          className="text-2xl font-bold text-page-text"
+          style={{ letterSpacing: "-0.02em", lineHeight: 1.2 }}
         >
-          Design that moves people.
+          Designing Delightful Experiences.
         </h1>
       </motion.div>
 
