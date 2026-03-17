@@ -497,8 +497,8 @@ export default function DisneyPlusCaseStudy() {
           style={{ background: "rgba(255,182,193,0.08)", border: "1.5px solid rgba(255,182,193,0.25)" }}
         >
           <p className="text-base leading-relaxed text-page-text/80 md:text-lg">
-            "The most powerful loyalty programs are the ones you don't feel like
-            a member of. You feel like a participant in something bigger." This
+            &quot;The most powerful loyalty programs are the ones you don&apos;t feel like
+            a member of. You feel like a participant in something bigger.&quot; This
             ecosystem makes every subscriber feel like the Disney universe is
             expanding for them personally. ♡
           </p>
