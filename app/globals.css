@@ -59,40 +59,44 @@ html {
 body {
   overflow-x: hidden;
   font-size: 15px;
-  /* Paper Cream base — warm, high-end */
-  background: linear-gradient(165deg, #FFFDF9 0%, #FFFBF7 55%, #FFF8F3 100%) !important;
+  /* Multi-directional warm gradient — palette tokens only                    */
+  /* --page-bg (#FFFDF9) top-left → --pale-blush (#FFF5F0) bottom-right      */
+  /* --warm-sand (#FFE0E6) accent lifts warmth from the bottom-left corner    */
+  background:
+    linear-gradient(to top right, rgba(255,224,230,0.22) 0%, transparent 52%),
+    linear-gradient(135deg, #FFFDF9 0%, #FFF5F0 100%) !important;
   /* Stacking context so ::before/::after sit above body background but below all content */
   isolation: isolate;
 }
 
-/* ── Layer 0: 3 Brand Pink Light Leaks ──────────────────────────────────── */
-/* Pure radial-gradient light leaks — no blend mode, no grey, only warm pink atmosphere */
+/* ── Layer 0: Warm accent light leaks — --accent & --warm-sand corners ─── */
+/* Two leaks mirror the gradient direction (top-right / bottom-left)         */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   background:
-    /* Top-right leak: right -5%, top -10% */
-    radial-gradient(ellipse at 105% -10%, rgba(255,182,193,0.12) 0%, transparent 52%),
-    /* Bottom-left leak: left -10%, bottom 20% = 80% from top */
-    radial-gradient(ellipse at -10% 80%,  rgba(255,182,193,0.12) 0%, transparent 50%),
-    /* Center-bottom accent */
-    radial-gradient(ellipse at 50% 110%,  rgba(255,182,193,0.06) 0%, transparent 42%);
+    radial-gradient(ellipse at 100% 0%,   rgba(255,182,193,0.09) 0%, transparent 50%),
+    radial-gradient(ellipse at 0%   100%, rgba(255,224,230,0.11) 0%, transparent 48%);
   z-index: -1;
   pointer-events: none;
 }
 
-/* ── Layer 1: White/Light grain — multiply blend at 2% ─────────────────── */
-/* Inverted fractalNoise → mostly white grain. Multiply at 2% = barely-there texture. */
+/* ── Layer 1: Warm static film grain — analog paper texture ─────────────── */
+/* fractalNoise (not turbulence) for organic, non-harsh grain                */
+/* Grayscale first, then warm-bias matrix: R slope > G slope > B slope      */
+/* Dark parts of the grain lean warm (more R than B), matching palette cream */
+/* multiply blend at 20%: light areas near-transparent, subtle tactile depth */
+/* Static — no animation — reads as paper/film, not live TV static           */
 body::after {
   content: "";
   position: fixed;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='280' height='280' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 280px 280px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='film'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.62' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0 0.25 0 0 0.75 0 0 0.18 0 0.82 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23film)'/%3E%3C/svg%3E");
+  background-size: 250px 250px;
   background-repeat: repeat;
   mix-blend-mode: multiply;
-  opacity: 0.02;
+  opacity: 0.20;
   z-index: -1;
   pointer-events: none;
   user-select: none;
@@ -218,11 +222,16 @@ body::after {
   50%       { opacity: 1;  transform: translateY(-50%) translateX(9px);  }
 }
 
+/* ── Typography helpers ─────────────────────────────────────────────────── */
+/* text-balance: auto-balances line lengths to prevent orphaned words */
+.text-balance { text-wrap: balance; }
+
 /* ── Hover bloom: soft pink text glow (standard — for large project titles) ── */
 .hover-glow {
   transition: text-shadow 0.35s ease, color 0.2s ease;
 }
 .hover-glow:hover {
+  color: #FFB6C1;
   text-shadow:
     0 0 10px rgba(255, 182, 193, 0.55),
     0 0 24px rgba(255, 182, 193, 0.22);
@@ -237,4 +246,70 @@ body::after {
     0 0 6px rgba(45, 27, 20, 0.30),
     0 0 14px rgba(45, 27, 20, 0.10);
 }
+
+/* ── Navigation active state ─────────────────────────────────────────────── */
+/* Source of truth: aria-current="page" attribute, set/removed by React on   */
+/* every route change. Active indicator uses border-bottom (not              */
+/* text-decoration) to completely bypass :visited/cascade inheritance quirks. */
+/* Base: no underline ever — border-bottom approach avoids text-decoration    */
+/* cascade entirely. Transparent border reserves space so layout never shifts */
+.nav-link {
+  color:           #2D1B14;
+  text-decoration: none !important;
+  border-bottom:   1.5px solid transparent;
+  padding-bottom:  3px;
+  transition:      opacity 0.2s ease;
+  opacity:         0.40;
+}
+.nav-link:hover,
+.nav-link:focus-visible { opacity: 1; }
+
+/* Active page: only the border-bottom color becomes visible                 */
+/* [aria-current="page"] is set/cleared by React on every route change       */
+.nav-link[aria-current="page"] {
+  opacity:       1;
+  border-bottom: 1.5px solid #2D1B14;
+}
+
+/* ── Playground pink footer: dark dot cursor (pink dot is invisible on pink bg) ── */
+/* Overrides the site-wide cursor:none so a visible deep-brown dot appears.         */
+.pg-footer-cursor,
+.pg-footer-cursor * {
+  cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5" fill="%232D1B14"/></svg>') 8 8, auto !important;
+}
+
+/* ── Stray underline / focus ring suppression ───────────────────────────── */
+/* main has tabIndex={-1} for skip-link — suppress focus outline site-wide   */
+#main-content:focus,
+#main-content:focus-visible {
+  outline: none;
+}
+
+/* ── Homepage animated background blobs ─────────────────────────────────── */
+/* Each blob drifts on a unique path; alternate reverses cleanly at loop end */
+@keyframes blob-drift-1 {
+  0%   { transform: translate(  0px,   0px); }
+  100% { transform: translate( 65px,  50px); }
+}
+@keyframes blob-drift-2 {
+  0%   { transform: translate(  0px,   0px); }
+  100% { transform: translate(-55px, -48px); }
+}
+@keyframes blob-drift-3 {
+  0%   { transform: translate(  0px,   0px); }
+  100% { transform: translate( 42px, -70px); }
+}
+@keyframes blob-drift-4 {
+  0%   { transform: translate(  0px,   0px); }
+  100% { transform: translate(-50px,  58px); }
+}
+
+.hp-blob-1 { animation: blob-drift-1 11s ease-in-out infinite alternate; }
+.hp-blob-2 { animation: blob-drift-2 13s ease-in-out infinite alternate; }
+.hp-blob-3 { animation: blob-drift-3  8s ease-in-out infinite alternate; }
+.hp-blob-4 { animation: blob-drift-4 10s ease-in-out infinite alternate; }
+
+/* ── Case study cinematic scroll reveal ─────────────────────────────────── */
+/* Dramatic entrance: 48px Y-drift + slow cinematic ease                     */
+/* Applied via Framer Motion whileInView — viewport: once: true              */
 

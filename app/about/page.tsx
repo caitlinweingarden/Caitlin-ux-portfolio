@@ -2,9 +2,13 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import ContactForm from "@/components/ContactForm";
 
-// Module 5: Four scannable personal facts
+// Module 5: Updated scannable facts including affiliations
 const FACTS = [
+  "University of Michigan student",
+  "Simplify Campus Ambassador",
+  "Member of TEDxUofM",
   "Artist at heart with fine art training",
   "Language learner currently mastering Japanese",
   "Video editor and storyteller always filming",
@@ -15,7 +19,7 @@ const FACTS = [
 const GALLERY_PHOTOS = [
   {
     src:        "/images/ocean_image.jpeg",
-    alt:        "Ocean view — Kamakura, Japan",
+    alt:        "Ocean view, Kamakura, Japan",
     cursor:     "beach",
   },
   {
@@ -185,6 +189,9 @@ export default function AboutPage() {
           ))}
         </div>
       </motion.div>
+
+      {/* ── Contact form ──────────────────────────────────────────── */}
+      <ContactForm />
 
     </div>
   );

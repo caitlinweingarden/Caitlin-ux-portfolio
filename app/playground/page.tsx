@@ -48,21 +48,24 @@ const BITE       = 1;     // px — frame overlap into sprocket strip
 // Content only needs to clear the fixed HeroZone bar (HERO_H), not the nav.
 const MOBILE_PAD_TOP = 16; // px — minimal top padding (sticky title is in flow)
 const TRACK_H        = `${STRIP_H}vh`;
-const FRAME_W        = `calc((${STRIP_H}vh - ${PAD_T + PAD_B - 2 * BITE}px) * 0.75 + ${2 * PAD_S}px)`;
+const FRAME_W        = `calc((${STRIP_H}vh - ${PAD_T + PAD_B + 2 * BITE}px) * 0.75 + ${2 * PAD_S}px)`;
+// Video frames are landscape 16:9 — wider than portrait image frames
+const FRAME_W_VIDEO    = `calc((${STRIP_H}vh - ${PAD_T + PAD_B + 2 * BITE}px) * ${(16 / 9).toFixed(6)} + ${2 * PAD_S}px)`;
+// Portrait video frame (painting) — 9:16, narrower than image frames
+const FRAME_W_PORTRAIT = `calc((${STRIP_H}vh - ${PAD_T + PAD_B + 2 * BITE}px) * ${(9 / 16).toFixed(6)} + ${2 * PAD_S}px)`;
 
 const DRIFT_D = 0.5;  // desktop auto-drift px/RAF frame
 const DRIFT_M = 0.7;  // mobile  auto-drift px/window.scrollBy
 
 // ── Content ───────────────────────────────────────────────────────────────────
-type VideoItem = { id: number; kind: "video"; src: string };
+type VideoItem = { id: number; kind: "video"; src: string; portrait?: boolean };
 type ImageItem = { id: number; kind: "image"; src: string };
 type Item      = VideoItem | ImageItem;
 
 const VIDEOS: VideoItem[] = [
-  { id: 2, kind: "video", src: "/Art/playground_2.mp4" },
   { id: 3, kind: "video", src: "/Art/playground_3.mp4" },
   { id: 4, kind: "video", src: "/Art/playground_4.mp4" },
-  { id: 5, kind: "video", src: "/Art/playground_5.mp4" },
+  { id: 5, kind: "video", src: "/Art/playground_5.mp4", portrait: true },
 ];
 const IMAGES: ImageItem[] = [
   { id: 6,  kind: "image", src: "/Art/playground_6.jpg"  },
@@ -70,8 +73,6 @@ const IMAGES: ImageItem[] = [
   { id: 8,  kind: "image", src: "/Art/playground_8.jpg"  },
   { id: 9,  kind: "image", src: "/Art/playground_9.jpg"  },
   { id: 10, kind: "image", src: "/Art/playground_10.jpg" },
-  { id: 11, kind: "image", src: "/Art/playground_11.jpg" },
-  { id: 12, kind: "image", src: "/Art/playground_12.jpg" },
 ];
 
 const BASE: Item[] = [
@@ -476,15 +477,29 @@ export default function PlaygroundPage() {
                     overflow:     "hidden",
                   }}>
                     {isVideo ? (
-                      <video src={(item as VideoItem).src} data-audio-id={item.id}
-                        autoPlay muted loop playsInline
-                        style={{ display: "block", width: "100%", height: "auto", objectFit: "contain" }}
-                      />
+                      <div style={{
+                        width:       "100%",
+                        aspectRatio: (item as VideoItem).portrait ? "9/16" : "16/9",
+                        overflow:    "hidden",
+                      }}>
+                        <video src={(item as VideoItem).src} data-audio-id={item.id}
+                          autoPlay muted loop playsInline
+                          style={{
+                            display:        "block",
+                            width:          "100%",
+                            height:         "100%",
+                            objectFit:      "cover",
+                            objectPosition: (item as VideoItem).portrait ? "center top" : "center",
+                          }}
+                        />
+                      </div>
                     ) : (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={(item as ImageItem).src} alt="" draggable={false}
-                        style={{ display: "block", width: "100%", height: "auto", objectFit: "contain", pointerEvents: "none" }}
-                      />
+                      <div style={{ width: "100%", aspectRatio: "4/3", overflow: "hidden" }}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={(item as ImageItem).src} alt="" draggable={false}
+                          style={{ display: "block", width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", pointerEvents: "none" }}
+                        />
+                      </div>
                     )}
                     <span style={{
                       position: "absolute", bottom: 12, left: PAD_S + BITE,
@@ -532,7 +547,7 @@ export default function PlaygroundPage() {
         </span>
         <span style={{ color: "#FFB6C1", marginLeft: 6, fontSize: "0.85rem", lineHeight: 1 }} aria-hidden>✮</span>
         <span style={{ marginLeft: "auto", fontSize: "0.62rem", fontWeight: 500, letterSpacing: "0.08em", color: "rgba(45,27,20,0.40)" }}>
-          drag to explore
+          swipe to explore
         </span>
       </div>
 
@@ -617,7 +632,9 @@ export default function PlaygroundPage() {
                     style={{
                       flexShrink:   0,
                       alignSelf:    "stretch",
-                      width:        FRAME_W,
+                      width:        isVideo
+                        ? ((item as VideoItem).portrait ? FRAME_W_PORTRAIT : FRAME_W_VIDEO)
+                        : FRAME_W,
                       height:       TRACK_H,
                       margin:       `${-BITE}px 0`,
                       boxSizing:    "border-box",
@@ -631,15 +648,25 @@ export default function PlaygroundPage() {
                     }}
                   >
                     {isVideo ? (
-                      <video src={(item as VideoItem).src} data-audio-id={item.id}
-                        autoPlay muted loop playsInline
-                        style={{ display: "block", width: "100%", height: "100%", objectFit: "contain" }}
-                      />
+                      <div style={{ width: "100%", height: "100%", overflow: "hidden" }}>
+                        <video src={(item as VideoItem).src} data-audio-id={item.id}
+                          autoPlay muted loop playsInline
+                          style={{
+                            display:        "block",
+                            width:          "100%",
+                            height:         "100%",
+                            objectFit:      "cover",
+                            objectPosition: (item as VideoItem).portrait ? "center top" : "center",
+                          }}
+                        />
+                      </div>
                     ) : (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={(item as ImageItem).src} alt="" draggable={false}
-                        style={{ display: "block", width: "100%", height: "100%", objectFit: "contain", pointerEvents: "none" }}
-                      />
+                      <div style={{ width: "100%", height: "100%", overflow: "hidden" }}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={(item as ImageItem).src} alt="" draggable={false}
+                          style={{ display: "block", width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", pointerEvents: "none" }}
+                        />
+                      </div>
                     )}
                     <span style={{
                       position: "absolute", bottom: 12, left: PAD_S,

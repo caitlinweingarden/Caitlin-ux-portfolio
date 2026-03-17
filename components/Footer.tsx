@@ -11,8 +11,6 @@ const NAV_LINKS = [
 ];
 
 const REACH_LINKS = [
-  { label: "Resume",   href: "/resume"                                   },
-  { label: "Email",    href: "mailto:caitlin@weingarden.design"          },
   { label: "LinkedIn", href: "https://linkedin.com/in/caitlinweingarden" },
 ];
 
@@ -20,21 +18,21 @@ export default function Footer() {
   const pathname     = usePathname();
   const isPlayground = pathname === "/playground";
 
-  // Module 6 + 7: Playground flips to Brand Pink; all other pages use Deep Brown
-  const bgColor      = isPlayground ? "#FFB6C1" : "#2D1B14";
+  // Playground flips to Brand Pink; all other pages use warm nostalgic brown
+  const bgColor      = isPlayground ? "#FFB6C1" : "#5C3219";
   const textColor    = isPlayground ? "#2D1B14" : "#FFFDF9";
-  const linkColor    = isPlayground ? "rgba(45,27,20,0.60)"   : "rgba(255,253,249,0.60)";
+  const linkColor    = isPlayground ? "rgba(45,27,20,0.60)"   : "rgba(255,253,249,0.55)";
   const linkHover    = isPlayground ? "#2D1B14"               : "#FFFDF9";
-  const headingColor = isPlayground ? "rgba(45,27,20,0.45)"   : "rgba(255,253,249,0.45)";
+  const headingColor = isPlayground ? "rgba(45,27,20,0.45)"   : "rgba(255,253,249,0.40)";
 
-  // Module 6: center 'high-shine' radial glow on Deep Brown footer
+  // Soft warm glow — no metallic shine
   const centerGlow = isPlayground
-    ? "radial-gradient(ellipse at 50% 50%, rgba(45,27,20,0.12) 0%, transparent 65%)"
-    : "radial-gradient(ellipse at 50% 0%,  rgba(255,182,193,0.20) 0%, transparent 60%)";
+    ? "radial-gradient(ellipse at 50% 50%, rgba(45,27,20,0.08) 0%, transparent 65%)"
+    : "radial-gradient(ellipse at 50% 0%,  rgba(255,182,193,0.10) 0%, transparent 55%)";
 
   return (
     <footer
-      className="relative overflow-hidden"
+      className={`relative overflow-hidden${isPlayground ? " pg-footer-cursor" : ""}`}
       style={{ backgroundColor: bgColor, transition: "background-color 0.4s ease" }}
       role="contentinfo"
     >
@@ -91,13 +89,13 @@ export default function Footer() {
               </ul>
             </div>
 
-            {/* Module 7: Resume, Email, LinkedIn */}
+            {/* Connect */}
             <div>
               <p
                 className="mb-4 text-xs font-bold uppercase tracking-widest"
                 style={{ color: headingColor }}
               >
-                Reach Out
+                Connect
               </p>
               <ul className="space-y-2.5">
                 {REACH_LINKS.map(({ label, href }) => (
