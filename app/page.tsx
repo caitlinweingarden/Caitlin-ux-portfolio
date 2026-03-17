@@ -152,7 +152,7 @@ function Hero() {
     textDecorationThickness: "1.5px",
   };
   return (
-    <section className="flex min-h-[85vh] flex-col justify-center pt-24 pb-16 md:pt-32 md:pb-20" aria-label="Introduction">
+    <section className="pt-16 pb-6 md:pt-20 md:pb-8" aria-label="Introduction">
       <div className="mx-auto w-full max-w-7xl px-8">
         <motion.h1
           className="text-balance text-page-text"
@@ -211,8 +211,8 @@ function CaseTile({
     >
       <Link href={href} className="block outline-none" data-cursor={cursorType}>
         <motion.div whileTap={{ scale: 0.97 }} whileHover={{ scale: 0.99 }} transition={SPRING}>
-          {/* Module 3: 16:9 dominates the viewport */}
-          <div className="w-full overflow-hidden rounded-3xl" style={{ aspectRatio: "16/9" }}>
+          {/* Tall viewport-filling tile — height in vh so 2 tiles + hero fit above the fold */}
+          <div className="w-full overflow-hidden rounded-3xl" style={{ height: "clamp(280px, 48vh, 580px)" }}>
             <img
               src={imageSrc}
               alt={imageAlt}
