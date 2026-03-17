@@ -152,7 +152,7 @@ function Hero() {
     textDecorationThickness: "1.5px",
   };
   return (
-    <section className="pt-28 pb-16 md:pt-40 md:pb-24" aria-label="Introduction">
+    <section className="flex min-h-[85vh] flex-col justify-center pt-24 pb-16 md:pt-32 md:pb-20" aria-label="Introduction">
       <div className="mx-auto w-full max-w-7xl px-8">
         <motion.h1
           className="text-balance text-page-text"

@@ -1,13 +1,20 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { ThemeProvider } from "./ThemeProvider";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import CustomCursor from "@/components/CustomCursor";
+
 export const metadata: Metadata = {
   title: "Caitlin Weingarden | UX & Product Design",
   description:
     "Artist turned product designer specializing in accessibility and translation. Creating accessible experiences with a warm, thoughtful approach.",
+};
+
+// Explicit viewport — initial-scale must be exactly 1.0
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -21,7 +28,9 @@ export default function RootLayout({
         <ThemeProvider>
           <CustomCursor />
           <Navigation />
-          <main id="main-content" tabIndex={-1} className="mx-auto w-full max-w-[1440px] flex-1 px-6 md:px-12 lg:px-24">
+          {/* Outer padding removed — every page manages its own horizontal padding.
+              Keeping max-w-[1440px] + mx-auto only for centering on ultra-wide screens. */}
+          <main id="main-content" tabIndex={-1} className="mx-auto w-full max-w-[1440px] flex-1">
             {children}
           </main>
           <Footer />
