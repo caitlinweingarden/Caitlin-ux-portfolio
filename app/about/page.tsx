@@ -73,7 +73,7 @@ export default function AboutPage() {
               transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
             >
               <h1
-                className="text-[clamp(2rem,4.5vw,3.5rem)] font-bold leading-[1.05] text-page-text"
+                className="text-[clamp(2.5rem,5vw,4.5rem)] font-bold leading-[1.05] text-page-text"
                 style={{ letterSpacing: "-0.035em" }}
               >
                 Hi, I&apos;m Caitlin.

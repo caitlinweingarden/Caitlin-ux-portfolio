@@ -152,15 +152,15 @@ function Hero() {
     textDecorationThickness: "1.5px",
   };
   return (
-    <section className="pt-20 pb-14 md:pt-28 md:pb-18" aria-label="Introduction">
+    <section className="pt-28 pb-16 md:pt-40 md:pb-24" aria-label="Introduction">
       <div className="mx-auto w-full max-w-7xl px-8">
         <motion.h1
           className="text-balance text-page-text"
           style={{
-            fontSize:      "clamp(1.75rem, 3.5vw, 2.25rem)",
+            fontSize:      "clamp(2.25rem, 5vw, 4.5rem)",
             fontWeight:    400,
-            letterSpacing: "-0.02em",
-            lineHeight:    1.12,
+            letterSpacing: "-0.03em",
+            lineHeight:    1.1,
             maxWidth:      "950px",
             textShadow:    "0 1px 3px rgba(0,0,0,0.08)",
           }}
@@ -220,7 +220,7 @@ function CaseTile({
             />
           </div>
           <div
-            className="mt-3 rounded-2xl px-3 py-2"
+            className="mt-4 rounded-2xl px-5 py-4"
             style={{
               background:           "rgba(255, 253, 249, 0.62)",
               backdropFilter:       "blur(2px)",
@@ -236,7 +236,7 @@ function CaseTile({
               {tags}
             </p>
             <h2
-              className="hover-glow text-3xl font-bold text-page-text"
+              className="hover-glow text-4xl font-bold text-page-text"
               style={{ letterSpacing: "-0.025em", lineHeight: 1.15 }}
             >
               {title}

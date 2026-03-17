@@ -115,7 +115,7 @@ export default function WorkPage() {
       >
         {/* Module 2: intent statement — smaller than case study titles */}
         <h1
-          className="text-2xl font-bold text-page-text"
+          className="text-4xl font-bold text-page-text md:text-5xl"
           style={{ letterSpacing: "-0.02em", lineHeight: 1.2 }}
         >
           Designing Delightful Experiences.

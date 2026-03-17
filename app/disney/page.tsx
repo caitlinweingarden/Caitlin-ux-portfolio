@@ -85,7 +85,7 @@ export default function DisneyPlusCaseStudy() {
         </p>
 
         <h1
-          className="mt-4 max-w-5xl text-4xl font-bold text-page-text md:text-5xl lg:text-6xl"
+          className="mt-4 max-w-5xl text-5xl font-bold text-page-text md:text-6xl lg:text-7xl"
           style={{ letterSpacing: "-0.03em", lineHeight: 1.05 }}
         >
           Connecting{" "}
