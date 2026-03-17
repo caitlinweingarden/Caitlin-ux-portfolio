@@ -58,7 +58,7 @@ html {
 
 body {
   overflow-x: hidden;
-  font-size: 15px;
+  font-size: 1rem; /* 16px from html root — aligns with Tailwind's rem scale */
   /* Multi-directional warm gradient — palette tokens only                    */
   /* --page-bg (#FFFDF9) top-left → --pale-blush (#FFF5F0) bottom-right      */
   /* --warm-sand (#FFE0E6) accent lifts warmth from the bottom-left corner    */

@@ -211,8 +211,8 @@ function CaseTile({
     >
       <Link href={href} className="block outline-none" data-cursor={cursorType}>
         <motion.div whileTap={{ scale: 0.97 }} whileHover={{ scale: 0.99 }} transition={SPRING}>
-          {/* Tall viewport-filling tile — height in vh so 2 tiles + hero fit above the fold */}
-          <div className="w-full overflow-hidden rounded-3xl" style={{ height: "clamp(280px, 48vh, 580px)" }}>
+          {/* 16/9 aspect ratio — matches work page, no clipping */}
+          <div className="w-full overflow-hidden rounded-3xl" style={{ aspectRatio: "16/9" }}>
             <img
               src={imageSrc}
               alt={imageAlt}
