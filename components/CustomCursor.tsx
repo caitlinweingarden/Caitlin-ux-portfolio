@@ -1,123 +1,161 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue } from "framer-motion";
+
+type CursorType =
+  | "default"
+  | "work"
+  | "award"
+  | "impact"
+  | "streaming"
+  | "hi"
+  | "beach"
+  | "paint"
+  | "food";
+
+// Labels — literal ♡, emoji allowed for photo contextual labels
+const LABELS: Record<Exclude<CursorType, "default">, string> = {
+  work:      "VIEW WORK ♡",
+  award:     "EXPLORE \u272E",
+  impact:    "IMPROVING LIVES ♡",
+  streaming: "STREAMING UX ♡",
+  hi:        "HI!! ♡",
+  beach:     "Kamakura, Japan \uD83D\uDCCD",  // 📍
+  paint:     "Mwah \uD83D\uDC8B",             // 💋
+  food:      "I love food \uD83C\uDF66",      // 🍦
+};
+
+// Pill geometry per cursor state
+const PILL_W: Record<CursorType, number> = {
+  default:   8,
+  work:      122,
+  award:     108,
+  impact:    158,
+  streaming: 134,
+  hi:        80,
+  beach:     164,
+  paint:     90,
+  food:      116,
+};
+const PILL_H: Record<CursorType, number> = {
+  default:   8,
+  work:      28,
+  award:     28,
+  impact:    28,
+  streaming: 28,
+  hi:        28,
+  beach:     28,
+  paint:     28,
+  food:      28,
+};
+const PILL_R: Record<CursorType, number> = {
+  default:   4,
+  work:      14,
+  award:     14,
+  impact:    14,
+  streaming: 14,
+  hi:        14,
+  beach:     14,
+  paint:     14,
+  food:      14,
+};
 
 export default function CustomCursor() {
-  const [isMounted, setIsMounted] = useState(false);
-  const [isClicking, setIsClicking] = useState(false);
-  const [clickPos, setClickPos] = useState({ x: 0, y: 0 });
-  const [isMobile, setIsMobile] = useState(false);
+  const [mounted,    setMounted]    = useState(false);
+  const [isMobile,   setIsMobile]   = useState(false);
+  const [cursorType, setCursorType] = useState<CursorType>("default");
 
-  // Raw motion values updated directly from mousemove
-  const rawX = useMotionValue(-100);
-  const rawY = useMotionValue(-100);
-
-  // Spring-smoothed values for the trailing effect
-  const springX = useSpring(rawX, { stiffness: 300, damping: 30, mass: 0.5 });
-  const springY = useSpring(rawY, { stiffness: 300, damping: 30, mass: 0.5 });
+  const x = useMotionValue(-200);
+  const y = useMotionValue(-200);
 
   useEffect(() => {
-    setIsMounted(true);
-
+    setMounted(true);
     if (typeof window !== "undefined") {
       setIsMobile("ontouchstart" in window || navigator.maxTouchPoints > 0);
     }
+  }, []);
 
-    const handleMouseMove = (e: MouseEvent) => {
-      rawX.set(e.clientX);
-      rawY.set(e.clientY);
+  useEffect(() => {
+    if (!mounted || isMobile) return;
+
+    const onMove = (e: MouseEvent) => {
+      x.set(e.clientX);
+      y.set(e.clientY);
     };
 
-    const handleMouseDown = (e: MouseEvent) => {
-      setIsClicking(true);
-      setClickPos({ x: e.clientX, y: e.clientY });
+    const onOver = (e: MouseEvent) => {
+      const el   = (e.target as HTMLElement).closest("[data-cursor]") as HTMLElement | null;
+      const type = el?.dataset.cursor;
+      if      (type === "award")     setCursorType("award");
+      else if (type === "impact")    setCursorType("impact");
+      else if (type === "streaming") setCursorType("streaming");
+      else if (type === "hi")        setCursorType("hi");
+      else if (type === "beach")     setCursorType("beach");
+      else if (type === "paint")     setCursorType("paint");
+      else if (type === "food")      setCursorType("food");
+      else if (type === "work")      setCursorType("work");
+      else                           setCursorType("default");
     };
 
-    const handleMouseUp = () => {
-      setIsClicking(false);
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mousedown", handleMouseDown);
-    window.addEventListener("mouseup", handleMouseUp);
-
+    window.addEventListener("mousemove", onMove, { passive: true });
+    document.addEventListener("mouseover", onOver, { passive: true });
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mousedown", handleMouseDown);
-      window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseover", onOver);
     };
-  }, [rawX, rawY]);
+  }, [mounted, isMobile, x, y]);
 
-  // Don't render until mounted (prevents hydration mismatch) or on touch devices
-  if (!isMounted || isMobile) return null;
+  if (!mounted || isMobile) return null;
+
+  const isExpanded = cursorType !== "default";
+  const label      = isExpanded ? LABELS[cursorType] : null;
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-40">
-      {/* Heart cursor with spring-based smooth trailing */}
+    <div className="pointer-events-none fixed inset-0 z-[9999]">
       <motion.div
-        className="absolute"
         style={{
-          left: springX,
-          top: springY,
-          x: "-50%",
-          y: "-50%",
+          position:       "absolute",
+          left:           x,
+          top:            y,
+          x:              "-50%",
+          y:              "-50%",
+          background:     "#FFB6C1",
+          display:        "flex",
+          alignItems:     "center",
+          justifyContent: "center",
+          overflow:       "hidden",
         }}
         animate={{
-          scale: isClicking ? 1.3 : [1, 1.1, 1],
+          width:        PILL_W[cursorType],
+          height:       PILL_H[cursorType],
+          borderRadius: PILL_R[cursorType],
         }}
-        transition={{
-          scale: {
-            duration: isClicking ? 0.2 : 2,
-            repeat: isClicking ? 0 : Infinity,
-            ease: "easeInOut",
-          },
-        }}
+        transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
       >
-        {/* SVG Heart — 20px, pale-blush fill / mushroom-taupe stroke */}
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="drop-shadow-sm"
-        >
-          <path
-            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-            fill="#E8D5D8"
-            className=""
-            opacity="0.9"
-          />
-          <path
-            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-            stroke="#6B5E5A"
-            strokeWidth="1"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            opacity="0.6"
-            className=""
-          />
-        </svg>
+        <AnimatePresence>
+          {label && (
+            <motion.span
+              key={label}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.12, delay: 0.08 }}
+              style={{
+                fontFamily:    "'Helvetica Neue', Helvetica, Arial, sans-serif",
+                fontSize:      "9px",
+                fontWeight:    700,
+                letterSpacing: "0.10em",
+                color:         "#2D1B14",
+                whiteSpace:    "nowrap",
+                userSelect:    "none",
+              }}
+            >
+              {label}
+            </motion.span>
+          )}
+        </AnimatePresence>
       </motion.div>
-
-      {/* Click ripple — appears at actual mouse position, not spring-lagged position */}
-      {isClicking && (
-        <motion.div
-          className="absolute rounded-full border-2 border-accent"
-          style={{
-            left: clickPos.x,
-            top: clickPos.y,
-            x: "-50%",
-            y: "-50%",
-            width: 20,
-            height: 20,
-          }}
-          initial={{ scale: 1, opacity: 0.6 }}
-          animate={{ scale: 3, opacity: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-        />
-      )}
     </div>
   );
 }

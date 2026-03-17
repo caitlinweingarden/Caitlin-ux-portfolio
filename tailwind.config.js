@@ -9,19 +9,19 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // ── Neapolitan Brand ──────────────────────────────────────
-        "page-bg":   "#FFF5F5",  // Pink-white
-        "page-text": "#3D1F0F",  // Chocolate
-        "accent":    "#F4ACB7",  // Strawberry
+        // ── Brand Palette ─────────────────────────────────────────
+        "page-bg":   "#FFFDF9",  // Paper Cream
+        "page-text": "#2D1B14",  // Deep Brown
+        "accent":    "#FFB6C1",  // Brand Pink
 
         // ── Semantic aliases (used across components) ─────────────
-        "accent-sage":    "#3D1F0F",  // Chocolate — primary buttons / CTAs
+        "accent-sage":    "#2D1B14",  // Deep Brown — primary buttons / CTAs
         "whisper-white":  "#FFFFFF",  // Pure white — button text
-        "pale-blush":     "#FFF5F5",  // Same as page-bg — card fills
-        "warm-sand":      "#FDE2E4",  // Soft strawberry — gradients
-        "mushroom-taupe": "#F4ACB7",  // Strawberry alias (legacy)
-        "mist-sage":      "#3D1F0F",  // Chocolate alias (legacy)
-        "silver-blue":    "#8A7065",  // Warm muted grey — footer links
+        "pale-blush":     "#FFF5F0",  // Warm cream — card fills
+        "warm-sand":      "#FFE0E6",  // Soft pink — gradients
+        "mushroom-taupe": "#FFB6C1",  // Brand Pink alias
+        "mist-sage":      "#2D1B14",  // Deep Brown alias
+        "silver-blue":    "#7A6058",  // Warm muted brown — footer links
       },
 
       fontFamily: {
@@ -68,8 +68,8 @@ module.exports = {
       },
 
       boxShadow: {
-        soft:      "0 4px 24px -4px rgba(61, 31, 15, 0.13)",
-        "soft-lg": "0 12px 44px -10px rgba(61, 31, 15, 0.20)",
+        soft:      "0 4px 24px -4px rgba(45, 27, 20, 0.13)",
+        "soft-lg": "0 12px 44px -10px rgba(45, 27, 20, 0.20)",
       },
     },
   },

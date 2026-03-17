@@ -1,405 +1,688 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
-import { motion } from "framer-motion";
+/**
+ * Playground — infinite horizontal film-strip gallery
+ *
+ * Footer fix:
+ *   The desktop canvas is position:relative (NOT position:fixed).
+ *   It fills the viewport below the nav as a normal block element.
+ *   The page continues after the canvas, so the footer renders below
+ *   when the user scrolls down past the film strip section.
+ *
+ * Gap-elimination (desktop sprocket seams):
+ *   Each Polaroid frame has marginTop/Bottom: -BITE so its edges overlap
+ *   the sprocket strips by 1 px. The film-block wrapper clips with
+ *   overflow:hidden. Black-on-black = zero seam.
+ *
+ * BLACK = #000000 everywhere in the film block — never near-black.
+ */
 
-// ── Brand tokens ──────────────────────────────────────────────────────────────
-const BG     = "#FFF5F5";
-const FRAME  = "#FFF9F0";
-const ACCENT = "#F4ACB7";
-const NAV_H  = 68;
+import {
+  Fragment,
+  CSSProperties,
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 
-// Vintage Polaroid: inner glow + 4-layer diffuse shadow
-const POLAROID_SHADOW = [
-  "inset 0 0 10px rgba(255,255,255,0.65)",
-  "0 1px 2px  rgba(61,31,15,0.10)",
-  "0 4px 10px rgba(61,31,15,0.16)",
-  "0 12px 32px rgba(61,31,15,0.20)",
-  "0 28px 64px rgba(61,31,15,0.11)",
-].join(", ");
+// ── Tokens ─────────────────────────────────────────────────────────────────────
+const BROWN = "#3D1F0F";
+const PINK  = "#F4ACB7";
+const WHITE = "#FFFFFF";
+const BLACK = "#000000";
 
-// Strawberry glow for tagline legibility
-const TAGLINE_GLOW = [
-  "0 0 14px rgba(244,172,183,0.90)",
-  "0 0 32px rgba(244,172,183,0.50)",
-].join(", ");
+const NAV_H         = 68;  // px — site nav height (pink bar)
+const PG_TITLE_H    = 48;  // px — sticky playground title below nav
+const HERO_H        = 80;  // px — kept for reference (no longer rendered)
+const DIVIDER_W     = 30;  // px — black gap between frames
+const STRIP_H    = 50;    // vh — track height
+const SPROCKET_H = 26;    // px — desktop top/bottom sprocket strip
+const SPROCKET_W = 26;    // px — mobile left/right sprocket strip
+const PAD_T      = 10;    // px — frame top padding
+const PAD_S      = 10;    // px — frame side padding
+const PAD_B      = 44;    // px — Polaroid caption zone
+const BITE       = 1;     // px — frame overlap into sprocket strip
 
-// ── Types ─────────────────────────────────────────────────────────────────────
-type VideoItem = { id: number; kind: "video"; src: string; rot: number };
-type ImageItem = { id: number; kind: "image"; src: string; rot: number };
+// Sticky nav is in document flow (takes NAV_H from the layout before <main>).
+// Content only needs to clear the fixed HeroZone bar (HERO_H), not the nav.
+const MOBILE_PAD_TOP = 16; // px — minimal top padding (sticky title is in flow)
+const TRACK_H        = `${STRIP_H}vh`;
+const FRAME_W        = `calc((${STRIP_H}vh - ${PAD_T + PAD_B - 2 * BITE}px) * 0.75 + ${2 * PAD_S}px)`;
 
-// ── Assets ────────────────────────────────────────────────────────────────────
+const DRIFT_D = 0.5;  // desktop auto-drift px/RAF frame
+const DRIFT_M = 0.7;  // mobile  auto-drift px/window.scrollBy
+
+// ── Content ───────────────────────────────────────────────────────────────────
+type VideoItem = { id: number; kind: "video"; src: string };
+type ImageItem = { id: number; kind: "image"; src: string };
+type Item      = VideoItem | ImageItem;
+
 const VIDEOS: VideoItem[] = [
-  { id: 2, kind: "video", src: "/Art/playground_2.mp4", rot: -4 },
-  { id: 3, kind: "video", src: "/Art/playground_3.mp4", rot:  3 },
-  { id: 4, kind: "video", src: "/Art/playground_4.mp4", rot: -2 },
-  { id: 5, kind: "video", src: "/Art/playground_5.mp4", rot:  5 },
+  { id: 2, kind: "video", src: "/Art/playground_2.mp4" },
+  { id: 3, kind: "video", src: "/Art/playground_3.mp4" },
+  { id: 4, kind: "video", src: "/Art/playground_4.mp4" },
+  { id: 5, kind: "video", src: "/Art/playground_5.mp4" },
 ];
-
 const IMAGES: ImageItem[] = [
-  { id: 6,  kind: "image", src: "/Art/playground_6.jpg",  rot:  4 },
-  { id: 7,  kind: "image", src: "/Art/playground_7.jpg",  rot: -6 },
-  { id: 8,  kind: "image", src: "/Art/playground_8.jpg",  rot:  2 },
-  { id: 9,  kind: "image", src: "/Art/playground_9.jpg",  rot: -3 },
-  { id: 10, kind: "image", src: "/Art/playground_10.jpg", rot:  5 },
-  { id: 11, kind: "image", src: "/Art/playground_11.jpg", rot: -4 },
-  { id: 12, kind: "image", src: "/Art/playground_12.jpg", rot:  3 },
+  { id: 6,  kind: "image", src: "/Art/playground_6.jpg"  },
+  { id: 7,  kind: "image", src: "/Art/playground_7.jpg"  },
+  { id: 8,  kind: "image", src: "/Art/playground_8.jpg"  },
+  { id: 9,  kind: "image", src: "/Art/playground_9.jpg"  },
+  { id: 10, kind: "image", src: "/Art/playground_10.jpg" },
+  { id: 11, kind: "image", src: "/Art/playground_11.jpg" },
+  { id: 12, kind: "image", src: "/Art/playground_12.jpg" },
 ];
 
-// ── Audio pill — "Shhh" / "Listen" toggle ────────────────────────────────────
-function AudioPill({
-  isActive,
-  mobile,
-  onToggle,
-}: {
-  isActive: boolean;
-  mobile: boolean;
-  onToggle: (e: React.MouseEvent | React.PointerEvent) => void;
-}) {
-  return (
-    <motion.button
-      type="button"
-      onPointerDown={(e) => e.stopPropagation()}
-      onClick={onToggle}
-      whileTap={{ scale: 0.88 }}
-      style={{
-        position:            "absolute",
-        bottom:              mobile ? 8 : 5,
-        right:               mobile ? 8 : 6,
-        background:          isActive ? "rgba(244,172,183,0.90)" : "rgba(61,31,15,0.65)",
-        color:               isActive ? "#3D1F0F" : "#FFF5F5",
-        border:              "none",
-        borderRadius:        "20px",
-        padding:             mobile ? "6px 14px" : "3px 11px",
-        fontSize:            "11px",
-        fontFamily:          "'Garamond','Georgia','Palatino Linotype',serif",
-        fontStyle:           "italic",
-        letterSpacing:       "0.02em",
-        cursor:              "pointer",
-        zIndex:              5,
-        minHeight:           mobile ? 34 : 24,
-        display:             "flex",
-        alignItems:          "center",
-        gap:                 "4px",
-        backdropFilter:      "blur(4px)",
-        WebkitBackdropFilter: "blur(4px)",
-        boxShadow:           isActive
-          ? "0 0 10px rgba(244,172,183,0.55), 0 1px 3px rgba(0,0,0,0.12)"
-          : "0 1px 4px rgba(0,0,0,0.28)",
-        transition:          "background 0.25s, color 0.25s, box-shadow 0.25s",
-      }}
-    >
-      {/* Note icon wiggles + pops when unmuted */}
-      <motion.span
-        key={isActive ? "on" : "off"}
-        animate={
-          isActive
-            ? { rotate: [-6, 7, -4, 4, 0], scale: [1, 1.25, 1, 1.1, 1] }
-            : { rotate: 0, scale: 1 }
-        }
-        transition={{ duration: 0.45 }}
-        style={{ display: "inline-block", lineHeight: 1 }}
-      >
-        {isActive ? "♪" : "♩"}
-      </motion.span>
-      {isActive ? "Listen" : "Shhh"}
-    </motion.button>
-  );
+const BASE: Item[] = [
+  ...VIDEOS,
+  ...IMAGES,
+];
+// Triple the strip so it feels infinite in both directions
+const STRIP: Item[] = [...BASE, ...BASE, ...BASE];
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function norm(offset: number, tw: number): number {
+  if (!tw) return offset;
+  return ((offset + 2 * tw) % tw + tw) % tw - 2 * tw;
 }
 
-// ── Page ──────────────────────────────────────────────────────────────────────
+function hSprocketBg(h: number): string {
+  const tw = 52, hw = 9, hh = Math.round(h * 0.54), hy = (h - hh) / 2;
+  const svg =
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${tw}" height="${h}">` +
+    `<rect width="${tw}" height="${h}" fill="${BLACK}"/>` +
+    `<rect x="4" y="${hy.toFixed(1)}" width="${hw}" height="${hh}" rx="2" fill="${BROWN}"/>` +
+    `<text x="${tw / 2}" y="${(h / 2).toFixed(1)}" text-anchor="middle"` +
+    ` dominant-baseline="middle" font-size="5.5" font-family="monospace"` +
+    ` fill="rgba(255,210,55,0.38)" letter-spacing="0.6">KODAK 400</text>` +
+    `<rect x="${tw - hw - 4}" y="${hy.toFixed(1)}" width="${hw}" height="${hh}" rx="2" fill="${BROWN}"/>` +
+    `</svg>`;
+  return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+}
+
+function vSprocketBg(w: number): string {
+  const th = 52, hh = 10, hw = Math.round(w * 0.46), hx = (w - hw) / 2;
+  const svg =
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${th}">` +
+    `<rect width="${w}" height="${th}" fill="${BLACK}"/>` +
+    `<rect x="${hx.toFixed(1)}" y="4" width="${hw}" height="${hh}" rx="2" fill="${BROWN}"/>` +
+    `<rect x="${hx.toFixed(1)}" y="${th - hh - 4}" width="${hw}" height="${hh}" rx="2" fill="${BROWN}"/>` +
+    `</svg>`;
+  return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+}
+
+// ── Component ─────────────────────────────────────────────────────────────────
 export default function PlaygroundPage() {
-  const pageRef   = useRef<HTMLDivElement>(null);
-  const videoRefs = useRef<Record<number, HTMLVideoElement | null>>({});
+  const canvasRef   = useRef<HTMLDivElement>(null);
+  const trackRef    = useRef<HTMLDivElement>(null);
+  const offsetRef   = useRef(0);
+  const twRef       = useRef(0);
+  const dragRef     = useRef({ on: false, startX: 0, startOff: 0 });
+  const velRef      = useRef(0);
+  const lastXRef    = useRef(0);
+  const lastTRef    = useRef(0);
+  const rafRef      = useRef(0);
+  const driftRafRef = useRef(0);
+  const wSnapRef    = useRef<ReturnType<typeof setTimeout>>();
+  const audioIdRef  = useRef<number | null>(null);
+  const hoverRef    = useRef(false);
 
   const [mounted,       setMounted]       = useState(false);
-  const [activeAudioId, setActiveAudioId] = useState<number | null>(null);
-  const [zMap,          setZMap]          = useState<Record<number, number>>({});
-  const [zTop,          setZTop]          = useState(20);
+  const [ready,         setReady]         = useState(false);
   const [isMobile,      setIsMobile]      = useState(false);
+  const [activeAudioId, setActiveAudioId] = useState<number | null>(null);
+
+  useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
+    const check = () => setIsMobile(window.innerWidth <= 768);
     check();
     window.addEventListener("resize", check);
-    setMounted(true);
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  const bringToFront = (id: number) => {
-    setZTop((prev) => {
-      const next = prev + 1;
-      setZMap((m) => ({ ...m, [id]: next }));
-      return next;
+  // ── Desktop drift ───────────────────────────────────────────────────────────
+  const stopDrift = useCallback(() => {
+    cancelAnimationFrame(driftRafRef.current);
+  }, []);
+
+  const startDrift = useCallback(() => {
+    cancelAnimationFrame(driftRafRef.current);
+    const step = () => {
+      if (!hoverRef.current && !dragRef.current.on) {
+        const next = norm(offsetRef.current - DRIFT_D, twRef.current);
+        offsetRef.current = next;
+        if (trackRef.current)
+          trackRef.current.style.transform = `translateX(${next}px)`;
+      }
+      driftRafRef.current = requestAnimationFrame(step);
+    };
+    driftRafRef.current = requestAnimationFrame(step);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted || isMobile) return;
+    const t = setTimeout(() => {
+      const track = trackRef.current;
+      if (!track) return;
+      const tw = track.scrollWidth / 3;
+      twRef.current = tw;
+      const initial = norm(window.innerWidth / 2 - 1.5 * tw, tw);
+      offsetRef.current = initial;
+      track.style.transform = `translateX(${initial}px)`;
+      setReady(true);
+    }, 200);
+    return () => clearTimeout(t);
+  }, [mounted, isMobile]);
+
+  useEffect(() => {
+    if (!ready || isMobile) return;
+    startDrift();
+    return () => stopDrift();
+  }, [ready, isMobile, startDrift, stopDrift]);
+
+  // ── Mobile window-scroll drift ──────────────────────────────────────────────
+  useEffect(() => {
+    if (!isMobile || !mounted) return;
+    const active = { on: true };
+    let raf = 0;
+    const step = () => {
+      if (active.on) window.scrollBy(0, DRIFT_M);
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    let timer: ReturnType<typeof setTimeout>;
+    const pause  = () => { active.on = false; clearTimeout(timer); };
+    const resume = () => { timer = setTimeout(() => { active.on = true; }, 1200); };
+    window.addEventListener("touchstart", pause,  { passive: true });
+    window.addEventListener("touchend",   resume, { passive: true });
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(timer);
+      window.removeEventListener("touchstart", pause);
+      window.removeEventListener("touchend",   resume);
+    };
+  }, [isMobile, mounted]);
+
+  // ── Singleton audio ──────────────────────────────────────────────────────────
+  const unmuteBestCopy = useCallback((id: number) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const all = Array.from(track.querySelectorAll<HTMLVideoElement>("video"));
+    all.forEach(v => { v.muted = true; });
+    const cx = window.innerWidth / 2;
+    const copies = all.filter(v => v.dataset.audioId === String(id));
+    let best = copies[0], bestD = Infinity;
+    copies.forEach(v => {
+      const r = v.getBoundingClientRect();
+      const d = Math.abs(r.left + r.width / 2 - cx);
+      if (d < bestD) { bestD = d; best = v; }
     });
-  };
+    if (best) { best.muted = false; best.play().catch(() => {}); }
+  }, []);
 
-  // Smart audio: mute every video, then unmute the chosen one
-  const toggleAudio = (id: number, e: React.MouseEvent | React.PointerEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
-
-    Object.values(videoRefs.current).forEach((v) => { if (v) v.muted = true; });
-
-    if (activeAudioId === id) {
+  const toggleAudio = useCallback((id: number) => {
+    document.querySelectorAll<HTMLVideoElement>("video").forEach(v => {
+      if (v.dataset.audioId !== String(id)) {
+        v.muted = true; v.pause(); v.currentTime = 0;
+        v.play().catch(() => {});
+      }
+    });
+    if (audioIdRef.current === id) {
+      document.querySelectorAll<HTMLVideoElement>("video")
+        .forEach(v => { if (v.dataset.audioId === String(id)) v.muted = true; });
+      audioIdRef.current = null;
       setActiveAudioId(null);
     } else {
+      audioIdRef.current = id;
       setActiveAudioId(id);
-      const vid = videoRefs.current[id];
-      if (vid) {
-        vid.muted = false;
-        if (vid.paused) vid.play().catch(() => {});
-      }
+      unmuteBestCopy(id);
     }
+  }, [unmuteBestCopy]);
+
+  // ── Spring snap ──────────────────────────────────────────────────────────────
+  const springTo = useCallback((target: number) => {
+    stopDrift();
+    cancelAnimationFrame(rafRef.current);
+    const go = () => {
+      const diff = target - offsetRef.current;
+      if (Math.abs(diff) < 0.3) {
+        const final = norm(target, twRef.current);
+        offsetRef.current = final;
+        if (trackRef.current) trackRef.current.style.transform = `translateX(${final}px)`;
+        if (audioIdRef.current !== null) unmuteBestCopy(audioIdRef.current);
+        if (!hoverRef.current && !dragRef.current.on) startDrift();
+        return;
+      }
+      offsetRef.current += diff * 0.13;
+      if (trackRef.current) trackRef.current.style.transform = `translateX(${offsetRef.current}px)`;
+      rafRef.current = requestAnimationFrame(go);
+    };
+    rafRef.current = requestAnimationFrame(go);
+  }, [unmuteBestCopy, startDrift, stopDrift]);
+
+  const snapToNearest = useCallback(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    const frames = Array.from(track.querySelectorAll<HTMLElement>("[data-frame]"));
+    if (!frames.length) return;
+    const cx = window.innerWidth / 2;
+    let best = frames[0], bestD = Infinity;
+    frames.forEach(f => {
+      const r = f.getBoundingClientRect();
+      const d = Math.abs(r.left + r.width / 2 - cx);
+      if (d < bestD) { bestD = d; best = f; }
+    });
+    const r = best.getBoundingClientRect();
+    springTo(offsetRef.current + cx - (r.left + r.width / 2));
+  }, [springTo]);
+
+  const runMomentum = useCallback(() => {
+    cancelAnimationFrame(rafRef.current);
+    const step = () => {
+      velRef.current *= 0.92;
+      if (Math.abs(velRef.current) < 1.5) { snapToNearest(); return; }
+      const next = norm(offsetRef.current + velRef.current, twRef.current);
+      offsetRef.current = next;
+      if (trackRef.current) trackRef.current.style.transform = `translateX(${next}px)`;
+      rafRef.current = requestAnimationFrame(step);
+    };
+    rafRef.current = requestAnimationFrame(step);
+  }, [snapToNearest]);
+
+  // ── Pointer drag ────────────────────────────────────────────────────────────
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if ((e.target as HTMLElement).closest("button")) return;
+    stopDrift();
+    cancelAnimationFrame(rafRef.current);
+    clearTimeout(wSnapRef.current);
+    e.currentTarget.setPointerCapture(e.pointerId);
+    if (canvasRef.current) canvasRef.current.style.cursor = "grabbing";
+    velRef.current = 0;
+    lastXRef.current = e.clientX;
+    lastTRef.current = performance.now();
+    dragRef.current = { on: true, startX: e.clientX, startOff: offsetRef.current };
+  };
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!dragRef.current.on || !trackRef.current) return;
+    const now = performance.now(), dt = Math.max(1, now - lastTRef.current);
+    velRef.current = ((e.clientX - lastXRef.current) / dt) * 16;
+    lastXRef.current = e.clientX;
+    lastTRef.current = now;
+    const next = norm(
+      dragRef.current.startOff + (e.clientX - dragRef.current.startX),
+      twRef.current,
+    );
+    offsetRef.current = next;
+    trackRef.current.style.transform = `translateX(${next}px)`;
+  };
+  const onPointerUp = () => {
+    if (!dragRef.current.on) return;
+    dragRef.current.on = false;
+    if (canvasRef.current) canvasRef.current.style.cursor = "grab";
+    runMomentum();
+  };
+  const onMouseEnter = () => { hoverRef.current = true;  stopDrift(); };
+  const onMouseLeave = () => {
+    hoverRef.current = false;
+    if (!dragRef.current.on && ready) startDrift();
   };
 
-  // Pre-mount placeholder — avoids hydration flash
-  if (!mounted) {
-    return <div style={{ minHeight: "100vh", background: BG }} />;
-  }
+  // Non-passive wheel handler
+  useEffect(() => {
+    if (!ready || isMobile) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const handler = (e: WheelEvent) => {
+      // Let primarily vertical scrolls pass through (page scroll, not film strip)
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX) * 1.5) return;
+      e.preventDefault();
+      stopDrift();
+      cancelAnimationFrame(rafRef.current);
+      clearTimeout(wSnapRef.current);
+      const raw = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+      const next = norm(offsetRef.current - Math.max(-200, Math.min(200, raw)), twRef.current);
+      offsetRef.current = next;
+      if (trackRef.current) trackRef.current.style.transform = `translateX(${next}px)`;
+      wSnapRef.current = setTimeout(() => { snapToNearest(); }, 160);
+    };
+    canvas.addEventListener("wheel", handler, { passive: false });
+    return () => canvas.removeEventListener("wheel", handler);
+  }, [ready, isMobile, snapToNearest, stopDrift]);
 
-  // ── Shared tagline ─────────────────────────────────────────────────────────
-  const tagline = (
-    <p
-      style={{
-        fontFamily:   "'Garamond','Georgia','Palatino Linotype',serif",
-        color:         ACCENT,
-        fontSize:      isMobile ? "0.875rem" : "clamp(0.8rem, 1.1vw, 0.95rem)",
-        fontStyle:     "italic",
-        letterSpacing: "0.02em",
-        lineHeight:    1.75,
-        maxWidth:      "70ch",
-        overflowWrap:  "break-word",
-        margin:        "0 auto",
-        textShadow:    TAGLINE_GLOW,
-      }}
-    >
-      Whether it&rsquo;s through baking, video editing, or painting—I just love
-      the act of creating. Stay a while.
-    </p>
+  if (!mounted) return <div style={{ minHeight: "100vh", background: BROWN }} />;
+
+  // ── Sub-components ───────────────────────────────────────────────────────────
+  const hSpBg = hSprocketBg(SPROCKET_H);
+  const vSpBg = vSprocketBg(SPROCKET_W);
+
+  const HSprocket = () => (
+    <div style={{
+      width:            "100%",
+      height:           SPROCKET_H,
+      flexShrink:       0,
+      backgroundImage:  hSpBg,
+      backgroundRepeat: "repeat-x",
+      backgroundSize:   `52px ${SPROCKET_H}px`,
+      backgroundColor:  BLACK,
+      pointerEvents:    "none",
+    }} />
   );
 
-  // ── Mobile: sticky tagline + single-col videos + 2-col image grid ──────────
+  const stickerCSS = (active: boolean): CSSProperties => ({
+    position:             "absolute",
+    bottom:               10,
+    right:                PAD_S,
+    fontFamily:           "ui-monospace,'SF Mono',Menlo,monospace",
+    fontSize:             "10px",
+    fontWeight:           500,
+    letterSpacing:        "0.05em",
+    lineHeight:           1.4,
+    color:                BROWN,
+    background:           active ? PINK : "rgba(255,255,255,0.93)",
+    backdropFilter:       "blur(6px)",
+    WebkitBackdropFilter: "blur(6px)",
+    border:               `0.5px solid rgba(61,31,15,${active ? 0.35 : 0.20})`,
+    borderRadius:         "2px",
+    padding:              "3px 7px",
+    cursor:               "pointer",
+    userSelect:           "none",
+    whiteSpace:           "nowrap",
+    zIndex:               5,
+    transition:           "background 0.15s, border-color 0.15s",
+  });
+
+  // ── MOBILE — vertical strip ──────────────────────────────────────────────────
   if (isMobile) {
+    const sidePad = SPROCKET_W;
     return (
-      <div style={{ background: BG, minHeight: "100vh", overflowX: "clip" }}>
-        {/* Grain — fixed so it covers the full scroll area */}
-        <div
-          className="hero-grain"
-          style={{ position: "fixed", zIndex: 1, pointerEvents: "none" }}
-        />
+      <div style={{ width: "100vw", marginLeft: "calc(-50vw + 50%)" }}>
 
-        {/* Sticky tagline */}
+        {/* Module 5: sticky Paper Cream title — z-40, sticks below pink nav (z-50) */}
         <div style={{
-          position:   "sticky",
-          top:        NAV_H,
-          zIndex:     30,
-          background: BG,
-          padding:    "20px 20px 14px",
-          textAlign:  "center",
+          position:             "sticky",
+          top:                  NAV_H,
+          zIndex:               40,
+          width:                "100%",
+          height:               PG_TITLE_H,
+          background:           "rgba(255,253,249,0.94)",
+          backdropFilter:       "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          borderBottom:         "1px solid rgba(255,182,193,0.18)",
+          display:              "flex",
+          alignItems:           "center",
+          padding:              "0 28px",
         }}>
-          {tagline}
+          <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.10em", color: "#2D1B14", userSelect: "none" }}>
+            welcome to my playground
+          </span>
+          <span style={{ color: "#FFB6C1", marginLeft: 6, fontSize: "0.85rem", lineHeight: 1 }} aria-hidden>✮</span>
+          <span style={{ marginLeft: "auto", fontSize: "0.62rem", fontWeight: 500, letterSpacing: "0.08em", color: "rgba(45,27,20,0.40)" }}>
+            scroll to explore
+          </span>
         </div>
 
-        {/* Videos: single column */}
-        <div style={{
-          display:       "flex",
-          flexDirection: "column",
-          gap:           "20px",
-          padding:       "12px 16px 20px",
-          position:      "relative",
-          zIndex:        5,
-        }}>
-          {VIDEOS.map((item) => (
-            <div
-              key={item.id}
-              style={{
-                background:   FRAME,
-                padding:      "8px 8px 32px",
-                borderRadius: "4px",
-                boxShadow:    POLAROID_SHADOW,
-                position:     "relative",
-              }}
-            >
-              <video
-                ref={(el) => { videoRefs.current[item.id] = el; }}
-                src={item.src}
-                autoPlay
-                muted
-                loop
-                playsInline
-                style={{ display: "block", width: "100%" }}
-              />
-              <AudioPill
-                isActive={activeAudioId === item.id}
-                mobile
-                onToggle={(e) => toggleAudio(item.id, e)}
-              />
-            </div>
-          ))}
-        </div>
+        {/* Dark film content */}
+        <div style={{ background: BROWN, minHeight: "100vh", width: "100%" }}>
 
-        {/* Images: 2-column grid */}
-        <div style={{
-          display:             "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap:                 "12px",
-          padding:             "0 16px 64px",
-          position:            "relative",
-          zIndex:              5,
-        }}>
-          {IMAGES.map((item) => (
-            <div
-              key={item.id}
-              style={{
-                background:   FRAME,
-                padding:      "6px 6px 26px",
-                borderRadius: "4px",
-                boxShadow:    POLAROID_SHADOW,
-              }}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={item.src}
-                alt=""
-                style={{ display: "block", width: "100%" }}
-              />
-            </div>
+          {/* Left + Right fixed sprockets */}
+          {([0, 1] as const).map(side => (
+            <div key={side} style={{
+              position:         "fixed",
+              [side === 0 ? "left" : "right"]: 0,
+              top:              0,
+              bottom:           0,
+              width:            SPROCKET_W,
+              backgroundImage:  vSpBg,
+              backgroundRepeat: "repeat-y",
+              backgroundSize:   `${SPROCKET_W}px 52px`,
+              backgroundColor:  BLACK,
+              zIndex:           10,
+              pointerEvents:    "none",
+            }} />
           ))}
+
+          {/* Content column */}
+          <div style={{
+            paddingTop:    MOBILE_PAD_TOP,
+            paddingBottom: 80,
+            paddingLeft:   sidePad,
+            paddingRight:  sidePad,
+            display:       "flex",
+            flexDirection: "column",
+            gap:           0,
+          }}>
+            {BASE.map((item, i) => {
+              const isVideo  = item.kind === "video";
+              const isActive = isVideo && activeAudioId === item.id;
+              const frameNum = String(i + 1).padStart(2, "0");
+              return (
+                <div key={item.id} style={{ margin: 0, padding: 0 }}>
+                  {i > 0 && (
+                    <div style={{ height: 30, marginLeft: -BITE, marginRight: -BITE, background: BLACK }} />
+                  )}
+                  <div style={{
+                    position:     "relative",
+                    width:        "100%",
+                    boxSizing:    "border-box",
+                    marginLeft:   -BITE,
+                    marginRight:  -BITE,
+                    padding:      `${PAD_T}px ${PAD_S + BITE}px ${PAD_B}px`,
+                    background:   WHITE,
+                    border:       "none",
+                    borderRadius: "2px",
+                    boxShadow:    "4px 4px 14px rgba(0,0,0,0.28)",
+                    overflow:     "hidden",
+                  }}>
+                    {isVideo ? (
+                      <video src={(item as VideoItem).src} data-audio-id={item.id}
+                        autoPlay muted loop playsInline
+                        style={{ display: "block", width: "100%", height: "auto", objectFit: "contain" }}
+                      />
+                    ) : (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={(item as ImageItem).src} alt="" draggable={false}
+                        style={{ display: "block", width: "100%", height: "auto", objectFit: "contain", pointerEvents: "none" }}
+                      />
+                    )}
+                    <span style={{
+                      position: "absolute", bottom: 12, left: PAD_S + BITE,
+                      fontSize: 8, fontFamily: "ui-monospace,monospace",
+                      color: "rgba(61,31,15,0.35)", letterSpacing: "0.08em",
+                      userSelect: "none", pointerEvents: "none",
+                    }}>{frameNum}</span>
+                    {isVideo && (
+                      <button type="button" onClick={() => toggleAudio(item.id)} style={stickerCSS(isActive)}>
+                        {isActive ? "[ AUDIO ON ]" : "[ AUDIO OFF ]"}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     );
   }
 
-  // ── Desktop: scrollable grid, items draggable ─────────────────────────────
-  // overflowX: "clip" keeps sticky tagline working without clipping sticky context
+  // ── DESKTOP — horizontal infinite film strip ─────────────────────────────────
   return (
-    <div
-      ref={pageRef}
-      style={{
-        background:  BG,
-        minHeight:   "100vh",
-        overflowX:   "clip",
-        paddingTop:  NAV_H,
-      }}
-    >
-      {/* Grain */}
+    // Full-bleed container — breaks out of centered max-w-[1440px] main
+    <div style={{ width: "100vw", marginLeft: "calc(-50vw + 50%)" }}>
+
+      {/* Module 5: sticky Paper Cream title — z-40 sticks below pink nav (z-50) */}
+      <div style={{
+        position:             "sticky",
+        top:                  NAV_H,
+        zIndex:               40,
+        width:                "100%",
+        height:               PG_TITLE_H,
+        background:           "rgba(255,253,249,0.94)",
+        backdropFilter:       "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)",
+        borderBottom:         "1px solid rgba(255,182,193,0.18)",
+        display:              "flex",
+        alignItems:           "center",
+        padding:              "0 32px",
+      }}>
+        <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.10em", color: "#2D1B14", userSelect: "none" }}>
+          welcome to my playground
+        </span>
+        <span style={{ color: "#FFB6C1", marginLeft: 6, fontSize: "0.85rem", lineHeight: 1 }} aria-hidden>✮</span>
+        <span style={{ marginLeft: "auto", fontSize: "0.62rem", fontWeight: 500, letterSpacing: "0.08em", color: "rgba(45,27,20,0.40)" }}>
+          drag to explore
+        </span>
+      </div>
+
+      {/* Film strip canvas — height accounts for nav + pg title */}
       <div
-        className="hero-grain"
-        style={{ position: "fixed", zIndex: 1, pointerEvents: "none" }}
-      />
+        ref={canvasRef}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        style={{
+          position:       "relative",
+          width:          "100%",
+          height:         `calc(100vh - ${NAV_H}px - ${PG_TITLE_H}px)`,
+          background:     BROWN,
+          overflow:       "hidden",
+          cursor:         "grab",
+          touchAction:    "none",
+          userSelect:     "none",
+          display:        "flex",
+          flexDirection:  "column",
+          alignItems:     "center",
+          justifyContent: "center",
+        }}
+      >
 
-      {/* ── Sticky tagline ──────────────────────────────────────────────────
-          top: 0 because paddingTop on parent already accounts for the nav.   */}
+      {/* Film block */}
       <div style={{
-        position:   "sticky",
-        top:        0,
-        zIndex:     30,
-        background: BG,
-        padding:    "24px 0 18px",
-        textAlign:  "center",
+        position:        "relative",
+        width:           "100%",
+        backgroundColor: BLACK,
+        overflow:        "hidden",
       }}>
-        {tagline}
+        <HSprocket />
+
+        {/* Track zone */}
+        <div style={{
+          position:        "relative",
+          width:           "100%",
+          height:          TRACK_H,
+          overflow:        "hidden",
+          backgroundColor: BLACK,
+        }}>
+          <div ref={trackRef} style={{
+            position:      "absolute",
+            top:           0,
+            left:          0,
+            height:        TRACK_H,
+            display:       "flex",
+            flexDirection: "row",
+            alignItems:    "stretch",
+            gap:           0,
+            margin:        0,
+            padding:       0,
+            willChange:    "transform",
+            opacity:       ready ? 1 : 0,
+            transition:    "opacity 0.4s ease",
+          }}>
+            {STRIP.map((item, i) => {
+              const isVideo  = item.kind === "video";
+              const copyIdx  = Math.floor(i / BASE.length);
+              const isActive = isVideo && activeAudioId === item.id;
+              const frameNum = String((i % BASE.length) + 1).padStart(2, "0");
+
+              return (
+                <Fragment key={`${item.id}-c${copyIdx}`}>
+                  {/* Black divider */}
+                  <div style={{
+                    flexShrink:      0,
+                    width:           DIVIDER_W,
+                    height:          TRACK_H,
+                    backgroundColor: BLACK,
+                    margin:          0,
+                    padding:         0,
+                  }} />
+
+                  {/* Polaroid frame */}
+                  <div
+                    data-frame
+                    style={{
+                      flexShrink:   0,
+                      alignSelf:    "stretch",
+                      width:        FRAME_W,
+                      height:       TRACK_H,
+                      margin:       `${-BITE}px 0`,
+                      boxSizing:    "border-box",
+                      padding:      `${PAD_T + BITE}px ${PAD_S}px ${PAD_B + BITE}px`,
+                      position:     "relative",
+                      background:   WHITE,
+                      border:       "none",
+                      borderRadius: "2px",
+                      boxShadow:    "4px 4px 18px rgba(0,0,0,0.28), 0 1px 4px rgba(0,0,0,0.14)",
+                      overflow:     "hidden",
+                    }}
+                  >
+                    {isVideo ? (
+                      <video src={(item as VideoItem).src} data-audio-id={item.id}
+                        autoPlay muted loop playsInline
+                        style={{ display: "block", width: "100%", height: "100%", objectFit: "contain" }}
+                      />
+                    ) : (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={(item as ImageItem).src} alt="" draggable={false}
+                        style={{ display: "block", width: "100%", height: "100%", objectFit: "contain", pointerEvents: "none" }}
+                      />
+                    )}
+                    <span style={{
+                      position: "absolute", bottom: 12, left: PAD_S,
+                      fontSize: 8, fontFamily: "ui-monospace,'SF Mono',monospace",
+                      color: "rgba(61,31,15,0.35)", letterSpacing: "0.08em",
+                      userSelect: "none", pointerEvents: "none",
+                    }}>{frameNum}</span>
+                    {isVideo && (
+                      <button type="button"
+                        onPointerDown={e => e.stopPropagation()}
+                        onClick={e => { e.stopPropagation(); toggleAudio(item.id); }}
+                        style={stickerCSS(isActive)}
+                      >
+                        {isActive ? "[ AUDIO ON ]" : "[ AUDIO OFF ]"}
+                      </button>
+                    )}
+                  </div>
+                </Fragment>
+              );
+            })}
+          </div>
+        </div>
+
+        <HSprocket />
       </div>
 
-      {/* ── Videos: 4 columns × 300 px ─────────────────────────────────── */}
-      <div style={{
-        display:             "grid",
-        gridTemplateColumns: "repeat(4, 300px)",
-        gap:                 "32px",
-        justifyContent:      "center",
-        padding:             "28px 48px 48px",
-        position:            "relative",
-        zIndex:              5,
+      {/* Pink scroll-hint arrow */}
+      <div aria-hidden style={{
+        position:      "absolute",
+        right:         22,
+        top:           "50%",
+        transform:     "translateY(-50%)",
+        zIndex:        300,
+        pointerEvents: "none",
+        color:         PINK,
+        fontSize:      36,
+        lineHeight:    1,
+        animation:     "pg-arrow-pulse 2.2s ease-in-out infinite",
       }}>
-        {VIDEOS.map((item, i) => (
-          <motion.div
-            key={item.id}
-            drag={mounted}
-            dragMomentum={false}
-            dragElastic={0}
-            whileDrag={{ scale: 1.05 }}
-            onDragStart={() => bringToFront(item.id)}
-            onMouseDown={() => bringToFront(item.id)}
-            initial={{ rotate: item.rot, opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.35, delay: i * 0.07 }}
-            style={{
-              background:   FRAME,
-              padding:      "8px 8px 30px",
-              borderRadius: "4px",
-              boxShadow:    POLAROID_SHADOW,
-              cursor:       "grab",
-              userSelect:   "none",
-              touchAction:  "none",
-              position:     "relative",
-              zIndex:       zMap[item.id] ?? 20 + i,
-              width:        "300px",
-            }}
-          >
-            <video
-              ref={(el) => { videoRefs.current[item.id] = el; }}
-              src={item.src}
-              autoPlay
-              muted
-              loop
-              playsInline
-              style={{ display: "block", width: "100%" }}
-            />
-            <AudioPill
-              isActive={activeAudioId === item.id}
-              mobile={false}
-              onToggle={(e) => toggleAudio(item.id, e)}
-            />
-          </motion.div>
-        ))}
+        {"\u203a"}
       </div>
-
-      {/* ── Images: 3 columns × 200 px, gap-16 (64 px) ────────────────── */}
-      <div style={{
-        display:             "grid",
-        gridTemplateColumns: "repeat(3, 200px)",
-        gap:                 "64px",
-        justifyContent:      "center",
-        padding:             "0 48px 96px",
-        position:            "relative",
-        zIndex:              5,
-      }}>
-        {IMAGES.map((item, i) => (
-          <motion.div
-            key={item.id}
-            drag={mounted}
-            dragMomentum={false}
-            dragElastic={0}
-            whileDrag={{ scale: 1.05 }}
-            onDragStart={() => bringToFront(item.id)}
-            onMouseDown={() => bringToFront(item.id)}
-            initial={{ rotate: item.rot, opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.35, delay: (VIDEOS.length + i) * 0.07 }}
-            style={{
-              background:   FRAME,
-              padding:      "6px 6px 26px",
-              borderRadius: "4px",
-              boxShadow:    POLAROID_SHADOW,
-              cursor:       "grab",
-              userSelect:   "none",
-              touchAction:  "none",
-              position:     "relative",
-              zIndex:       zMap[item.id] ?? 20 + VIDEOS.length + i,
-              width:        "200px",
-            }}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={item.src}
-              alt=""
-              draggable={false}
-              style={{ display: "block", width: "100%", pointerEvents: "none" }}
-            />
-          </motion.div>
-        ))}
-      </div>
+    </div>
+    {/* closes outer full-bleed wrapper */}
     </div>
   );
 }

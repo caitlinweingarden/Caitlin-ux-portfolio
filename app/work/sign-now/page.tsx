@@ -273,13 +273,13 @@ export default function SignNowPage() {
               No existing ASL translation precedent · Solo designer · 6-week timeline · No usability testing budget
             </div>
 
-            {/* Hero image — 21:9 */}
+            {/* Hero image — full width, natural aspect ratio */}
             <div className={`mt-10 ${T} ${r("hero-img")}`} data-reveal="hero-img">
-              <Img
-                ratio="21/9"
-                src="/images/sign-now/hero.png"
-                label="sign-now-hero.png"
-                caption="Sign Now: Real-time audio-to-ASL translation for healthcare settings"
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/case_studies/Sign_Now_Images/Ready_to_Post_Images/Sign_Now_Hero.jpg"
+                alt="Sign Now Case Study Hero"
+                style={{ width: "100%", height: "auto", display: "block", margin: 0, padding: 0 }}
               />
             </div>
           </div>
@@ -561,6 +561,93 @@ export default function SignNowPage() {
                   </p>
                 </div>
               ))}
+            </div>
+
+            {/* ── Persona cards — Module 5: named personas with avatar icons ── */}
+            <div
+              className={`mb-12 grid gap-6 md:grid-cols-2 ${T} ${r("s-research-personas")}`}
+              data-reveal="s-research-personas"
+            >
+              {/* Persona 1: Maya */}
+              <div
+                className="sn-lift rounded-2xl overflow-hidden"
+                style={{ border: "1px solid var(--taupe)" }}
+              >
+                <div
+                  className="flex items-center gap-4 p-6"
+                  style={{ background: "var(--sage)", borderBottom: "1px solid var(--taupe)" }}
+                >
+                  {/* Avatar icon — SVG geometric face */}
+                  <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                    <circle cx="24" cy="24" r="24" fill="var(--terra)" opacity="0.18" />
+                    <circle cx="24" cy="20" r="9" fill="var(--terra)" opacity="0.55" />
+                    <ellipse cx="24" cy="40" rx="13" ry="8" fill="var(--terra)" opacity="0.4" />
+                    <circle cx="20" cy="19" r="1.5" fill="var(--ink)" opacity="0.7" />
+                    <circle cx="28" cy="19" r="1.5" fill="var(--ink)" opacity="0.7" />
+                    <path d="M20 23.5 Q24 26.5 28 23.5" stroke="var(--ink)" strokeWidth="1.4" strokeLinecap="round" fill="none" opacity="0.7" />
+                  </svg>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-widest" style={{ color: "var(--terra)" }}>Persona 01</p>
+                    <h3 className="text-lg font-bold font-sans" style={{ color: "var(--ink)" }}>Maya Chen, 28</h3>
+                    <p className="text-xs" style={{ color: "var(--ink-70)" }}>Patient. Congenital hearing loss.</p>
+                  </div>
+                </div>
+                <div className="p-6" style={{ background: "var(--cream)" }}>
+                  <div className="mb-4">
+                    <p className="mb-1 text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--terra)" }}>Goal</p>
+                    <p className="text-sm leading-relaxed" style={{ color: "var(--ink-70)" }}>
+                      Communicate independently during medical appointments without waiting for an interpreter.
+                    </p>
+                  </div>
+                  <div>
+                    <p className="mb-1 text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--ink-40)" }}>Pain Point</p>
+                    <p className="text-sm leading-relaxed" style={{ color: "var(--ink-70)" }}>
+                      Interpreter delays create anxiety and risk miscommunication during critical diagnoses.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Persona 2: Marcus */}
+              <div
+                className="sn-lift rounded-2xl overflow-hidden"
+                style={{ border: "1px solid var(--taupe)" }}
+              >
+                <div
+                  className="flex items-center gap-4 p-6"
+                  style={{ background: "var(--blush)", borderBottom: "1px solid var(--taupe)" }}
+                >
+                  {/* Avatar icon — SVG geometric face variant */}
+                  <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                    <circle cx="24" cy="24" r="24" fill="var(--ink)" opacity="0.08" />
+                    <circle cx="24" cy="20" r="9" fill="var(--ink)" opacity="0.30" />
+                    <ellipse cx="24" cy="40" rx="13" ry="8" fill="var(--ink)" opacity="0.22" />
+                    <circle cx="20" cy="19" r="1.5" fill="var(--ink)" opacity="0.7" />
+                    <circle cx="28" cy="19" r="1.5" fill="var(--ink)" opacity="0.7" />
+                    <path d="M20 23 Q24 25.5 28 23" stroke="var(--ink)" strokeWidth="1.4" strokeLinecap="round" fill="none" opacity="0.6" />
+                    <rect x="18" y="11" width="12" height="3" rx="1.5" fill="var(--ink)" opacity="0.25" />
+                  </svg>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-widest" style={{ color: "var(--terra)" }}>Persona 02</p>
+                    <h3 className="text-lg font-bold font-sans" style={{ color: "var(--ink)" }}>Marcus Wright, 42</h3>
+                    <p className="text-xs" style={{ color: "var(--ink-70)" }}>Hospital administrator. Patient access coordinator.</p>
+                  </div>
+                </div>
+                <div className="p-6" style={{ background: "var(--cream)" }}>
+                  <div className="mb-4">
+                    <p className="mb-1 text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--terra)" }}>Goal</p>
+                    <p className="text-sm leading-relaxed" style={{ color: "var(--ink-70)" }}>
+                      Provide equitable, ADA-compliant care to all patients efficiently and without scheduling delays.
+                    </p>
+                  </div>
+                  <div>
+                    <p className="mb-1 text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--ink-40)" }}>Pain Point</p>
+                    <p className="text-sm leading-relaxed" style={{ color: "var(--ink-70)" }}>
+                      Staffing qualified interpreters is expensive and unreliable. Coverage gaps create liability exposure.
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div className={`${T} ${r("s-research-img")}`} data-reveal="s-research-img">
