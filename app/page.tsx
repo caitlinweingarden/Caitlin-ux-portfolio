@@ -152,16 +152,16 @@ function Hero() {
     textDecorationThickness: "1.5px",
   };
   return (
-    <section className="pt-16 pb-6 md:pt-20 md:pb-8" aria-label="Introduction">
+    <section className="pt-16 pb-12 md:pt-20 md:pb-16" aria-label="Introduction">
       <div className="mx-auto w-full max-w-7xl px-8">
         <motion.h1
-          className="text-balance text-page-text"
+          className="text-page-text"
           style={{
-            fontSize:      "clamp(2.25rem, 5vw, 4.5rem)",
+            fontSize:      "clamp(1.5rem, 3.5vw, 3rem)",
             fontWeight:    400,
             letterSpacing: "-0.03em",
-            lineHeight:    1.1,
-            maxWidth:      "950px",
+            lineHeight:    1.15,
+            maxWidth:      "1100px",
             textShadow:    "0 1px 3px rgba(0,0,0,0.08)",
           }}
           initial={{ opacity: 0, y: 14 }}
@@ -172,7 +172,9 @@ function Hero() {
           <span style={{ fontWeight: 700 }}>Caitlin Weingarden</span>.{" "}
           I&apos;m an{" "}
           <span style={underline}>artist</span>{" "}
-          turned product designer creating{" "}
+          turned
+          <br className="hidden md:block" />
+          product designer creating{" "}
           <span style={underline}>accessible</span>{" "}
           experiences.
         </motion.h1>
