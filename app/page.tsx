@@ -172,7 +172,7 @@ function Hero() {
           <span style={{ fontWeight: 700 }}>Caitlin Weingarden</span>.{" "}
           I&apos;m an{" "}
           <span style={underline}>artist</span>{" "}
-          turned
+          turned{" "}
           <br className="hidden md:block" />
           product designer creating{" "}
           <span style={underline}>accessible</span>{" "}
