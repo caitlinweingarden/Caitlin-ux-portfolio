@@ -16,7 +16,7 @@ const DISNEY = {
 const SIGNNOW = {
   href:     "/signnow",
   title:    "Audio to Sign Language Translator",
-  award:    "1ST PLACE \u2022 UMICH ROSS TECH INNOVATION JAM",
+  award:    "1ST PLACE \u2014 HEALTH TRACK \u00b7 UMICH ROSS TECH INNOVATION JAM",
   tags:     "ACCESSIBILITY \u2022 HEALTHCARE",
   imageSrc: "/sign-now/Ready_to_Post_Images/Sign_Now_Hero.jpg",
 };

@@ -583,8 +583,8 @@ export default function SignNowCaseStudy() {
               key={participant}
               className="rounded-xl p-6"
               style={{
-                background: "rgba(45,27,20,0.03)",
-                border:     "1px solid rgba(45,27,20,0.08)",
+                background: "rgba(255,182,193,0.09)",
+                border:     "1px solid rgba(255,182,193,0.28)",
               }}
             >
               <span
@@ -619,10 +619,9 @@ export default function SignNowCaseStudy() {
       >
         <SectionLabel num="05" label="Design Process" />
         <p className="mb-10 max-w-2xl text-base leading-relaxed text-page-text/65">
-          The design moved through three phases: early Figma layout exploration,
-          mid-fidelity accessibility testing, and high-fidelity refinement.
-          Every decision was checked against one question: does this reduce
-          cognitive load in a high-stress environment?
+          With every iteration, I checked whether my design decisions aligned
+          with the findings from my user research — ensuring each change was
+          grounded in real user needs, not assumptions.
         </p>
 
         <div className="mb-6">
@@ -687,13 +686,13 @@ export default function SignNowCaseStudy() {
 
         <div className="mb-8 max-w-2xl">
           <p className="text-base font-medium text-page-text" style={{ letterSpacing: "-0.01em" }}>
-            Access our translation platform with the click of a button.
+            For any situation a Deaf individual encounters, they can receive an
+            accurate, real-time translation through the Dynamic Island.
           </p>
           <p className="mt-3 text-base leading-relaxed text-page-text/65">
-            The Dynamic Island persistent mode keeps translation running in the
-            background, allowing providers to use other tools without interrupting
-            the conversation. Patients stay informed throughout the entire clinical
-            encounter.
+            Ensuring nothing is ever missed, no matter the context — whether
+            in an emergency room, a campus clinic, or a spontaneous conversation
+            in everyday life.
           </p>
         </div>
 

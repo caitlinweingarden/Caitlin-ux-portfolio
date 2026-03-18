@@ -155,11 +155,10 @@ export default function DisneyPlusCaseStudy() {
 
         {/* Metadata row */}
         <div className="mt-10 border-t border-page-text/12 pt-7">
-          <div className="grid grid-cols-2 gap-x-10 gap-y-6 md:grid-cols-4">
+          <div className="grid grid-cols-2 gap-x-10 gap-y-6 md:grid-cols-3">
             {[
               { label: "Role",     value: "UX Designer" },
               { label: "Timeline", value: "1 Day Sprint" },
-              { label: "Award",    value: "1st Place \u2022 UMich Ross Tech Innovation Jam" },
               { label: "Tools",    value: "Figma, FigJam, Miro" },
             ].map(({ label, value }) => (
               <div key={label}>
