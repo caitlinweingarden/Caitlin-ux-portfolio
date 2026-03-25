@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 
 // ── Image paths ────────────────────────────────────────────────────────────────
@@ -54,6 +55,99 @@ function CaseImage({
   return (
     <figure className="w-full">
       <img src={src} alt={alt} className={`w-full h-auto block ${rounded}`} />
+      {caption && (
+        <figcaption className="mt-3 text-xs text-page-text/40 tracking-wide">
+          {caption}
+        </figcaption>
+      )}
+    </figure>
+  );
+}
+
+function CaseVideo({
+  src,
+  label = "Prototype Demo",
+  caption,
+  rounded = "rounded-3xl",
+}: {
+  src: string;
+  label?: string;
+  caption?: string;
+  rounded?: string;
+}) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = useState(true);
+
+  function togglePlay() {
+    const v = videoRef.current;
+    if (!v) return;
+    if (v.paused) {
+      v.play();
+      setPlaying(true);
+    } else {
+      v.pause();
+      setPlaying(false);
+    }
+  }
+
+  return (
+    <figure className="w-full">
+      <p
+        className="mb-4 text-base font-bold uppercase tracking-widest"
+        style={{ color: "#FFB6C1" }}
+      >
+        {label}
+      </p>
+
+      {/* Constrain to phone-sized width on desktop, full-width on mobile */}
+      <div className="relative mx-auto w-full max-w-xs sm:max-w-sm">
+        {/* Cream background to absorb any black letterbox around the video */}
+        <div
+          className="overflow-hidden rounded-3xl p-4"
+          style={{ background: "#FFFDF9" }}
+        >
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          className={`w-full h-auto block ${rounded}`}
+        >
+          <source src={src} type="video/mp4" />
+          <source src={src} type="video/quicktime" />
+        </video>
+        </div>{/* end cream bg wrapper */}
+
+        {/* Play / pause button — positioned over the bottom-right of the cream box */}
+        <button
+          onClick={togglePlay}
+          aria-label={playing ? "Pause video" : "Play video"}
+          className="absolute bottom-3 right-3 flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition-opacity hover:opacity-90 active:scale-95"
+          style={{
+            background: "rgba(255,182,193,0.92)",
+            color: "#1a0a0e",
+            backdropFilter: "blur(8px)",
+            letterSpacing: "0.02em",
+          }}
+        >
+          {playing ? (
+            /* Pause icon */
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor">
+              <rect x="1" y="1" width="3" height="8" rx="1" />
+              <rect x="6" y="1" width="3" height="8" rx="1" />
+            </svg>
+          ) : (
+            /* Play icon */
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor">
+              <path d="M2 1.5l7 3.5-7 3.5V1.5z" />
+            </svg>
+          )}
+          {playing ? "Pause" : "Play"}
+        </button>
+      </div>
+
       {caption && (
         <figcaption className="mt-3 text-xs text-page-text/40 tracking-wide">
           {caption}
@@ -701,6 +795,14 @@ export default function SignNowCaseStudy() {
           alt="Dynamic Island: persistent background translation"
           caption="Dynamic Island integration: one tap from the lock screen, no app launch required. Designed for the moment when a patient cannot wait."
         />
+
+        <div className="mt-8">
+          <CaseVideo
+            src="/sign-now/Ready_to_Post_Images/dynamic-island-narrated-music-2.mp4.mov"
+            label="Dynamic Island Interaction"
+            caption="Live prototype walkthrough: Dynamic Island activation and real-time ASL translation in a simulated clinical interaction."
+          />
+        </div>
       </motion.section>
 
       <Divider />
