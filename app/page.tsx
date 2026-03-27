@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
@@ -295,6 +295,166 @@ function AboutTile() {
   );
 }
 
+function TimeFlipCard() {
+  const [flipped, setFlipped] = useState(false);
+  const [time,    setTime]    = useState("");
+
+  useEffect(() => {
+    const tick = () =>
+      setTime(
+        new Date().toLocaleTimeString("en-US", {
+          timeZone: "America/Detroit",
+          hour:     "numeric",
+          minute:   "2-digit",
+          second:   "2-digit",
+          hour12:   true,
+        })
+      );
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const faceBase: React.CSSProperties = {
+    position:                 "absolute",
+    inset:                    0,
+    backfaceVisibility:       "hidden",
+    WebkitBackfaceVisibility: "hidden" as React.CSSProperties["WebkitBackfaceVisibility"],
+    borderRadius:             "16px",
+    padding:                  "16px 20px 14px",
+    display:                  "flex",
+    flexDirection:            "column",
+    justifyContent:           "center",
+    gap:                      "5px",
+    overflow:                 "hidden",
+  };
+
+  return (
+    <>
+      <style>{`
+        @keyframes tfc-gradient {
+          0%,100% { background-position: 0% 60%; }
+          50%      { background-position: 100% 40%; }
+        }
+        @keyframes tfc-sparkle {
+          0%,100% { opacity: 0.55; transform: scale(1)   rotate(0deg);   }
+          50%      { opacity: 0.90; transform: scale(1.25) rotate(22deg); }
+        }
+      `}</style>
+
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.28, ease: [0.22, 1, 0.36, 1] }}
+        whileHover={{ scale: 1.015 }}
+        style={{ perspective: "900px" }}
+        className="cursor-pointer select-none"
+        onClick={() => setFlipped((f) => !f)}
+        onMouseEnter={() => setFlipped(true)}
+        onMouseLeave={() => setFlipped(false)}
+        role="button"
+        aria-label="Flip to see current time"
+      >
+        {/* Card inner — 3D flip container */}
+        <div
+          style={{
+            position:       "relative",
+            transformStyle: "preserve-3d",
+            transition:     "transform 0.58s cubic-bezier(0.22, 1, 0.36, 1)",
+            transform:      flipped ? "rotateY(180deg)" : "rotateY(0deg)",
+            /* height set by the invisible spacer below */
+          }}
+        >
+          {/* ── FRONT: HCI ──────────────────────────────── */}
+          <div
+            style={{
+              ...faceBase,
+              background:     "linear-gradient(135deg, rgba(255,182,193,0.32) 0%, rgba(255,245,240,0.48) 50%, rgba(255,182,193,0.26) 100%)",
+              backgroundSize: "220% 220%",
+              animation:      "tfc-gradient 5s ease infinite",
+              border:         "1px solid rgba(255,182,193,0.50)",
+              boxShadow:      "0 2px 16px rgba(255,182,193,0.18)",
+            }}
+          >
+            {/* decorative ✦ — top-right, pulses */}
+            <span
+              aria-hidden
+              style={{
+                position:  "absolute",
+                top:       "10px",
+                right:     "14px",
+                fontSize:  "11px",
+                color:     "rgba(255,182,193,0.70)",
+                animation: "tfc-sparkle 3s ease-in-out infinite",
+              }}
+            >
+              ✦
+            </span>
+
+            <p className="text-[0.55rem] font-bold uppercase tracking-widest text-page-text/35">
+              Currently
+            </p>
+            <p
+              className="font-bold text-page-text"
+              style={{ fontSize: "0.875rem", letterSpacing: "-0.02em", lineHeight: 1.3 }}
+            >
+              Studying Human Computer Interaction @ U of M
+            </p>
+            <p className="text-[0.5rem] font-bold uppercase tracking-widest text-page-text/22">
+              Tap to flip ↩
+            </p>
+          </div>
+
+          {/* ── BACK: live clock ────────────────────────── */}
+          <div
+            style={{
+              ...faceBase,
+              transform:  "rotateY(180deg)",
+              background: "rgba(255,253,249,0.88)",
+              border:     "1px solid rgba(255,182,193,0.32)",
+              boxShadow:  "0 2px 16px rgba(255,182,193,0.12)",
+            }}
+          >
+            <p className="text-[0.55rem] font-bold uppercase tracking-widest text-page-text/35">
+              EST · Current time
+            </p>
+            <p
+              className="font-bold text-page-text"
+              style={{
+                fontSize:           "1.4rem",
+                letterSpacing:      "-0.025em",
+                fontVariantNumeric: "tabular-nums",
+                lineHeight:         1,
+              }}
+            >
+              {time}
+            </p>
+          </div>
+
+          {/* ── invisible spacer keeps container tall enough ── */}
+          <div
+            aria-hidden
+            style={{
+              visibility:    "hidden",
+              pointerEvents: "none",
+              padding:       "16px 20px 14px",
+              display:       "flex",
+              flexDirection: "column",
+              gap:           "5px",
+            }}
+          >
+            <p style={{ fontSize: "0.55rem", lineHeight: 1 }}>Currently</p>
+            <p style={{ fontSize: "0.875rem", lineHeight: 1.3 }}>
+              Studying Human Computer Interaction @ U of M
+            </p>
+            <p style={{ fontSize: "0.5rem", lineHeight: 1 }}>Tap to flip ↩</p>
+          </div>
+        </div>
+      </motion.div>
+    </>
+  );
+}
+
 function AboutInfoBlock() {
   return (
     <motion.article
@@ -310,20 +470,7 @@ function AboutInfoBlock() {
         border:               "1px solid rgba(255,182,193,0.22)",
       }}
     >
-      <div>
-        <p className="mb-3 text-[0.6rem] font-bold uppercase tracking-widest text-page-text/35">
-          CURRENTLY
-        </p>
-        <h2
-          className="text-base font-bold text-page-text"
-          style={{ letterSpacing: "-0.02em", lineHeight: 1.3 }}
-        >
-          UX Design Student
-        </h2>
-        <p className="mt-1 text-sm text-page-text/55">
-          University of Michigan, Ann Arbor
-        </p>
-      </div>
+      <TimeFlipCard />
 
       <div className="mt-8 space-y-3">
         {[

@@ -58,14 +58,14 @@ const DRIFT_D = 0.5;  // desktop auto-drift px/RAF frame
 const DRIFT_M = 0.7;  // mobile  auto-drift px/window.scrollBy
 
 // ── Content ───────────────────────────────────────────────────────────────────
-type VideoItem = { id: number; kind: "video"; src: string; portrait?: boolean };
+type VideoItem = { id: number; kind: "video"; src: string; portrait?: boolean; crop?: boolean };
 type ImageItem = { id: number; kind: "image"; src: string };
 type Item      = VideoItem | ImageItem;
 
 const VIDEOS: VideoItem[] = [
   { id: 3, kind: "video", src: "/Art/playground_3.mp4" },
   { id: 4, kind: "video", src: "/Art/playground_4.mp4" },
-  { id: 5, kind: "video", src: "/Art/playground_5.mp4", portrait: true },
+  { id: 5, kind: "video", src: "/Art/playground_5.mp4", portrait: true, crop: true },
 ];
 const IMAGES: ImageItem[] = [
   { id: 6,  kind: "image", src: "/Art/playground_6.jpg"  },
@@ -133,8 +133,20 @@ export default function PlaygroundPage() {
   const [ready,         setReady]         = useState(false);
   const [isMobile,      setIsMobile]      = useState(false);
   const [activeAudioId, setActiveAudioId] = useState<number | null>(null);
+  const [navH,          setNavH]          = useState(NAV_H);
 
   useEffect(() => { setMounted(true); }, []);
+
+  // Measure the real nav height so sticky offsets stay flush
+  useEffect(() => {
+    const nav = document.querySelector("nav");
+    if (!nav) return;
+    const update = () => setNavH(nav.offsetHeight);
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(nav);
+    return () => ro.disconnect();
+  }, [mounted]);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth <= 768);
@@ -208,19 +220,36 @@ export default function PlaygroundPage() {
 
   // ── Singleton audio ──────────────────────────────────────────────────────────
   const unmuteBestCopy = useCallback((id: number) => {
-    const track = trackRef.current;
-    if (!track) return;
-    const all = Array.from(track.querySelectorAll<HTMLVideoElement>("video"));
+    // Desktop: search inside the film-strip track.
+    // Mobile: trackRef is null, so fall back to the whole document.
+    const container: Element = trackRef.current ?? document.body;
+    const all = Array.from(container.querySelectorAll<HTMLVideoElement>("video"));
+
+    // Mute everything first so only one video plays audio at a time.
     all.forEach(v => { v.muted = true; });
-    const cx = window.innerWidth / 2;
+
     const copies = all.filter(v => v.dataset.audioId === String(id));
-    let best = copies[0], bestD = Infinity;
-    copies.forEach(v => {
-      const r = v.getBoundingClientRect();
-      const d = Math.abs(r.left + r.width / 2 - cx);
-      if (d < bestD) { bestD = d; best = v; }
-    });
-    if (best) { best.muted = false; best.play().catch(() => {}); }
+    if (!copies.length) return;
+
+    // Desktop: pick the copy closest to the horizontal centre of the viewport.
+    // Mobile: only one copy exists, so just use it directly.
+    let best = copies[0];
+    if (trackRef.current) {
+      const cx = window.innerWidth / 2;
+      let bestD = Infinity;
+      copies.forEach(v => {
+        const r = v.getBoundingClientRect();
+        const d = Math.abs(r.left + r.width / 2 - cx);
+        if (d < bestD) { bestD = d; best = v; }
+      });
+    }
+
+    // iOS requires pause → unmute → play (all synchronous within the user
+    // gesture) to actually deliver audio. Calling play() on a still-playing
+    // muted video does not unblock the audio session on Safari/iOS.
+    best.pause();
+    best.muted = false;
+    best.play().catch(() => {});
   }, []);
 
   const toggleAudio = useCallback((id: number) => {
@@ -231,8 +260,14 @@ export default function PlaygroundPage() {
       }
     });
     if (audioIdRef.current === id) {
+      // Turn audio off — mute and resume silent autoplay on every copy.
       document.querySelectorAll<HTMLVideoElement>("video")
-        .forEach(v => { if (v.dataset.audioId === String(id)) v.muted = true; });
+        .forEach(v => {
+          if (v.dataset.audioId === String(id)) {
+            v.muted = true;
+            v.play().catch(() => {});
+          }
+        });
       audioIdRef.current = null;
       setActiveAudioId(null);
     } else {
@@ -403,7 +438,7 @@ export default function PlaygroundPage() {
         {/* Module 5: sticky Paper Cream title — z-40, sticks below pink nav (z-50) */}
         <div style={{
           position:             "sticky",
-          top:                  NAV_H,
+          top:                  navH,
           zIndex:               40,
           width:                "100%",
           height:               PG_TITLE_H,
@@ -418,9 +453,11 @@ export default function PlaygroundPage() {
           <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.10em", color: "#2D1B14", userSelect: "none" }}>
             welcome to my playground
           </span>
-          <span style={{ color: "#FFB6C1", marginLeft: 6, fontSize: "0.85rem", lineHeight: 1 }} aria-hidden>✮</span>
-          <span style={{ marginLeft: "auto", fontSize: "0.62rem", fontWeight: 500, letterSpacing: "0.08em", color: "rgba(45,27,20,0.40)" }}>
-            scroll to explore
+          <span style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
+            <span style={{ color: "#FFB6C1", fontSize: "0.85rem", lineHeight: 1 }} aria-hidden>✮</span>
+            <span style={{ fontSize: "0.62rem", fontWeight: 500, letterSpacing: "0.08em", color: "rgba(45,27,20,0.40)" }}>
+              scroll to explore
+            </span>
           </span>
         </div>
 
@@ -490,6 +527,11 @@ export default function PlaygroundPage() {
                             height:         "100%",
                             objectFit:      "cover",
                             objectPosition: (item as VideoItem).portrait ? "center top" : "center",
+                            // Scale up and shift to crop logos off top and sides
+                            ...((item as VideoItem).crop && {
+                              transform:       "scale(1.22)",
+                              transformOrigin: "center center",
+                            }),
                           }}
                         />
                       </div>
@@ -530,7 +572,7 @@ export default function PlaygroundPage() {
       {/* Module 5: sticky Paper Cream title — z-40 sticks below pink nav (z-50) */}
       <div style={{
         position:             "sticky",
-        top:                  NAV_H,
+        top:                  navH,
         zIndex:               40,
         width:                "100%",
         height:               PG_TITLE_H,
@@ -545,9 +587,11 @@ export default function PlaygroundPage() {
         <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.10em", color: "#2D1B14", userSelect: "none" }}>
           welcome to my playground
         </span>
-        <span style={{ color: "#FFB6C1", marginLeft: 6, fontSize: "0.85rem", lineHeight: 1 }} aria-hidden>✮</span>
-        <span style={{ marginLeft: "auto", fontSize: "0.62rem", fontWeight: 500, letterSpacing: "0.08em", color: "rgba(45,27,20,0.40)" }}>
-          swipe to explore
+        <span style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
+          <span style={{ color: "#FFB6C1", fontSize: "0.85rem", lineHeight: 1 }} aria-hidden>✮</span>
+          <span style={{ fontSize: "0.62rem", fontWeight: 500, letterSpacing: "0.08em", color: "rgba(45,27,20,0.40)" }}>
+            swipe to explore
+          </span>
         </span>
       </div>
 
@@ -563,7 +607,7 @@ export default function PlaygroundPage() {
         style={{
           position:       "relative",
           width:          "100%",
-          height:         `calc(100vh - ${NAV_H}px - ${PG_TITLE_H}px)`,
+          height:         `calc(100vh - ${navH}px - ${PG_TITLE_H}px)`,
           background:     BROWN,
           overflow:       "hidden",
           cursor:         "grab",
@@ -657,6 +701,11 @@ export default function PlaygroundPage() {
                             height:         "100%",
                             objectFit:      "cover",
                             objectPosition: (item as VideoItem).portrait ? "center top" : "center",
+                            // Scale up and shift to crop logos off top and sides
+                            ...((item as VideoItem).crop && {
+                              transform:       "scale(1.22)",
+                              transformOrigin: "center center",
+                            }),
                           }}
                         />
                       </div>

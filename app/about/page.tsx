@@ -2,16 +2,11 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import ContactForm from "@/components/ContactForm";
 
-// Module 5: Updated scannable facts including affiliations
 const FACTS = [
   "University of Michigan student",
-  "Simplify Campus Ambassador",
-  "Member of TEDxUofM",
   "Artist at heart with fine art training",
-  "Language learner currently mastering Japanese",
-  "Video editor and storyteller always filming",
+  "Member of TEDxUofM",
   "Sweet treat fanatic on the hunt for the best local cupcake",
 ];
 
@@ -39,9 +34,9 @@ export default function AboutPage() {
     <div className="pb-16 md:pb-24">
 
       {/* ── Primary Bio ───────────────────────────────────────────── */}
-      <section className="px-6 pt-24 pb-16 md:px-12 md:pt-32 lg:px-16">
+      <section className="pt-24 pb-16 md:pt-32">
         <div className="mx-auto max-w-[1200px]">
-          <div className="grid grid-cols-1 gap-12 md:grid-cols-12 md:gap-8 lg:gap-10">
+          <div className="grid grid-cols-1 gap-12 md:grid-cols-12 md:items-center md:gap-8 lg:gap-10">
 
             {/* Columns 1-4: Portrait — centered upper body crop */}
             <motion.div
@@ -146,7 +141,7 @@ export default function AboutPage() {
         transition={{ duration: 0.45 }}
       >
         <p className="mx-auto mb-5 max-w-[1200px] px-6 text-[10px] font-bold uppercase tracking-[0.18em] text-page-text/30 md:px-12 lg:px-16">
-          Hover to explore
+          Swipe to explore
         </p>
 
         <div
@@ -189,9 +184,6 @@ export default function AboutPage() {
           ))}
         </div>
       </motion.div>
-
-      {/* ── Contact form ──────────────────────────────────────────── */}
-      <ContactForm />
 
     </div>
   );

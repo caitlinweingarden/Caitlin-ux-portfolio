@@ -26,9 +26,9 @@ const LABELS: Record<Exclude<CursorType, "default">, string> = {
   impact:      "IMPROVING LIVES ♡",   // SignNow header (mission-driven, keeps ♡)
   // Personal / About page — keep fun labels
   hi:          "HI!! ♡",
-  beach:       "Kamakura, Japan \uD83D\uDCCD",  // 📍
-  paint:       "Mwah \uD83D\uDC8B",             // 💋
-  food:        "I love food \uD83C\uDF66",      // 🍦
+  beach:       "Kamakura, Japan",
+  paint:       "Mwah",
+  food:        "I love food",
 };
 
 // Pill width calibrated to label length
@@ -40,9 +40,9 @@ const PILL_W: Record<CursorType, number> = {
   streaming:    172,
   "case-study": 148,
   hi:           80,
-  beach:        164,
-  paint:        90,
-  food:         116,
+  beach:        140,
+  paint:        68,
+  food:         96,
 };
 const PILL_H: Record<CursorType, number> = {
   default:      8,
