@@ -25,6 +25,129 @@ const ASL = {
 
 const SPRING = { type: "spring", stiffness: 300, damping: 24 } as const;
 
+// ── Background (gradient + drifting blobs + grain) ────────────────────────────
+
+function WorkBackground() {
+  return (
+    <div
+      aria-hidden
+      style={{
+        position:      "fixed",
+        inset:         0,
+        zIndex:        -1,
+        pointerEvents: "none",
+        overflow:      "hidden",
+      }}
+    >
+      {/* Layer 1 — base gradient: pink/warm LEFT, white RIGHT */}
+      <div
+        style={{
+          position: "absolute",
+          inset:    0,
+          background: [
+            // Pink bloom anchored upper-left
+            "radial-gradient(ellipse 70% 70% at 0% 0%,   rgba(255,182,193,0.38) 0%, transparent 65%)",
+            // Warm blush mid-left
+            "radial-gradient(ellipse 55% 60% at 5% 65%,  rgba(255,224,230,0.32) 0%, transparent 60%)",
+            // Cream wash on the right — fades to near-white
+            "radial-gradient(ellipse 65% 80% at 100% 50%, #FFFDF9 0%, transparent 70%)",
+            // Base: warm white overall
+            "linear-gradient(105deg, #FFF5F0 0%, #FFFDF9 55%, #FFFFFF 100%)",
+          ].join(", "),
+        }}
+      />
+
+      {/* Blob A — Brand Pink, upper-left */}
+      <div
+        className="hp-blob-1"
+        style={{
+          position:     "absolute",
+          width:        "520px",
+          height:       "440px",
+          top:          "-100px",
+          left:         "-60px",
+          borderRadius: "50%",
+          background:   "rgba(255,182,193,0.34)",
+          filter:       "blur(100px)",
+          mixBlendMode: "multiply",
+        }}
+      />
+
+      {/* Blob B — Warm Sand, lower-left */}
+      <div
+        className="hp-blob-2"
+        style={{
+          position:     "absolute",
+          width:        "600px",
+          height:       "500px",
+          bottom:       "-130px",
+          left:         "-70px",
+          borderRadius: "50%",
+          background:   "rgba(255,224,230,0.38)",
+          filter:       "blur(110px)",
+          mixBlendMode: "multiply",
+        }}
+      />
+
+      {/* Blob C — Deep Brown, very low opacity, left-center for subtle depth */}
+      <div
+        className="hp-blob-3"
+        style={{
+          position:     "absolute",
+          width:        "420px",
+          height:       "390px",
+          top:          "33%",
+          left:         "10%",
+          borderRadius: "50%",
+          background:   "rgba(45,27,20,0.055)",
+          filter:       "blur(90px)",
+          mixBlendMode: "multiply",
+        }}
+      />
+
+      {/* Blob D — Pale Blush, mid-left */}
+      <div
+        className="hp-blob-4"
+        style={{
+          position:     "absolute",
+          width:        "480px",
+          height:       "430px",
+          top:          "18%",
+          left:         "-50px",
+          borderRadius: "50%",
+          background:   "rgba(255,245,240,0.42)",
+          filter:       "blur(95px)",
+          mixBlendMode: "soft-light",
+        }}
+      />
+
+      {/* Layer 3 — film grain, same as original */}
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        style={{
+          position:      "absolute",
+          inset:         0,
+          width:         "100%",
+          height:        "100%",
+          opacity:       0.18,
+          pointerEvents: "none",
+        }}
+      >
+        <filter id="wk-grain">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.65"
+            numOctaves="3"
+            stitchTiles="stitch"
+          />
+          <feColorMatrix type="saturate" values="0" />
+        </filter>
+        <rect width="100%" height="100%" filter="url(#wk-grain)" />
+      </svg>
+    </div>
+  );
+}
+
 // ── Project card ───────────────────────────────────────────────────────────────
 
 function ProjectCard({
@@ -93,11 +216,14 @@ function ProjectCard({
 
 export default function WorkPage() {
   return (
+    <>
+      <WorkBackground />
     <div className="mx-auto max-w-7xl px-8 pt-16 pb-28 md:pt-20 md:pb-32">
       <div className="grid grid-cols-1 gap-16 md:grid-cols-2 md:gap-14">
         <ProjectCard project={ASL}    delay={0}    />
         <ProjectCard project={DISNEY} delay={0.08} />
       </div>
     </div>
+    </>
   );
 }

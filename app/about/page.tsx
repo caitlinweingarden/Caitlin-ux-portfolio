@@ -16,8 +16,131 @@ const GALLERY_PHOTOS = [
   { src: "/images/foodie_image.jpeg", alt: "Food exploration"           },
 ];
 
+function AboutBackground() {
+  return (
+    <div
+      aria-hidden
+      style={{
+        position:      "fixed",
+        inset:         0,
+        zIndex:        -1,
+        pointerEvents: "none",
+        overflow:      "hidden",
+      }}
+    >
+      {/* Layer 1 — base: warm cream centre, fades to white at edges */}
+      <div
+        style={{
+          position: "absolute",
+          inset:    0,
+          background: [
+            // Soft pink bloom, top-right — mirrors Work page but opposite corner
+            "radial-gradient(ellipse 60% 55% at 100% 0%,  rgba(255,182,193,0.28) 0%, transparent 62%)",
+            // Warm blush pool, bottom-centre — grounds the page
+            "radial-gradient(ellipse 75% 50% at 50% 100%, rgba(255,224,230,0.30) 0%, transparent 65%)",
+            // Pale blush wash, left-centre — gentle fill
+            "radial-gradient(ellipse 50% 60% at 0% 55%,   rgba(255,245,240,0.36) 0%, transparent 60%)",
+            // Base: cream overall, slightly warmer than the Work page white
+            "linear-gradient(160deg, #FFFDF9 0%, #FFF8F5 50%, #FFFDF9 100%)",
+          ].join(", "),
+        }}
+      />
+
+      {/* Blob A — Brand Pink, upper-right, slow drift */}
+      <div
+        className="hp-blob-1"
+        style={{
+          position:     "absolute",
+          width:        "480px",
+          height:       "420px",
+          top:          "-80px",
+          right:        "-40px",
+          borderRadius: "50%",
+          background:   "rgba(255,182,193,0.28)",
+          filter:       "blur(110px)",
+          mixBlendMode: "multiply",
+        }}
+      />
+
+      {/* Blob B — Warm Sand, bottom-centre */}
+      <div
+        className="hp-blob-2"
+        style={{
+          position:     "absolute",
+          width:        "580px",
+          height:       "460px",
+          bottom:       "-120px",
+          left:         "20%",
+          borderRadius: "50%",
+          background:   "rgba(255,224,230,0.32)",
+          filter:       "blur(115px)",
+          mixBlendMode: "multiply",
+        }}
+      />
+
+      {/* Blob C — Deep Brown, very low opacity, centre — subtle warmth anchor */}
+      <div
+        className="hp-blob-3"
+        style={{
+          position:     "absolute",
+          width:        "400px",
+          height:       "360px",
+          top:          "40%",
+          left:         "38%",
+          borderRadius: "50%",
+          background:   "rgba(45,27,20,0.04)",
+          filter:       "blur(90px)",
+          mixBlendMode: "multiply",
+        }}
+      />
+
+      {/* Blob D — Pale Blush, left-centre */}
+      <div
+        className="hp-blob-4"
+        style={{
+          position:     "absolute",
+          width:        "440px",
+          height:       "400px",
+          top:          "25%",
+          left:         "-60px",
+          borderRadius: "50%",
+          background:   "rgba(255,245,240,0.38)",
+          filter:       "blur(100px)",
+          mixBlendMode: "soft-light",
+        }}
+      />
+
+      {/* Layer 3 — film grain, identical to Work page */}
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        style={{
+          position:      "absolute",
+          inset:         0,
+          width:         "100%",
+          height:        "100%",
+          opacity:       0.18,
+          pointerEvents: "none",
+        }}
+      >
+        <filter id="about-grain">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.65"
+            numOctaves="3"
+            stitchTiles="stitch"
+          />
+          <feColorMatrix type="saturate" values="0" />
+        </filter>
+        <rect width="100%" height="100%" filter="url(#about-grain)" />
+      </svg>
+    </div>
+  );
+}
+
 export default function AboutPage() {
   return (
+    <>
+    <AboutBackground />
     <div className="pb-16 md:pb-24">
 
       {/* ── Primary Bio ───────────────────────────────────────────── */}
@@ -187,5 +310,6 @@ export default function AboutPage() {
       </motion.div>
 
     </div>
+    </>
   );
 }
