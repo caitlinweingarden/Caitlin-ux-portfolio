@@ -23,15 +23,6 @@ a {
   text-decoration: none;
 }
 
-/* ── Custom cursor — hide system pointer site-wide ─────────────────────── */
-/* The CustomCursor component renders the 8px Brand Pink dot replacement.    */
-*, *::before, *::after {
-  cursor: none !important;
-}
-/* Restore text cursor inside form fields */
-input, textarea, select, [contenteditable] {
-  cursor: text !important;
-}
 
 /* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
@@ -271,12 +262,6 @@ body::after {
   border-bottom: 1.5px solid #2D1B14;
 }
 
-/* ── Playground pink footer: dark dot cursor (pink dot is invisible on pink bg) ── */
-/* Overrides the site-wide cursor:none so a visible deep-brown dot appears.         */
-.pg-footer-cursor,
-.pg-footer-cursor * {
-  cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5" fill="%232D1B14"/></svg>') 8 8, auto !important;
-}
 
 /* ── Stray underline / focus ring suppression ───────────────────────────── */
 /* main has tabIndex={-1} for skip-link — suppress focus outline site-wide   */

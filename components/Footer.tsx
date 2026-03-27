@@ -4,10 +4,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const NAV_LINKS = [
-  { label: "Work",       href: "/work"       },
+  { label: "Work",       href: "/"           },
   { label: "Playground", href: "/playground" },
   { label: "About",      href: "/about"      },
-  { label: "Home",       href: "/"           },
 ];
 
 const REACH_LINKS = [
@@ -32,7 +31,7 @@ export default function Footer() {
 
   return (
     <footer
-      className={`relative overflow-hidden${isPlayground ? " pg-footer-cursor" : ""}`}
+      className="relative overflow-hidden"
       style={{ backgroundColor: bgColor, transition: "background-color 0.4s ease" }}
       role="contentinfo"
     >

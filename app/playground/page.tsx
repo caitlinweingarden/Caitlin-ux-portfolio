@@ -529,7 +529,7 @@ export default function PlaygroundPage() {
                             objectPosition: (item as VideoItem).portrait ? "center top" : "center",
                             // Scale up and shift to crop logos off top and sides
                             ...((item as VideoItem).crop && {
-                              transform:       "scale(1.22)",
+                              transform:       "scale(1.48)",
                               transformOrigin: "center center",
                             }),
                           }}
@@ -703,7 +703,7 @@ export default function PlaygroundPage() {
                             objectPosition: (item as VideoItem).portrait ? "center top" : "center",
                             // Scale up and shift to crop logos off top and sides
                             ...((item as VideoItem).crop && {
-                              transform:       "scale(1.22)",
+                              transform:       "scale(1.48)",
                               transformOrigin: "center center",
                             }),
                           }}

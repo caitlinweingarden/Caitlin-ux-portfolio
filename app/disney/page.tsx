@@ -71,7 +71,7 @@ export default function DisneyPlusCaseStudy() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        data-cursor="streaming"
+
       >
         <Link
           href="/"
@@ -135,8 +135,8 @@ export default function DisneyPlusCaseStudy() {
             },
             {
               label:  "Solution",
-              accent: "#FFB6C1",
-              bg:     "rgba(255,182,193,0.12)",
+              accent: "#2D1B14",
+              bg:     "rgba(45,27,20,0.05)",
               text:   "A unified Disney+ ecosystem where streaming activity directly translates to real-world park perks and travel rewards.",
             },
             {

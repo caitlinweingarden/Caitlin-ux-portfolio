@@ -170,7 +170,7 @@ export default function SignNowPage() {
 
       {/* ── Floating back pill ───────────────────────────────────── */}
       <Link
-        href="/work"
+        href="/"
         className="fixed bottom-8 right-8 z-50 rounded-full px-5 py-2.5 text-sm font-medium shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
         style={{
           background: "var(--ink)",
@@ -197,9 +197,7 @@ export default function SignNowPage() {
               style={{ color: "var(--ink-40)" }}
               aria-label="Breadcrumb"
             >
-              <Link href="/" className="hover:underline" style={{ color: "var(--ink-40)" }}>Home</Link>
-              <span aria-hidden>›</span>
-              <Link href="/work" className="hover:underline" style={{ color: "var(--ink-40)" }}>Work</Link>
+              <Link href="/" className="hover:underline" style={{ color: "var(--ink-40)" }}>Work</Link>
               <span aria-hidden>›</span>
               <span style={{ color: "var(--ink)" }}>Sign Now</span>
             </nav>
@@ -1223,14 +1221,14 @@ export default function SignNowPage() {
           <div className={INNER}>
             <div className="flex items-center justify-between py-8">
               <Link
-                href="/work"
+                href="/"
                 className="text-sm font-medium transition-colors hover:underline"
                 style={{ color: "var(--terra)" }}
               >
                 ← Back to Work
               </Link>
               <Link
-                href="/work"
+                href="/"
                 className="text-sm font-medium transition-colors hover:underline"
                 style={{ color: "var(--terra)" }}
               >

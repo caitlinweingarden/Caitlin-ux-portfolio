@@ -239,9 +239,9 @@ export default function SignNowCaseStudy() {
             },
             {
               label:  "Solution",
-              accent: "#FFB6C1",
-              bg:     "rgba(255,182,193,0.12)",
-              text:   "A real-time, human-centric AR bridge connecting ASL users with hearing professionals.",
+              accent: "#2D1B14",
+              bg:     "rgba(45,27,20,0.05)",
+              text:   "A one-touch translation experience built into Apple Dynamic Island, giving ASL users instant access to communication support without friction.",
             },
             {
               label:  "Impact",
@@ -748,11 +748,7 @@ export default function SignNowCaseStudy() {
       >
         <SectionLabel num="06" label="The Solution" />
         <p className="mb-10 max-w-2xl text-base leading-relaxed text-page-text/65">
-          An in-app translation experience using{" "}
-          <strong style={{ fontWeight: 700, textDecoration: "underline", textDecorationColor: "rgba(255,182,193,0.85)", textUnderlineOffset: "3px", textDecorationThickness: "1.5px" }}>real human images</strong>{" "}
-          for clarity and trust: a multilingual AI-powered solution that makes
-          communication across languages and signing systems feel{" "}
-          <strong style={{ fontWeight: 700, textDecoration: "underline", textDecorationColor: "rgba(255,182,193,0.85)", textUnderlineOffset: "3px", textDecorationThickness: "1.5px" }}>seamless, immediate, and human</strong>.
+          A one-touch translation experience built into Apple Dynamic Island, giving ASL users instant access to communication support without friction.
         </p>
 
         {/* Hi-fi with sticker callouts */}

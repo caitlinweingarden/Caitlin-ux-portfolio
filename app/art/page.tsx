@@ -4,7 +4,6 @@ import { useState, useMemo } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { ART_ITEMS, ART_CATEGORIES, type ArtCategory, type ArtItem } from "@/lib/art";
-import Lightbox from "@/components/Lightbox";
 
 // Alternating aspect ratios create the asymmetric masonry rhythm
 const ASPECT_RATIOS = [
@@ -21,19 +20,15 @@ const ASPECT_RATIOS = [
 function ArtCard({
   item,
   index,
-  onOpen,
 }: {
   item: ArtItem;
   index: number;
-  onOpen: () => void;
 }) {
   const aspectClass = ASPECT_RATIOS[index % ASPECT_RATIOS.length];
 
   return (
-    <motion.button
-      type="button"
-      onClick={onOpen}
-      className="group mb-4 w-full break-inside-avoid overflow-hidden rounded-xl bg-pale-blush p-0 text-left shadow-soft transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-soft-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 md:mb-5"
+    <motion.div
+      className="group mb-4 w-full break-inside-avoid overflow-hidden rounded-xl bg-pale-blush md:mb-5"
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: (index % 8) * 0.04 }}
@@ -44,7 +39,7 @@ function ArtCard({
             src={item.imageSrc}
             alt={item.imageAlt}
             fill
-            className="object-cover transition-transform duration-400 ease-out group-hover:scale-[1.03]"
+            className="object-cover"
             sizes="(max-width: 640px) 50vw, (max-width: 1023px) 33vw, 25vw"
           />
         ) : (
@@ -62,29 +57,17 @@ function ArtCard({
           <p className="mt-0.5 text-sm text-page-text/60">{item.caption}</p>
         )}
       </div>
-    </motion.button>
+    </motion.div>
   );
 }
 
 export default function ArtPage() {
   const [filter, setFilter] = useState<ArtCategory>("all");
-  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const filteredItems = useMemo(() => {
     if (filter === "all") return ART_ITEMS;
     return ART_ITEMS.filter((item) => item.category === filter);
   }, [filter]);
-
-  const openLightbox  = (index: number) => setLightboxIndex(index);
-  const closeLightbox = () => setLightboxIndex(null);
-  const goPrev = () =>
-    setLightboxIndex((i) => (i === null ? null : Math.max(0, i - 1)));
-  const goNext = () =>
-    setLightboxIndex((i) =>
-      i === null ? null : Math.min(filteredItems.length - 1, i + 1)
-    );
-
-  const currentItem = lightboxIndex !== null ? filteredItems[lightboxIndex] : null;
 
   return (
     <div className="pt-24 pb-16 md:pt-32 md:pb-20 lg:pb-24">
@@ -132,24 +115,9 @@ export default function ArtPage() {
             key={item.id}
             item={item}
             index={index}
-            onOpen={() => openLightbox(index)}
           />
         ))}
       </div>
-
-      {currentItem && (
-        <Lightbox
-          isOpen={lightboxIndex !== null}
-          onClose={closeLightbox}
-          src={currentItem.imageSrc || "/placeholder-art.svg"}
-          alt={currentItem.imageAlt}
-          title={currentItem.caption || currentItem.title}
-          onPrevious={goPrev}
-          onNext={goNext}
-          hasPrevious={lightboxIndex !== null && lightboxIndex > 0}
-          hasNext={lightboxIndex !== null && lightboxIndex < filteredItems.length - 1}
-        />
-      )}
     </div>
   );
 }

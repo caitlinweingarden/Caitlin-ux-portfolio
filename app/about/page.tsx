@@ -10,23 +10,10 @@ const FACTS = [
   "Sweet treat fanatic on the hunt for the best local cupcake",
 ];
 
-// Module 3: cursor data-attribute per photo
 const GALLERY_PHOTOS = [
-  {
-    src:        "/images/ocean_image.jpeg",
-    alt:        "Ocean view, Kamakura, Japan",
-    cursor:     "beach",
-  },
-  {
-    src:        "/images/paint_image.jpeg",
-    alt:        "Painting in the studio",
-    cursor:     "paint",
-  },
-  {
-    src:        "/images/foodie_image.jpeg",
-    alt:        "Food exploration",
-    cursor:     "food",
-  },
+  { src: "/images/ocean_image.jpeg", alt: "Ocean view, Kamakura, Japan" },
+  { src: "/images/paint_image.jpeg", alt: "Painting in the studio"      },
+  { src: "/images/foodie_image.jpeg", alt: "Food exploration"           },
 ];
 
 export default function AboutPage() {
@@ -36,7 +23,7 @@ export default function AboutPage() {
       {/* ── Primary Bio ───────────────────────────────────────────── */}
       <section className="pt-24 pb-16 md:pt-32">
         <div className="mx-auto max-w-[1200px]">
-          <div className="grid grid-cols-1 gap-12 md:grid-cols-12 md:items-center md:gap-8 lg:gap-10">
+          <div className="grid grid-cols-1 gap-12 md:grid-cols-12 md:items-start md:gap-8 lg:gap-10">
 
             {/* Columns 1-4: Portrait — centered upper body crop */}
             <motion.div
@@ -53,7 +40,8 @@ export default function AboutPage() {
                   src="/images/self_image.jpg"
                   alt="Caitlin Weingarden"
                   fill
-                  className="object-cover object-center"
+                  className="object-cover"
+                  style={{ objectPosition: "62% bottom" }}
                   sizes="(max-width: 768px) 90vw, 33vw"
                   priority
                 />
@@ -68,18 +56,33 @@ export default function AboutPage() {
               transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
             >
               <h1
-                className="text-[clamp(2.5rem,5vw,4.5rem)] font-bold leading-[1.05] text-page-text"
-                style={{ letterSpacing: "-0.035em" }}
+                className="text-page-text"
+                style={{
+                  fontSize:      "clamp(1.5rem, 3.5vw, 3rem)",
+                  fontWeight:    400,
+                  letterSpacing: "-0.03em",
+                  lineHeight:    1.15,
+                  textShadow:    "0 1px 3px rgba(0,0,0,0.08)",
+                }}
               >
-                Hi, I&apos;m Caitlin.
+                Hi, I&apos;m{" "}
+                <span style={{ fontWeight: 700 }}>Caitlin Weingarden</span>.{" "}
+                I&apos;m an{" "}
+                <span style={{
+                  textDecoration:          "underline",
+                  textDecorationColor:     "rgba(255,182,193,0.75)",
+                  textUnderlineOffset:     "5px",
+                  textDecorationThickness: "1.5px",
+                }}>artist</span>{" "}
+                turned product designer creating{" "}
+                <span style={{
+                  textDecoration:          "underline",
+                  textDecorationColor:     "rgba(255,182,193,0.75)",
+                  textUnderlineOffset:     "5px",
+                  textDecorationThickness: "1.5px",
+                }}>accessible</span>{" "}
+                experiences.
               </h1>
-              <p
-                className="mt-4 text-sm leading-relaxed text-page-text/55"
-                style={{ maxWidth: "38ch" }}
-              >
-                Artist, researcher, and product designer building accessible
-                experiences for the people who need them most.
-              </p>
 
               {/* 4 staggered facts */}
               <ul className="mt-10 space-y-3">
@@ -132,7 +135,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Photo Gallery — crisp, no overlays, cursor-driven context ── */}
+      {/* ── Photo Gallery ─────────────────────────────────────────── */}
       <motion.div
         className="mb-14"
         initial={{ opacity: 0, y: 18 }}
@@ -153,10 +156,8 @@ export default function AboutPage() {
           }}
         >
           {GALLERY_PHOTOS.map((photo) => (
-            // Module 3: data-cursor attr drives custom pill label on hover
             <div
               key={photo.src}
-              data-cursor={photo.cursor}
               className="relative flex-shrink-0"
               style={{
                 width:           "clamp(220px, 28vw, 300px)",

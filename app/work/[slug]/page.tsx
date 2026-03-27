@@ -119,7 +119,7 @@ export default async function CaseStudyPage({ params }: Props) {
         aria-label="Case study navigation"
       >
         <Link
-          href="/work"
+          href="/"
           className="text-sm font-medium tracking-wide text-mushroom-taupe transition-colors hover:text-accent-sage focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
         >
           ← Back to work
