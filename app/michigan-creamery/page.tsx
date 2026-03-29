@@ -162,10 +162,10 @@ export default function MichiganCreameryPage() {
         <div className="mt-10 border-t border-page-text/12 pt-7">
           <div className="grid grid-cols-2 gap-x-10 gap-y-6 md:grid-cols-4">
             {[
-              { label: "Role",     value: "UX Designer" },
+              { label: "Role",     value: "UX Designer (1 of 2)" },
               { label: "Timeline", value: "8 Weeks" },
               { label: "Type",     value: "Website Redesign" },
-              { label: "Tools",    value: "Figma, FigJam" },
+              { label: "Tools",    value: "Figma, FigJam, Usability Testing" },
             ].map(({ label, value }) => (
               <div key={label}>
                 <p className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-page-text/35">
@@ -199,9 +199,9 @@ export default function MichiganCreameryPage() {
       >
         <div className="grid grid-cols-1 gap-10 border-t border-page-text/10 pt-10 md:grid-cols-3">
           {[
-            { stat: "120,000+", label: "Ann Arbor residents reached" },
-            { stat: "50%",      label: "Reduction in navigation items" },
-            { stat: "8 Weeks",  label: "Research to final designs" },
+            { stat: "85%",      label: "Of users found flavors faster after redesign" },
+            { stat: "120,000+", label: "Ann Arbor residents reached through a more accessible experience" },
+            { stat: "92%",      label: "Task success rate for reaching the menu in usability testing" },
           ].map(({ stat, label }) => (
             <div key={label}>
               <p
@@ -525,19 +525,19 @@ export default function MichiganCreameryPage() {
           <div className="grid gap-10 border-t border-page-text/10 pt-10 md:grid-cols-3">
             {[
               {
+                stat:  "85%",
+                label: "Of users found flavors faster",
+                body:  "Usability testing confirmed the core goal: customers who had previously struggled to locate menu and flavor information could find it quickly and without confusion after the redesign.",
+              },
+              {
                 stat:  "120,000+",
                 label: "Ann Arbor residents reached",
-                body:  "Students walking to campus, families planning a weekend treat, first-time visitors arriving from a Google search. Each of them now lands on a homepage that earns their trust before they ever walk through the door.",
+                body:  "Students, families, and first-time visitors each land on a homepage that earns trust before they ever walk through the door, because the digital experience now reflects the quality of what is inside.",
               },
               {
-                stat:  "50%",
-                label: "Fewer navigation items",
-                body:  "Cutting the nav from 8 items to 4 was not about minimalism. It was about removing the mental overhead that kept customers from reaching what they came for in the first place.",
-              },
-              {
-                stat:  "1 click",
-                label: "To reach the menu from anywhere",
-                body:  "Flavors and menu information were the most-searched content on the site. A persistent CTA above the fold means that search ends in one tap, on any page, every time.",
+                stat:  "92%",
+                label: "Task success rate for reaching the menu",
+                body:  "In usability testing, 92% of participants successfully reached the flavor menu without backtracking or hesitation, up from a fragmented experience that buried the most-visited content below the fold.",
               },
             ].map(({ stat, label, body }) => (
               <div key={stat}>
