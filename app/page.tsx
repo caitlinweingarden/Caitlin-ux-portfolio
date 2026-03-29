@@ -19,8 +19,17 @@ const ASL = {
   title:       "Audio to Sign Language Translator",
   tags:        "ACCESSIBILITY \u2022 HEALTHCARE",
   description: "Breaking communication barriers with real-time ASL translation for healthcare environments.",
-  imageSrc:    "/sign-now/Ready_to_Post_Images/Sign_Now_Hero.jpg",
+  imageSrc:    "/sign-now/Tile.png",
   award:       "1ST PLACE \u2022 UMICH ROSS TECH INNOVATION JAM" as string | null,
+};
+
+const MICHIGAN = {
+  href:        "/michigan-creamery",
+  title:       "Michigan Creamery",
+  tags:        "PRODUCT DESIGN \u2022 UX RESEARCH",
+  description: "Redesigning a family-owned Ann Arbor ice cream shop's digital presence to match the premium experience customers love in store.",
+  imageSrc:    "/michigan-creamery/Hero%20Image.png",
+  award:       null as string | null,
 };
 
 const SPRING = { type: "spring", stiffness: 300, damping: 24 } as const;
@@ -220,8 +229,9 @@ export default function WorkPage() {
       <WorkBackground />
     <div className="mx-auto max-w-7xl px-8 pt-16 pb-28 md:pt-20 md:pb-32">
       <div className="grid grid-cols-1 gap-16 md:grid-cols-2 md:gap-14">
-        <ProjectCard project={ASL}    delay={0}    />
-        <ProjectCard project={DISNEY} delay={0.08} />
+        <ProjectCard project={ASL}      delay={0}    />
+        <ProjectCard project={DISNEY}   delay={0.08} />
+        <ProjectCard project={MICHIGAN} delay={0.16} />
       </div>
     </div>
     </>
