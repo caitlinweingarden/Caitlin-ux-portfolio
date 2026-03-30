@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 const NAV_LINKS = [
   { label: "Work",       href: "/"           },
@@ -14,20 +13,12 @@ const REACH_LINKS = [
 ];
 
 export default function Footer() {
-  const pathname     = usePathname();
-  const isPlayground = pathname === "/playground";
-
-  // Playground flips to Brand Pink; all other pages use warm nostalgic brown
-  const bgColor      = isPlayground ? "#FFB6C1" : "#5C3219";
-  const textColor    = isPlayground ? "#2D1B14" : "#FFFDF9";
-  const linkColor    = isPlayground ? "rgba(45,27,20,0.60)"   : "rgba(255,253,249,0.55)";
-  const linkHover    = isPlayground ? "#2D1B14"               : "#FFFDF9";
-  const headingColor = isPlayground ? "rgba(45,27,20,0.45)"   : "rgba(255,253,249,0.40)";
-
-  // Soft warm glow — no metallic shine
-  const centerGlow = isPlayground
-    ? "radial-gradient(ellipse at 50% 50%, rgba(45,27,20,0.08) 0%, transparent 65%)"
-    : "radial-gradient(ellipse at 50% 0%,  rgba(255,182,193,0.10) 0%, transparent 55%)";
+  const bgColor      = "#5C3219";
+  const textColor    = "#FFFDF9";
+  const linkColor    = "rgba(255,253,249,0.55)";
+  const linkHover    = "#FFFDF9";
+  const headingColor = "rgba(255,253,249,0.40)";
+  const centerGlow   = "radial-gradient(ellipse at 50% 0%, rgba(255,182,193,0.10) 0%, transparent 55%)";
 
   return (
     <footer

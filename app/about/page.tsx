@@ -63,24 +63,17 @@ function AboutBackground() {
           position: "absolute",
           inset:    0,
           background: [
-            "radial-gradient(ellipse 60% 55% at 100% 0%,  rgba(255,182,193,0.28) 0%, transparent 62%)",
-            "radial-gradient(ellipse 75% 50% at 50% 100%, rgba(255,224,230,0.30) 0%, transparent 65%)",
-            "radial-gradient(ellipse 50% 60% at 0% 55%,   rgba(255,245,240,0.36) 0%, transparent 60%)",
-            "linear-gradient(160deg, #FFFDF9 0%, #FFF8F5 50%, #FFFDF9 100%)",
+            "radial-gradient(ellipse 70% 70% at 0% 0%,   rgba(255,182,193,0.38) 0%, transparent 65%)",
+            "radial-gradient(ellipse 55% 60% at 5% 65%,  rgba(255,224,230,0.32) 0%, transparent 60%)",
+            "radial-gradient(ellipse 65% 80% at 100% 50%, #FFFDF9 0%, transparent 70%)",
+            "linear-gradient(105deg, #FFF5F0 0%, #FFFDF9 55%, #FFFFFF 100%)",
           ].join(", "),
         }}
       />
-      <div className="hp-blob-1" style={{ position:"absolute", width:"480px", height:"420px", top:"-80px",    right:"-40px", borderRadius:"50%", background:"rgba(255,182,193,0.28)", filter:"blur(110px)", mixBlendMode:"multiply"   }} />
-      <div className="hp-blob-2" style={{ position:"absolute", width:"580px", height:"460px", bottom:"-120px", left:"20%",   borderRadius:"50%", background:"rgba(255,224,230,0.32)", filter:"blur(115px)", mixBlendMode:"multiply"   }} />
-      <div className="hp-blob-3" style={{ position:"absolute", width:"400px", height:"360px", top:"40%",       left:"38%",   borderRadius:"50%", background:"rgba(45,27,20,0.04)",    filter:"blur(90px)",  mixBlendMode:"multiply"   }} />
-      <div className="hp-blob-4" style={{ position:"absolute", width:"440px", height:"400px", top:"25%",       left:"-60px", borderRadius:"50%", background:"rgba(255,245,240,0.38)", filter:"blur(100px)", mixBlendMode:"soft-light" }} />
-      <svg xmlns="http://www.w3.org/2000/svg" style={{ position:"absolute", inset:0, width:"100%", height:"100%", opacity:0.18, pointerEvents:"none" }}>
-        <filter id="about-grain">
-          <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
-          <feColorMatrix type="saturate" values="0" />
-        </filter>
-        <rect width="100%" height="100%" filter="url(#about-grain)" />
-      </svg>
+      <div className="hp-blob-1" style={{ position: "absolute", width: "520px", height: "440px", top: "-100px", left: "-60px",  borderRadius: "50%", background: "rgba(255,182,193,0.34)", filter: "blur(100px)", mixBlendMode: "multiply"    }} />
+      <div className="hp-blob-2" style={{ position: "absolute", width: "600px", height: "500px", bottom: "-130px", left: "-70px", borderRadius: "50%", background: "rgba(255,224,230,0.38)", filter: "blur(110px)", mixBlendMode: "multiply"    }} />
+      <div className="hp-blob-3" style={{ position: "absolute", width: "420px", height: "390px", top: "33%",       left: "10%",   borderRadius: "50%", background: "rgba(45,27,20,0.055)",  filter: "blur(90px)",  mixBlendMode: "multiply"    }} />
+      <div className="hp-blob-4" style={{ position: "absolute", width: "480px", height: "430px", top: "18%",       left: "-50px", borderRadius: "50%", background: "rgba(255,245,240,0.42)", filter: "blur(95px)",  mixBlendMode: "soft-light" }} />
     </div>
   );
 }

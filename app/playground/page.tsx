@@ -26,11 +26,52 @@ import {
   useCallback,
 } from "react";
 
+// ── Background ────────────────────────────────────────────────────────────────
+function PlaygroundBackground() {
+  return (
+    <div
+      aria-hidden
+      style={{
+        position:      "fixed",
+        inset:         0,
+        zIndex:        -1,
+        pointerEvents: "none",
+        overflow:      "hidden",
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          inset:    0,
+          background: [
+            "radial-gradient(ellipse 70% 70% at 0% 0%,   rgba(255,182,193,0.38) 0%, transparent 65%)",
+            "radial-gradient(ellipse 55% 60% at 5% 65%,  rgba(255,224,230,0.32) 0%, transparent 60%)",
+            "radial-gradient(ellipse 65% 80% at 100% 50%, #FFFDF9 0%, transparent 70%)",
+            "linear-gradient(105deg, #FFF5F0 0%, #FFFDF9 55%, #FFFFFF 100%)",
+          ].join(", "),
+        }}
+      />
+      <div style={{ position: "absolute", width: "520px", height: "440px", top: "-100px", left: "-60px",  borderRadius: "50%", background: "rgba(255,182,193,0.34)", filter: "blur(100px)", mixBlendMode: "multiply"    }} />
+      <div style={{ position: "absolute", width: "600px", height: "500px", bottom: "-130px", left: "-70px", borderRadius: "50%", background: "rgba(255,224,230,0.38)", filter: "blur(110px)", mixBlendMode: "multiply"    }} />
+      <div style={{ position: "absolute", width: "420px", height: "390px", top: "33%",      left: "10%",   borderRadius: "50%", background: "rgba(45,27,20,0.055)",  filter: "blur(90px)",  mixBlendMode: "multiply"    }} />
+      <div style={{ position: "absolute", width: "480px", height: "430px", top: "18%",      left: "-50px", borderRadius: "50%", background: "rgba(255,245,240,0.42)", filter: "blur(95px)",  mixBlendMode: "soft-light" }} />
+      <svg xmlns="http://www.w3.org/2000/svg" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.18, pointerEvents: "none" }}>
+        <filter id="pg-grain">
+          <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
+          <feColorMatrix type="saturate" values="0" />
+        </filter>
+        <rect width="100%" height="100%" filter="url(#pg-grain)" />
+      </svg>
+    </div>
+  );
+}
+
 // ── Tokens ─────────────────────────────────────────────────────────────────────
 const BROWN = "#3D1F0F";
 const PINK  = "#F4ACB7";
 const WHITE = "#FFFFFF";
-const BLACK = "#000000";
+const BLACK   = "#1a0d12"; // warm dark wine — tints SVG sprockets
+const FILM_BG = "rgba(24, 12, 16, 0.82)"; // semi-transparent for large areas
 
 const NAV_H         = 68;  // px — site nav height (pink bar)
 const PG_TITLE_H    = 48;  // px — sticky playground title below nav
@@ -387,7 +428,7 @@ export default function PlaygroundPage() {
     return () => canvas.removeEventListener("wheel", handler);
   }, [ready, isMobile, snapToNearest, stopDrift]);
 
-  if (!mounted) return <div style={{ minHeight: "100vh", background: BROWN }} />;
+  if (!mounted) return <><PlaygroundBackground /><div style={{ minHeight: "100vh" }} /></>;
 
   // ── Sub-components ───────────────────────────────────────────────────────────
   const hSpBg = hSprocketBg(SPROCKET_H);
@@ -434,6 +475,7 @@ export default function PlaygroundPage() {
     const sidePad = SPROCKET_W;
     return (
       <div style={{ width: "100vw", marginLeft: "calc(-50vw + 50%)" }}>
+        <PlaygroundBackground />
 
         {/* Module 5: sticky Paper Cream title — z-40, sticks below pink nav (z-50) */}
         <div style={{
@@ -461,8 +503,8 @@ export default function PlaygroundPage() {
           </span>
         </div>
 
-        {/* Dark film content */}
-        <div style={{ background: BROWN, minHeight: "100vh", width: "100%" }}>
+        {/* Film content */}
+        <div style={{ minHeight: "100vh", width: "100%" }}>
 
           {/* Left + Right fixed sprockets */}
           {([0, 1] as const).map(side => (
@@ -475,7 +517,7 @@ export default function PlaygroundPage() {
               backgroundImage:  vSpBg,
               backgroundRepeat: "repeat-y",
               backgroundSize:   `${SPROCKET_W}px 52px`,
-              backgroundColor:  BLACK,
+              backgroundColor:  FILM_BG,
               zIndex:           10,
               pointerEvents:    "none",
             }} />
@@ -498,7 +540,7 @@ export default function PlaygroundPage() {
               return (
                 <div key={item.id} style={{ margin: 0, padding: 0 }}>
                   {i > 0 && (
-                    <div style={{ height: 30, marginLeft: -BITE, marginRight: -BITE, background: BLACK }} />
+                    <div style={{ height: 30, marginLeft: -BITE, marginRight: -BITE, background: FILM_BG }} />
                   )}
                   <div style={{
                     position:     "relative",
@@ -568,6 +610,7 @@ export default function PlaygroundPage() {
   return (
     // Full-bleed container — breaks out of centered max-w-[1440px] main
     <div style={{ width: "100vw", marginLeft: "calc(-50vw + 50%)" }}>
+      <PlaygroundBackground />
 
       {/* Module 5: sticky Paper Cream title — z-40 sticks below pink nav (z-50) */}
       <div style={{
@@ -608,7 +651,6 @@ export default function PlaygroundPage() {
           position:       "relative",
           width:          "100%",
           height:         `calc(100vh - ${navH}px - ${PG_TITLE_H}px)`,
-          background:     BROWN,
           overflow:       "hidden",
           cursor:         "grab",
           touchAction:    "none",
@@ -624,7 +666,7 @@ export default function PlaygroundPage() {
       <div style={{
         position:        "relative",
         width:           "100%",
-        backgroundColor: BLACK,
+        backgroundColor: FILM_BG,
         overflow:        "hidden",
       }}>
         <HSprocket />
@@ -635,7 +677,7 @@ export default function PlaygroundPage() {
           width:           "100%",
           height:          TRACK_H,
           overflow:        "hidden",
-          backgroundColor: BLACK,
+          backgroundColor: FILM_BG,
         }}>
           <div ref={trackRef} style={{
             position:      "absolute",
@@ -660,12 +702,12 @@ export default function PlaygroundPage() {
 
               return (
                 <Fragment key={`${item.id}-c${copyIdx}`}>
-                  {/* Black divider */}
+                  {/* Film divider */}
                   <div style={{
                     flexShrink:      0,
                     width:           DIVIDER_W,
                     height:          TRACK_H,
-                    backgroundColor: BLACK,
+                    backgroundColor: FILM_BG,
                     margin:          0,
                     padding:         0,
                   }} />
