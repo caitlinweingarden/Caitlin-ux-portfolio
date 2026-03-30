@@ -5,11 +5,12 @@ import { motion } from "framer-motion";
 
 // ── Image paths ────────────────────────────────────────────────────────────────
 const IMG = {
-  hero:       "/michigan-creamery/Hero%20Image.png",
-  hifi:       "/michigan-creamery/HiFi%20Images.png",
-  components: "/michigan-creamery/Components.png",
-  templates:  "/michigan-creamery/Templates.png",
-  typography: "/michigan-creamery/Typography.png",
+  hero:        "/michigan-creamery/Hero%20Image.png?v=4",
+  hifi:        "/michigan-creamery/HiFi%20Images.png",
+  hifiDesigns: "/michigan-creamery/HiFi%20Designs.png",
+  components:  "/michigan-creamery/Components.png",
+  templates:   "/michigan-creamery/Templates.png",
+  typography:  "/michigan-creamery/Typography.png",
 };
 
 // ── Shared components ──────────────────────────────────────────────────────────
@@ -112,7 +113,7 @@ export default function MichiganCreameryPage() {
           className="mt-10 text-xs font-bold uppercase tracking-widest"
           style={{ color: "#FFB6C1" }}
         >
-          Product Design · UX Research · Branding
+          UX Research · Design Systems · E-Commerce
         </p>
 
         <h1
@@ -131,15 +132,15 @@ export default function MichiganCreameryPage() {
           {[
             {
               label: "Problem",
-              text:  "The existing site felt inconsistent and cluttered, undermining a brand that had been carefully refined since its 2017 rebrand.",
+              text:  <>Flavors, hours, and menu info were <span style={{ textDecoration: "underline", textDecorationColor: "rgba(255,182,193,0.6)", textUnderlineOffset: "3px", textDecorationThickness: "1.5px" }}>frustratingly difficult to locate</span> before deciding to make the trip.</>,
             },
             {
               label: "Solution",
-              text:  "Every design decision traced back to a real user need: surface the menu faster, reduce cognitive load, and give the brand story room to breathe. The result is a site built around what customers actually come looking for.",
+              text:  <>Every design decision traced back to a real user need: <span style={{ textDecoration: "underline", textDecorationColor: "rgba(255,182,193,0.6)", textUnderlineOffset: "3px", textDecorationThickness: "1.5px", fontWeight: 700 }}>surface the menu faster</span>, reduce cognitive load, and give the brand story room to breathe.</>,
             },
             {
               label: "Impact",
-              text:  "For the 120,000+ residents of Ann Arbor who search for Michigan Creamery, the redesign means the quality inside the shop finally matches what they find online.",
+              text:  <>For the <strong className="font-bold text-page-text">120,000+ Ann Arbor residents</strong> who search for Michigan Creamery, the redesign means the quality inside the shop finally matches what they find online.</>,
             },
           ].map(({ label, text }) => (
             <div
@@ -149,7 +150,7 @@ export default function MichiganCreameryPage() {
             >
               <p
                 className="mb-2 text-xs font-bold uppercase tracking-widest"
-                style={{ color: "#2D1B14" }}
+                style={{ color: "#FFB6C1" }}
               >
                 {label}
               </p>
@@ -165,7 +166,7 @@ export default function MichiganCreameryPage() {
               { label: "Role",     value: "UX Designer (1 of 2)" },
               { label: "Timeline", value: "8 Weeks" },
               { label: "Type",     value: "Website Redesign" },
-              { label: "Tools",    value: "Figma, FigJam, Usability Testing" },
+              { label: "Tools",    value: "Figma, FigJam, Usability Testing, Cursor, AI Tools" },
             ].map(({ label, value }) => (
               <div key={label}>
                 <p className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-page-text/35">
@@ -219,27 +220,27 @@ export default function MichiganCreameryPage() {
       {/* ── Body ──────────────────────────────────────────────────────────── */}
       <div className="mx-auto mt-24 max-w-7xl px-8">
 
-        {/* 01 Background */}
+        {/* 01 Meet Michigan Creamery */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
         >
-          <SectionLabel num="01" label="Background" />
+          <SectionLabel num="01" label="Meet Michigan Creamery" />
           <div className="grid gap-12 md:grid-cols-2 md:gap-20">
             <div className="space-y-4 text-base leading-relaxed text-page-text/65">
               <p>
-                Michigan Creamery is a family-owned ice cream and sweet shop in Ann Arbor, Michigan. Founded in 2007 and thoughtfully rebranded in 2017, the shop has built a loyal following around premium small-batch ice cream made with locally sourced Michigan milk.
+                Never heard of Michigan Creamery? You are not alone. Their website had the same problem.
               </p>
               <p>
-                Despite a strong in-store experience and a refined brand identity, the digital presence told a different story. Inconsistent visuals, a cluttered navigation, and a menu that was hard to find were creating friction for new and returning customers alike.
+                Michigan Creamery is a family-owned ice cream and sweet shop in Ann Arbor, Michigan, with a loyal following built around <strong className="font-bold text-page-text">premium small-batch ice cream</strong> made with locally sourced Michigan milk.
+              </p>
+              <p>
+                Inconsistent visuals, cluttered navigation, and a menu that was <strong className="font-bold text-page-text">hard to find</strong> were creating friction for new and returning customers alike.
               </p>
             </div>
             <div className="space-y-4 text-base leading-relaxed text-page-text/65">
-              <p>
-                The goal of this project was to close the gap between how Michigan Creamery feels in person and how it shows up online, giving every customer a reason to visit before they even walk through the door.
-              </p>
               <div className="flex flex-wrap gap-2 pt-2">
                 <Sticker>Family-owned since 2007</Sticker>
                 <Sticker>Locally sourced Michigan dairy</Sticker>
@@ -260,15 +261,12 @@ export default function MichiganCreameryPage() {
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
         >
           <SectionLabel num="02" label="The Problem" />
-          <p className="mb-12 max-w-2xl text-base leading-relaxed text-page-text/65">
-            User research and a heuristic evaluation of the existing site surfaced three friction points that were consistently getting in the way of customers.
-          </p>
           <div className="grid gap-5 md:grid-cols-3">
             {[
               {
                 icon:  "🎨",
                 title: "Color as a Visual Cue",
-                body:  "Color was used inconsistently across the site, making it difficult for users to identify interactive elements, read hierarchy, or feel oriented within the brand.",
+                body:  "Color was used inconsistently across the site, making it difficult for users to identify interactive elements, read visual hierarchy, or feel oriented within the brand.",
               },
               {
                 icon:  "📋",
@@ -284,7 +282,7 @@ export default function MichiganCreameryPage() {
               <div
                 key={title}
                 className="rounded-2xl p-7"
-                style={{ background: "rgba(45,27,20,0.04)", border: "1px solid rgba(45,27,20,0.08)" }}
+                style={{ background: "rgba(255,182,193,0.06)", border: "1px solid rgba(255,182,193,0.20)" }}
               >
                 <span style={{ fontSize: 28, display: "block", marginBottom: 16 }}>{icon}</span>
                 <h3
@@ -310,7 +308,7 @@ export default function MichiganCreameryPage() {
         >
           <SectionLabel num="03" label="Research" />
           <p className="mb-12 max-w-2xl text-base leading-relaxed text-page-text/65">
-            A competitive audit and heuristic evaluation surfaced where the experience was falling short. Three distinct user types kept appearing in the findings.
+            <strong className="font-bold text-page-text">User interviews conducted on campus</strong> helped ground the findings in real behavior.
           </p>
 
           {/* Persona cards */}
@@ -320,55 +318,68 @@ export default function MichiganCreameryPage() {
                 avatar:      "🎓",
                 name:        "The Student",
                 context:     "U of M undergrad, Ann Arbor local",
-                goal:        "Find the flavor menu and hours before heading over",
-                frustration: "Couldn't locate basic info without digging through multiple pages",
+                goal:        "Find the flavor menu and hours before heading out.",
+                frustration: "Hard to track down flavors while planning a Friday night, and the ordering page linking out to a separate site caused loading issues that killed the vibe.",
+                accentBg:    "rgba(255,182,193,0.12)",
+                accentBorder:"rgba(255,182,193,0.35)",
               },
               {
                 avatar:      "👨‍👩‍👧",
                 name:        "The Local Family",
                 context:     "Ann Arbor resident, regular visitor",
-                goal:        "Discover seasonal flavors and plan a weekend trip",
-                frustration: "The site felt outdated compared to the warm in-store experience",
+                goal:        "Discover seasonal flavors and plan a weekend trip.",
+                frustration: "On desktop, flavors were hard to find and the site felt outdated, making them quietly question whether the quality was still there.",
+                accentBg:    "rgba(45,27,20,0.05)",
+                accentBorder:"rgba(45,27,20,0.12)",
               },
               {
-                avatar:      "🏫",
+                avatar:      "🗺️",
                 name:        "The First-Timer",
                 context:     "Visitor or new resident, found via Google",
-                goal:        "Understand what makes Michigan Creamery worth the trip",
-                frustration: "No clear brand story or differentiation on the homepage",
+                goal:        "Understand what makes Michigan Creamery worth the trip.",
+                frustration: "No clear brand story on the homepage and no real product photography, making it impossible to see what the ice cream actually looks like.",
+                accentBg:    "rgba(255,182,193,0.07)",
+                accentBorder:"rgba(255,182,193,0.20)",
               },
-            ].map(({ avatar, name, context, goal, frustration }) => (
+            ].map(({ avatar, name, context, goal, frustration, accentBg, accentBorder }) => (
               <div
                 key={name}
-                className="rounded-2xl p-7"
+                className="flex flex-col rounded-2xl overflow-hidden"
                 style={{ background: "rgba(45,27,20,0.04)", border: "1px solid rgba(45,27,20,0.08)" }}
               >
                 <div
-                  className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl text-3xl"
-                  style={{ background: "rgba(255,182,193,0.20)" }}
+                  className="flex items-center gap-4 px-7 py-5"
+                  style={{ background: accentBg, borderBottom: `1px solid ${accentBorder}` }}
                 >
-                  {avatar}
-                </div>
-                <p
-                  className="mb-1 text-xs font-bold uppercase tracking-widest"
-                  style={{ color: "#FFB6C1" }}
-                >
-                  User Persona
-                </p>
-                <h3
-                  className="mb-1 text-base font-bold text-page-text"
-                  style={{ letterSpacing: "-0.02em" }}
-                >
-                  {name}
-                </h3>
-                <p className="mb-4 text-xs text-page-text/40">{context}</p>
-                <div className="space-y-3">
+                  <div
+                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-2xl"
+                    style={{ background: "rgba(255,182,193,0.25)" }}
+                  >
+                    {avatar}
+                  </div>
                   <div>
-                    <p className="mb-1 text-[0.65rem] font-bold uppercase tracking-widest text-page-text/35">Goal</p>
+                    <p
+                      className="text-[0.6rem] font-bold uppercase tracking-widest"
+                      style={{ color: "#FFB6C1" }}
+                    >
+                      User Persona
+                    </p>
+                    <h3
+                      className="text-base font-bold text-page-text"
+                      style={{ letterSpacing: "-0.02em" }}
+                    >
+                      {name}
+                    </h3>
+                    <p className="text-xs text-page-text/40">{context}</p>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-4 px-7 py-6">
+                  <div>
+                    <p className="mb-1 text-[0.65rem] font-bold uppercase tracking-widest" style={{ color: "#FFB6C1" }}>Goal</p>
                     <p className="text-sm leading-relaxed text-page-text/65">{goal}</p>
                   </div>
                   <div>
-                    <p className="mb-1 text-[0.65rem] font-bold uppercase tracking-widest text-page-text/35">Frustration</p>
+                    <p className="mb-1 text-[0.65rem] font-bold uppercase tracking-widest" style={{ color: "#FFB6C1" }}>Frustration</p>
                     <p className="text-sm leading-relaxed text-page-text/65">{frustration}</p>
                   </div>
                 </div>
@@ -376,94 +387,191 @@ export default function MichiganCreameryPage() {
             ))}
           </div>
 
-          {/* Templates image + research findings */}
-          <div className="grid gap-12 md:grid-cols-2 md:gap-20">
-            <CaseImage
-              src={IMG.templates}
-              alt="Research templates and audit framework"
-              caption="Audit templates used across the competitive benchmarking process"
-            />
-            <div>
-              <h3
-                className="mb-6 text-xl font-bold text-page-text"
-                style={{ letterSpacing: "-0.025em" }}
-              >
-                What the audit revealed
-              </h3>
-              {/* Research insight cards */}
-              <div className="space-y-4">
-                {[
-                  { icon: "🔍", finding: "14 usability issues flagged across the existing site, from low-contrast text to broken information hierarchy." },
-                  { icon: "📊", finding: "Competitive audit of 6 ice cream brands showed clear best practices in menu layout, photography, and nav structure that Michigan Creamery was not using." },
-                  { icon: "🎯", finding: "Three core user goals surfaced: find the menu fast, understand the brand difference, and locate the shop." },
-                ].map(({ icon, finding }) => (
-                  <div
-                    key={finding}
-                    className="flex items-start gap-4 rounded-xl p-5"
-                    style={{ background: "rgba(45,27,20,0.04)", border: "1px solid rgba(45,27,20,0.07)" }}
-                  >
-                    <span className="mt-0.5 shrink-0 text-xl">{icon}</span>
-                    <p className="text-sm leading-relaxed text-page-text/65">{finding}</p>
-                  </div>
-                ))}
-              </div>
+          {/* Research findings */}
+          <div>
+            <h3
+              className="mb-6 text-xl font-bold text-page-text"
+              style={{ letterSpacing: "-0.025em" }}
+            >
+              What the audit revealed
+            </h3>
+            <div className="grid gap-4 md:grid-cols-3">
+              {[
+                {
+                  icon: "🔍",
+                  finding: <>The audit revealed <strong className="font-bold text-page-text">14 usability issues</strong> across the existing site, from low-contrast text to broken information hierarchy.</>,
+                  key: "usability",
+                },
+                {
+                  icon: "📊",
+                  finding: <>A competitive audit of <strong className="font-bold text-page-text">6 ice cream brands</strong> surfaced clear best practices in menu layout, photography, and nav structure that Michigan Creamery was not following.</>,
+                  key: "competitive",
+                },
+                {
+                  icon: "🎯",
+                  finding: <>Three core user goals emerged: <strong className="font-bold text-page-text">find the menu fast</strong>, understand the brand difference, and locate the shop.</>,
+                  key: "goals",
+                },
+              ].map(({ icon, finding, key }) => (
+                <div
+                  key={key}
+                  className="flex items-start gap-4 rounded-xl p-5"
+                  style={{ background: "rgba(255,182,193,0.06)", border: "1px solid rgba(255,182,193,0.20)" }}
+                >
+                  <span className="mt-0.5 shrink-0 text-xl">{icon}</span>
+                  <p className="text-sm leading-relaxed text-page-text/65">{finding}</p>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Typography image */}
-          <div className="mt-12">
-            <CaseImage
-              src={IMG.typography}
-              alt="Typography system for Michigan Creamery"
-              caption="Typography decisions drawn from the competitive audit and brand standards"
-            />
+          {/* Competitive Analysis */}
+          <div className="mt-16">
+            <h3
+              className="mb-3 text-xl font-bold text-page-text"
+              style={{ letterSpacing: "-0.025em" }}
+            >
+              What the Competition Got Right
+            </h3>
+            <p className="mb-8 max-w-2xl text-base leading-relaxed text-page-text/65">
+              I audited 3 direct competitors to identify what Michigan Creamery was missing online.
+            </p>
+
+            <div className="mb-8 grid gap-5 md:grid-cols-3">
+              {[
+                {
+                  icon:     "🍦",
+                  name:     "Ben & Jerry's",
+                  finding:  <>Led with <strong className="font-bold text-page-text">bold, appetizing product photography</strong> on every page. Flavors were impossible to miss, making the experience feel indulgent before you even walk in.</>,
+                  key:      "bj",
+                },
+                {
+                  icon:     "🖤",
+                  name:     "Blank Slate Creamery",
+                  finding:  <>Leaned into <strong className="font-bold text-page-text">modern, editorial branding</strong> with a clean layout that felt premium and intentional.</>,
+                  key:      "bs",
+                },
+                {
+                  icon:     "🏛️",
+                  name:     "Washtenaw Dairy",
+                  finding:  <>Built on <strong className="font-bold text-page-text">community loyalty and nostalgia</strong>, a historic Ann Arbor staple since 1934 with a large flavor selection.</>,
+                  key:      "wd",
+                },
+              ].map(({ icon, name, finding, key }) => (
+                <div
+                  key={key}
+                  className="rounded-2xl p-6"
+                  style={{ background: "rgba(45,27,20,0.04)", border: "1px solid rgba(45,27,20,0.08)" }}
+                >
+                  <span style={{ fontSize: 26, display: "block", marginBottom: 12 }}>{icon}</span>
+                  <p
+                    className="mb-2 text-[0.6rem] font-bold uppercase tracking-widest"
+                    style={{ color: "#FFB6C1" }}
+                  >
+                    Competitor
+                  </p>
+                  <h4
+                    className="mb-3 text-base font-bold text-page-text"
+                    style={{ letterSpacing: "-0.02em" }}
+                  >
+                    {name}
+                  </h4>
+                  <p className="text-sm leading-relaxed text-page-text/60">{finding}</p>
+                </div>
+              ))}
+            </div>
+
+            <div
+              className="max-w-3xl rounded-2xl p-7"
+              style={{ background: "rgba(255,182,193,0.08)", border: "1.5px solid rgba(255,182,193,0.28)" }}
+            >
+              <p className="text-sm leading-relaxed text-page-text/80">
+                Michigan Creamery&apos;s biggest weakness was not its product, it was <strong className="font-bold text-page-text">website navigation and information organization</strong>. Competitors were winning online before customers even walked through the door.
+              </p>
+            </div>
           </div>
+
         </motion.div>
 
         <Divider />
 
-        {/* 04 Key Design Decisions */}
+        {/* 04 The Ingredients */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
         >
-          <SectionLabel num="04" label="Key Design Decisions" />
-          <p className="mb-12 max-w-2xl text-base leading-relaxed text-page-text/65">
-            Each decision was grounded in research and validated against the goal of making the experience feel as premium as the product itself.
-          </p>
+          <SectionLabel num="04" label="The Ingredients" />
+          <div
+            className="mb-10 max-w-3xl rounded-2xl p-8"
+            style={{ background: "rgba(255,182,193,0.08)", border: "1.5px solid rgba(255,182,193,0.28)" }}
+          >
+            <p className="text-base leading-relaxed text-page-text/80">
+              Before designing a single screen, I rebuilt the <strong className="font-bold text-page-text">color palette, typography, and component library</strong> from scratch.
+            </p>
+          </div>
+          <div className="grid gap-8 md:grid-cols-3">
+            <CaseImage
+              src={IMG.typography}
+              alt="Typography system for Michigan Creamery"
+              caption="Typography decisions drawn from the competitive audit and brand standards"
+            />
+            <CaseImage
+              src={IMG.components}
+              alt="Michigan Creamery component library"
+              caption="Component library built to maintain consistency across every page"
+            />
+            <CaseImage
+              src={IMG.templates}
+              alt="Research templates and audit framework"
+              caption="Audit templates used across the competitive benchmarking process"
+              rounded=""
+            />
+          </div>
+        </motion.div>
+
+        <Divider />
+
+        {/* 05 Key Design Decisions */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <SectionLabel num="05" label="Key Design Decisions" />
           <div className="grid gap-5 md:grid-cols-2">
             {[
               {
                 num:   "01",
                 icon:  "📍",
                 title: "Clear View Menu CTA",
-                body:  "A persistent, high-contrast View Menu button was anchored above the fold on every page. Users no longer had to hunt for the most-visited piece of content on the site.",
+                body:  <>A persistent, high-contrast <strong className="font-bold text-page-text">View Menu button</strong> was anchored above the fold on every page.</>,
               },
               {
                 num:   "02",
                 icon:  "🗂️",
                 title: "Simplified Navigation",
-                body:  "Navigation was reduced from 8 items to 4 focused destinations. A clear visual hierarchy was added to guide users toward the actions they actually care about.",
+                body:  <>Navigation was reduced from <strong className="font-bold text-page-text">8 items to 4</strong> focused destinations.</>,
               },
               {
                 num:   "03",
                 icon:  "🏠",
                 title: "Improved Homepage Hierarchy",
-                body:  "The homepage was restructured around a clear narrative: what Michigan Creamery is, why it matters, and how to visit or order. Story-first, action second.",
+                body:  "The homepage was restructured around a clear narrative: what Michigan Creamery is, why it matters, and how to visit or order.",
               },
               {
                 num:   "04",
                 icon:  "📸",
                 title: "Elevated Product Imagery",
-                body:  "Small, low-contrast thumbnails were replaced with full-bleed photography and generous white space. The ice cream became the hero it deserved to be.",
+                body:  <>Small, low-contrast thumbnails were replaced with <strong className="font-bold text-page-text">full-bleed photography</strong> and generous white space. The ice cream became the hero it deserved to be.</>,
               },
             ].map(({ num, icon, title, body }) => (
               <div
                 key={title}
                 className="rounded-2xl p-7"
-                style={{ background: "rgba(45,27,20,0.03)", border: "1px solid rgba(45,27,20,0.08)" }}
+                style={{ background: "rgba(255,182,193,0.06)", border: "1px solid rgba(255,182,193,0.20)" }}
               >
                 <div className="mb-5 flex items-center gap-3">
                   <span style={{ fontSize: 24 }}>{icon}</span>
@@ -485,59 +593,79 @@ export default function MichiganCreameryPage() {
             ))}
           </div>
 
-          {/* Components image */}
-          <div className="mt-10">
+        </motion.div>
+
+        <Divider />
+
+        {/* 06 Final Designs */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <SectionLabel num="06" label="Final Designs" />
+
+          {/* TLDR preview */}
+          <div className="mb-16">
+            <p
+              className="mb-2 text-xs font-bold uppercase tracking-widest"
+              style={{ color: "#FFB6C1" }}
+            >
+              TLDR
+            </p>
+            <p className="mb-6 max-w-2xl text-base leading-relaxed text-page-text/65">
+              Clean hierarchy, elevated photography, and a <strong className="font-bold text-page-text">menu that is actually easy to find</strong>.
+            </p>
             <CaseImage
-              src={IMG.components}
-              alt="Michigan Creamery component library"
-              caption="Component library built to maintain consistency across every page"
+              src={IMG.hifiDesigns}
+              alt="Michigan Creamery final design preview"
+              rounded=""
+            />
+          </div>
+
+          {/* Responsive designs */}
+          <div>
+            <p
+              className="mb-2 text-xs font-bold uppercase tracking-widest"
+              style={{ color: "#FFB6C1" }}
+            >
+              Responsive Designs
+            </p>
+            <CaseImage
+              src={IMG.hifi}
+              alt="Michigan Creamery responsive designs across screen sizes"
+              rounded=""
             />
           </div>
         </motion.div>
 
         <Divider />
 
-        {/* 05 Final Designs */}
+        {/* 07 Impact */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
         >
-          <SectionLabel num="05" label="Final Designs" />
-          <CaseImage
-            src={IMG.hifi}
-            alt="Michigan Creamery high-fidelity designs"
-            caption="High-fidelity screens across homepage, menu, and product detail pages"
-          />
-        </motion.div>
-
-        <Divider />
-
-        {/* 06 Impact */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <SectionLabel num="06" label="Impact" />
+          <SectionLabel num="07" label="Impact" />
           <div className="grid gap-10 border-t border-page-text/10 pt-10 md:grid-cols-3">
             {[
               {
                 stat:  "85%",
-                label: "Of users found flavors faster",
-                body:  "Usability testing confirmed the core goal: customers who had previously struggled to locate menu and flavor information could find it quickly and without confusion after the redesign.",
+                label: "of users said the redesign better reflects the Michigan Creamery brand",
+                body:  "",
               },
               {
                 stat:  "120,000+",
-                label: "Ann Arbor residents reached",
-                body:  "Students, families, and first-time visitors each land on a homepage that earns trust before they ever walk through the door, because the digital experience now reflects the quality of what is inside.",
+                label: "Ann Arbor residents reached through a more accessible experience",
+                body:  "",
               },
               {
                 stat:  "92%",
-                label: "Task success rate for reaching the menu",
-                body:  "In usability testing, 92% of participants successfully reached the flavor menu without backtracking or hesitation, up from a fragmented experience that buried the most-visited content below the fold.",
+                label: "task success rate for reaching the menu in usability testing",
+                body:  "",
               },
             ].map(({ stat, label, body }) => (
               <div key={stat}>
@@ -561,30 +689,41 @@ export default function MichiganCreameryPage() {
 
         <Divider />
 
-        {/* 07 Reflection */}
+        {/* 08 Reflection */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
         >
-          <SectionLabel num="07" label="Reflection" />
+          <SectionLabel num="08" label="Reflection" />
+          <div
+            className="mb-10 max-w-3xl rounded-2xl p-8"
+            style={{ background: "rgba(255,182,193,0.08)", border: "1.5px solid rgba(255,182,193,0.28)" }}
+          >
+            <p className="text-base leading-relaxed text-page-text/80 md:text-lg">
+              If it does not solve the problem, it is not good design.
+            </p>
+          </div>
           <div className="grid gap-12 md:grid-cols-2 md:gap-20">
-            <div className="space-y-4 text-base leading-relaxed text-page-text/65">
-              <p>
-                This project reinforced how much a well-defined information architecture can do on its own. Reducing the navigation from 8 items to 4 was one of the simplest changes and one of the most impactful for the overall feel of the site.
+            <ul className="space-y-3">
+              <Bullet><strong className="font-bold text-page-text">Product first.</strong> The menu page leads with real photography so users know what they want before they even walk in.</Bullet>
+              <Bullet><strong className="font-bold text-page-text">Intentional CTAs.</strong> The View Menu button guides customers to what they came for before they realize they need it.</Bullet>
+              <Bullet><strong className="font-bold text-page-text">Brand consistency.</strong> Improved imagery throughout finally matches the warmth and quality of the in-store experience.</Bullet>
+              <Bullet><strong className="font-bold text-page-text">Navigation simplified.</strong> Reducing from 8 items to 4 was one of the smallest changes with the biggest impact.</Bullet>
+              <Bullet><strong className="font-bold text-page-text">Component library built.</strong> Handed off a full system so the Michigan Creamery team can maintain consistency as the site grows.</Bullet>
+            </ul>
+            <div className="space-y-4">
+              <p
+                className="text-xs font-bold uppercase tracking-widest"
+                style={{ color: "#FFB6C1" }}
+              >
+                If I were to continue this project:
               </p>
-              <p>
-                Working with a real local brand meant every decision had stakes. The visual identity had been carefully built over years, and the design needed to honor that while making it work harder for users.
-              </p>
-            </div>
-            <div className="space-y-4 text-base leading-relaxed text-page-text/65">
-              <p>
-                If I were to continue this project, I would build out a component library to give the Michigan Creamery team the tools to maintain consistency on their own as the site grows.
-              </p>
-              <p>
-                I would also run usability testing with actual customers to validate the hierarchy changes and measure whether the View Menu CTA placement is performing as expected.
-              </p>
+              <ul className="space-y-3">
+                <Bullet>Usability testing with real customers to validate hierarchy changes and measure View Menu CTA performance.</Bullet>
+                <Bullet>Expand the design system to cover seasonal promotions and new product launches.</Bullet>
+              </ul>
             </div>
           </div>
         </motion.div>

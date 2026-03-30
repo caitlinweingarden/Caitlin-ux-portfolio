@@ -26,6 +26,8 @@ export default function RootLayout({
       <body className="flex min-h-screen flex-col bg-page-bg font-sans text-page-text antialiased">
         <ThemeProvider>
           <Navigation />
+          {/* Spacer pushes content below the fixed nav bar */}
+          <div className="h-[44px] md:h-[35px] shrink-0" aria-hidden />
           <main id="main-content" tabIndex={-1} className="mx-auto w-full max-w-[1440px] flex-1 px-6 md:px-12 lg:px-24">
             {children}
           </main>

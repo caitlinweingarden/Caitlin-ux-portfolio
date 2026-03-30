@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 
 // ── Image paths ────────────────────────────────────────────────────────────────
 const IMG = {
-  hero:    "/sign-now/Ready_to_Post_Images/Sign_Now_Hero.jpg",
+  hero:    "/sign-now/Tile.png",
   lofi:    "/sign-now/LoFi%20WireFrames.png",
   lofi_bw: "/sign-now/LoFi%20WireFrames%20(Black%20and%20White)%201.png",
   hifi:    "/sign-now/HiFi_Images.png",
@@ -206,12 +206,19 @@ export default function SignNowCaseStudy() {
           <span aria-hidden>←</span> Back to Work
         </Link>
 
-        {/* Category tag */}
+        {/* Award tag */}
         <p
           className="mt-10 text-xs font-bold uppercase tracking-widest"
           style={{ color: "#FFB6C1" }}
         >
-          UX Design · Accessibility · Healthcare
+          🥇 1ST PLACE · UMICH ROSS TECH INNOVATION JAM
+        </p>
+
+        {/* Category tags */}
+        <p
+          className="mt-1 text-xs font-bold uppercase tracking-widest text-page-text/35"
+        >
+          Product Design · User Flows · AI-Powered Translation
         </p>
 
         {/* Title */}
@@ -272,8 +279,8 @@ export default function SignNowCaseStudy() {
             {[
               { label: "Role",     value: "Lead UX Designer" },
               { label: "Timeline", value: "Fall 2025 \u00b7 6 Weeks" },
-              { label: "Award",    value: "1st Place \u2022 UMich Ross Tech Innovation Jam" },
-              { label: "Tools",    value: "Figma, FigJam, Miro" },
+              { label: "Award",    value: "1st Place, Health Track, UMich Ross Tech Innovation Jam" },
+              { label: "Tools",    value: "Figma, FigJam, Miro, Claude Code, AI Tools" },
             ].map(({ label, value }) => (
               <div key={label}>
                 <p className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-page-text/35">

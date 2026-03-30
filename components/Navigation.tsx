@@ -25,11 +25,11 @@ export default function Navigation() {
     <>
       <a href="#main-content" className="skip-link">Skip to main content</a>
 
-      {/* Paper Cream bg, sticky utility bar */}
+      {/* Paper Cream bg, fixed utility bar */}
       <nav
-        className="sticky top-0 z-50 w-full backdrop-blur-sm"
+        className="fixed inset-x-0 top-0 z-50 w-full backdrop-blur-sm"
         style={{
-          background:   "rgba(255,253,249,0.94)",
+          background: "rgba(255,253,249,0.94)",
         }}
         aria-label="Main navigation"
       >
