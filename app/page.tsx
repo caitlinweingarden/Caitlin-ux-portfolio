@@ -1,7 +1,88 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+
+// ── Typewriter intro ───────────────────────────────────────────────────────────
+
+const INTRO_SEGMENTS = [
+  { text: "I\u2019m ",             bold: false, underline: false },
+  { text: "Caitlin Weingarden",    bold: true,  underline: false },
+  { text: ", an ",                 bold: false, underline: false },
+  { text: "artist",                bold: false, underline: true  },
+  { text: " turned ",              bold: false, underline: false },
+  { text: "product designer",      bold: false, underline: true  },
+  { text: ".",                     bold: false, underline: false },
+] as const;
+
+const TOTAL_CHARS = INTRO_SEGMENTS.reduce((n, s) => n + s.text.length, 0);
+
+function TypewriterIntro() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (count >= TOTAL_CHARS) return;
+    const t = setTimeout(() => setCount(c => c + 1), 36);
+    return () => clearTimeout(t);
+  }, [count]);
+
+  const underlineStyle = {
+    textDecoration:          "underline",
+    textDecorationColor:     "rgba(255,182,193,0.75)",
+    textUnderlineOffset:     "4px",
+    textDecorationThickness: "1.5px",
+  } as const;
+
+  let rendered = 0;
+  const nodes = INTRO_SEGMENTS.map((seg, i) => {
+    const start   = rendered;
+    rendered     += seg.text.length;
+    const visible = Math.min(Math.max(count - start, 0), seg.text.length);
+    if (visible === 0) return null;
+    const text = seg.text.slice(0, visible);
+    return (
+      <span
+        key={i}
+        style={{
+          fontWeight: seg.bold ? 700 : undefined,
+          ...(seg.underline ? underlineStyle : {}),
+        }}
+      >
+        {text}
+      </span>
+    );
+  });
+
+  return (
+    <p
+      className="mb-12 md:mb-16 text-page-text"
+      style={{
+        fontSize:      "clamp(1.05rem, 2vw, 1.35rem)",
+        fontWeight:    400,
+        letterSpacing: "-0.02em",
+        lineHeight:    1.3,
+        textShadow:    "0 1px 3px rgba(0,0,0,0.06)",
+      }}
+    >
+      {nodes}
+      {count < TOTAL_CHARS && (
+        <span
+          aria-hidden
+          style={{
+            display:             "inline-block",
+            width:               "2px",
+            height:              "1em",
+            background:          "rgba(255,182,193,0.7)",
+            marginLeft:          "2px",
+            verticalAlign:       "text-bottom",
+            animation:           "tw-blink 0.75s step-end infinite",
+          }}
+        />
+      )}
+    </p>
+  );
+}
 
 // ── Project data ───────────────────────────────────────────────────────────────
 
@@ -12,6 +93,7 @@ const DISNEY = {
   description: "Rethinking content discovery and bridging streaming with Disney Parks through mood-based browsing and personalized rewards.",
   imageSrc:    "/case_studies%20/Disney%2B/Disney%2B%20Hero%20Image/Tile.png",
   award:       null as string | null,
+  year:        "2025",
 };
 
 const ASL = {
@@ -21,6 +103,7 @@ const ASL = {
   description: "Breaking communication barriers with real-time ASL translation for healthcare environments.",
   imageSrc:    "/sign-now/Tile.png",
   award:       "🥇 1ST PLACE \u00b7 HEALTH TRACK \u00b7 UMICH ROSS TECH INNOVATION JAM" as string | null,
+  year:        "2025",
 };
 
 const MICHIGAN = {
@@ -30,6 +113,7 @@ const MICHIGAN = {
   description: "Redesigning a family-owned Ann Arbor ice cream shop's digital presence to match the premium experience customers love in store.",
   imageSrc:    "/michigan-creamery/Hero%20Image.png?v=4",
   award:       null as string | null,
+  year:        "2026",
 };
 
 const NEXJE = {
@@ -38,6 +122,7 @@ const NEXJE = {
   description: "Never lose a contact again. A networking app designed to make collecting and remembering contacts at events effortless.",
   imageSrc:    "/nexje/Hero%20Image.png?v=4",
   award:       null as string | null,
+  year:        "2026",
 };
 
 const SPRING = { type: "spring", stiffness: 300, damping: 24 } as const;
@@ -125,7 +210,7 @@ function ProjectCard({
               </p>
             )}
             <p className="mb-1.5 text-[0.6rem] font-semibold uppercase leading-relaxed tracking-[0.08em] text-page-text/45 text-pretty">
-              {project.tags}
+              {project.tags} <span className="text-page-text/55">&middot; {project.year}</span>
             </p>
             <h2
               className="hover-glow font-bold text-page-text text-xl md:text-2xl text-balance"
@@ -195,7 +280,7 @@ function ComingSoonCard({
           {/* Text */}
           <div className="pt-4 text-left">
             <p className="mb-1.5 text-[0.6rem] font-semibold uppercase leading-relaxed tracking-[0.08em] text-page-text/45 text-pretty">
-              {project.tags}
+              {project.tags} <span className="text-page-text/55">&middot; {project.year}</span>
             </p>
             <h2
               className="font-bold text-page-text text-xl md:text-2xl text-balance"
@@ -220,6 +305,9 @@ export default function WorkPage() {
     <>
       <WorkBackground />
       <div className="mx-auto max-w-6xl px-5 pt-16 pb-24 sm:px-8 md:pt-24 md:pb-36">
+
+        {/* Intro line — typewriter */}
+        <TypewriterIntro />
 
         {/* 2×2 grid — collapses to single column on mobile */}
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-8">

@@ -113,7 +113,7 @@ export default function MichiganCreameryPage() {
           className="mt-10 text-xs font-bold uppercase tracking-widest"
           style={{ color: "#FFB6C1" }}
         >
-          UX Research · Design Systems · E-Commerce
+          UX Research · Design Systems · E-Commerce <span style={{ color: "rgba(45,27,20,0.55)" }}>· 2026</span>
         </p>
 
         <h1

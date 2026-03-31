@@ -81,7 +81,7 @@ export default function DisneyPlusCaseStudy() {
         </Link>
 
         <p className="mt-10 text-xs font-semibold uppercase tracking-widest" style={{ color: "#FFB6C1" }}>
-          Product Design · Streaming · Strategy
+          Product Design · Streaming · Strategy <span style={{ color: "rgba(45,27,20,0.55)" }}>· 2025</span>
         </p>
 
         <h1

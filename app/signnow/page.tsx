@@ -218,7 +218,7 @@ export default function SignNowCaseStudy() {
         <p
           className="mt-1 text-xs font-bold uppercase tracking-widest text-page-text/35"
         >
-          Product Design · User Flows · AI-Powered Translation
+          Product Design · User Flows · AI-Powered Translation <span className="text-page-text/55">· 2025</span>
         </p>
 
         {/* Title */}

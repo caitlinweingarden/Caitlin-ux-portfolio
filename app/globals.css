@@ -298,3 +298,8 @@ body::after {
 /* Dramatic entrance: 48px Y-drift + slow cinematic ease                     */
 /* Applied via Framer Motion whileInView — viewport: once: true              */
 
+
+@keyframes tw-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
