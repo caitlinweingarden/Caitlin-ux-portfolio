@@ -92,9 +92,9 @@ function TypewriterIntro() {
 const FACTS = [
   "I love AI tools.",
   "I\u2019m learning 3 languages.",
-  "I\u2019m always planning my next trip.",
+  "Always traveling somewhere.",
   "I paint, collage, and create.",
-  "I\u2019m a chocolate chip cookie fanatic.",
+  "I love chocolate chip cookies.",
 ];
 
 // Delay start until the first typewriter line finishes
@@ -154,14 +154,13 @@ function CyclingFact() {
     <p
       className="text-page-text"
       style={{
-        fontSize:      "clamp(1.55rem, 4vw, 2.75rem)",
+        fontSize:      "clamp(1.1rem, 4vw, 2.75rem)",
         fontWeight:    400,
         fontStyle:     "italic",
         letterSpacing: "-0.02em",
         lineHeight:    1.3,
         textShadow:    "0 1px 3px rgba(0,0,0,0.06)",
-        textWrap:      "balance",
-        maxWidth:      "38rem",
+        whiteSpace:    "nowrap",
         minHeight:     "1.4em",
       }}
     >
