@@ -59,7 +59,7 @@ function TypewriterIntro() {
     <p
       className="mb-1 text-page-text"
       style={{
-        fontSize:      "clamp(1.05rem, 2vw, 1.65rem)",
+        fontSize:      "clamp(1.4rem, 2vw, 1.65rem)",
         fontWeight:    400,
         letterSpacing: "-0.02em",
         lineHeight:    1.3,
@@ -154,7 +154,7 @@ function CyclingFact() {
     <p
       className="text-page-text"
       style={{
-        fontSize:      "clamp(1.05rem, 2vw, 1.65rem)",
+        fontSize:      "clamp(1.4rem, 2vw, 1.65rem)",
         fontWeight:    400,
         fontStyle:     "italic",
         letterSpacing: "-0.02em",
@@ -395,7 +395,7 @@ export default function WorkPage() {
       <div className="mx-auto max-w-6xl px-5 pt-16 pb-24 sm:px-8 md:pt-24 md:pb-36">
 
         {/* Intro lines — typewriter + cycling fact */}
-        <div className="mb-12 md:mb-28">
+        <div className="mb-16 md:mb-28">
           <TypewriterIntro />
           <CyclingFact />
         </div>
