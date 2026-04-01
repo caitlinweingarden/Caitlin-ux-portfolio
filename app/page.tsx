@@ -59,7 +59,7 @@ function TypewriterIntro() {
     <p
       className="mb-1 text-page-text"
       style={{
-        fontSize:      "clamp(1.4rem, 2vw, 1.65rem)",
+        fontSize:      "clamp(1.55rem, 4vw, 2.75rem)",
         fontWeight:    400,
         letterSpacing: "-0.02em",
         lineHeight:    1.3,
@@ -154,7 +154,7 @@ function CyclingFact() {
     <p
       className="text-page-text"
       style={{
-        fontSize:      "clamp(1.4rem, 2vw, 1.65rem)",
+        fontSize:      "clamp(1.55rem, 4vw, 2.75rem)",
         fontWeight:    400,
         fontStyle:     "italic",
         letterSpacing: "-0.02em",
