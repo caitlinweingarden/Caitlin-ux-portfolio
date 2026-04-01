@@ -59,13 +59,12 @@ function TypewriterIntro() {
     <p
       className="mb-1 text-page-text"
       style={{
-        fontSize:      "clamp(1.05rem, 2vw, 1.35rem)",
+        fontSize:      "clamp(1.05rem, 4vw, 3rem)",
         fontWeight:    400,
-        letterSpacing: "-0.02em",
-        lineHeight:    1.3,
+        letterSpacing: "-0.025em",
+        lineHeight:    1.2,
         textShadow:    "0 1px 3px rgba(0,0,0,0.06)",
         textWrap:      "balance",
-        maxWidth:      "38rem",
       }}
     >
       {nodes}
@@ -154,15 +153,14 @@ function CyclingFact() {
     <p
       className="text-page-text"
       style={{
-        fontSize:      "clamp(1.05rem, 2vw, 1.35rem)",
+        fontSize:      "clamp(1.05rem, 4vw, 3rem)",
         fontWeight:    400,
         fontStyle:     "italic",
-        letterSpacing: "-0.02em",
-        lineHeight:    1.3,
+        letterSpacing: "-0.025em",
+        lineHeight:    1.2,
         textShadow:    "0 1px 3px rgba(0,0,0,0.06)",
         textWrap:      "balance",
-        maxWidth:      "38rem",
-        minHeight:     "1.4em",
+        minHeight:     "1.25em",
       }}
     >
       {started ? (
@@ -392,16 +390,16 @@ export default function WorkPage() {
   return (
     <>
       <WorkBackground />
-      <div className="mx-auto max-w-6xl px-5 pt-16 pb-24 sm:px-8 md:pt-24 md:pb-36">
+      <div className="mx-auto max-w-6xl px-5 sm:px-8">
 
-        {/* Intro lines — typewriter + cycling fact */}
-        <div className="mb-12 md:mb-16">
+        {/* Hero — fills viewport on desktop, normal flow on mobile */}
+        <div className="flex flex-col justify-center pt-16 pb-12 md:min-h-[90vh] md:pt-0 md:pb-16">
           <TypewriterIntro />
           <CyclingFact />
         </div>
 
         {/* 2×2 grid — collapses to single column on mobile */}
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-8">
+        <div className="grid grid-cols-1 gap-10 pb-24 md:grid-cols-2 md:gap-8 md:pb-36">
           <ProjectCard    project={ASL}      delay={0}    />
           <ProjectCard    project={DISNEY}   delay={0.08} />
           <ProjectCard    project={MICHIGAN} delay={0.16} />
