@@ -7,13 +7,13 @@ import { motion } from "framer-motion";
 // ── Typewriter intro ───────────────────────────────────────────────────────────
 
 const INTRO_SEGMENTS = [
-  { text: "I\u2019m ",             bold: false, underline: false },
-  { text: "Caitlin Weingarden",    bold: true,  underline: false },
-  { text: ", an ",                 bold: false, underline: false },
-  { text: "artist",                bold: false, underline: true  },
-  { text: " turned ",              bold: false, underline: false },
-  { text: "product designer",      bold: false, underline: true  },
-  { text: ".",                     bold: false, underline: false },
+  { text: "I\u2019m ",             bold: false, underline: false, nowrap: false },
+  { text: "Caitlin Weingarden",    bold: true,  underline: false, nowrap: true  },
+  { text: ", an ",                 bold: false, underline: false, nowrap: false },
+  { text: "artist",                bold: false, underline: true,  nowrap: false },
+  { text: " turned ",              bold: false, underline: false, nowrap: false },
+  { text: "product designer",      bold: false, underline: true,  nowrap: true  },
+  { text: ".",                     bold: false, underline: false, nowrap: false },
 ] as const;
 
 const TOTAL_CHARS = INTRO_SEGMENTS.reduce((n, s) => n + s.text.length, 0);
@@ -45,7 +45,8 @@ function TypewriterIntro() {
       <span
         key={i}
         style={{
-          fontWeight: seg.bold ? 700 : undefined,
+          fontWeight:  seg.bold   ? 700      : undefined,
+          whiteSpace:  seg.nowrap ? "nowrap" : undefined,
           ...(seg.underline ? underlineStyle : {}),
         }}
       >
@@ -56,13 +57,15 @@ function TypewriterIntro() {
 
   return (
     <p
-      className="mb-12 md:mb-16 text-page-text"
+      className="mb-1 text-page-text"
       style={{
         fontSize:      "clamp(1.05rem, 2vw, 1.35rem)",
         fontWeight:    400,
         letterSpacing: "-0.02em",
         lineHeight:    1.3,
         textShadow:    "0 1px 3px rgba(0,0,0,0.06)",
+        textWrap:      "balance",
+        maxWidth:      "38rem",
       }}
     >
       {nodes}
@@ -80,6 +83,91 @@ function TypewriterIntro() {
           }}
         />
       )}
+    </p>
+  );
+}
+
+// ── Cycling facts ─────────────────────────────────────────────────────────────
+
+const FACTS = [
+  "I love AI tools.",
+  "I\u2019m learning 3 languages.",
+  "I\u2019m always planning my next trip.",
+  "I paint, collage, and create.",
+  "I\u2019m a chocolate chip cookie fanatic.",
+];
+
+// Delay start until the first typewriter line finishes
+const FACT_DELAY_MS = TOTAL_CHARS * 36 + 400;
+
+function CyclingFact() {
+  const [started, setStarted] = useState(false);
+  const [factIdx, setFactIdx] = useState(0);
+  const [chars,   setChars]   = useState(0);
+  const [phase,   setPhase]   = useState<"typing" | "deleting">("typing");
+
+  useEffect(() => {
+    const t = setTimeout(() => setStarted(true), FACT_DELAY_MS);
+    return () => clearTimeout(t);
+  }, []);
+
+  const fact = FACTS[factIdx];
+
+  useEffect(() => {
+    if (!started) return;
+    let t: ReturnType<typeof setTimeout>;
+    if (phase === "typing") {
+      if (chars < fact.length) {
+        t = setTimeout(() => setChars(c => c + 1), 36);
+      } else {
+        t = setTimeout(() => setPhase("deleting"), 1800);
+      }
+    } else {
+      if (chars > 0) {
+        t = setTimeout(() => setChars(c => c - 1), 22);
+      } else {
+        t = setTimeout(() => {
+          setFactIdx(i => (i + 1) % FACTS.length);
+          setPhase("typing");
+        }, 350);
+      }
+    }
+    return () => clearTimeout(t);
+  }, [started, phase, chars, fact.length]);
+
+  const cursor = (
+    <span
+      aria-hidden
+      style={{
+        display:       "inline-block",
+        width:         "2px",
+        height:        "1em",
+        background:    "rgba(255,182,193,0.7)",
+        marginLeft:    "2px",
+        verticalAlign: "text-bottom",
+        animation:     "tw-blink 0.75s step-end infinite",
+      }}
+    />
+  );
+
+  return (
+    <p
+      className="text-page-text"
+      style={{
+        fontSize:      "clamp(1.05rem, 2vw, 1.35rem)",
+        fontWeight:    400,
+        fontStyle:     "italic",
+        letterSpacing: "-0.02em",
+        lineHeight:    1.3,
+        textShadow:    "0 1px 3px rgba(0,0,0,0.06)",
+        textWrap:      "balance",
+        maxWidth:      "38rem",
+        minHeight:     "1.4em",
+      }}
+    >
+      {started ? (
+        <>{fact.slice(0, chars)}{cursor}</>
+      ) : null}
     </p>
   );
 }
@@ -306,8 +394,11 @@ export default function WorkPage() {
       <WorkBackground />
       <div className="mx-auto max-w-6xl px-5 pt-16 pb-24 sm:px-8 md:pt-24 md:pb-36">
 
-        {/* Intro line — typewriter */}
-        <TypewriterIntro />
+        {/* Intro lines — typewriter + cycling fact */}
+        <div className="mb-12 md:mb-16">
+          <TypewriterIntro />
+          <CyclingFact />
+        </div>
 
         {/* 2×2 grid — collapses to single column on mobile */}
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-8">

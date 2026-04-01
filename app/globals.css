@@ -303,3 +303,8 @@ body::after {
   0%, 100% { opacity: 1; }
   50%       { opacity: 0; }
 }
+
+@keyframes text-shimmer {
+  0%   { background-position: 150% center; }
+  100% { background-position: -150% center; }
+}
